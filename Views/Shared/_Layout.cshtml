@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="~/Content/Icone/sdm services logo.svg" type="image/png" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script>
+        const urlPath = '@System.Configuration.ConfigurationManager.AppSettings["urlPath"]';
+    </script>
+    <link rel="stylesheet" href="~/Content/CustomStyle/MainStyle.css" />
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous"></script>
+</head>
+<body>
+    <script>
+        logout = () => {
+            $.post("/Home/Logout");
+        }
+
+        function openMenu() {
+            document.getElementById("overflow-menu").style.visibility = 'visible';
+        }
+
+        function closeMenu() {
+            document.getElementById("overflow-menu").style.visibility = 'hidden';
+        }
+
+        function openMenuDownload() {
+            //let menu = document.getElementById("overflow-menu-download").style.visibility;
+            //let result = menu === 'visible' ? 'hidden' : 'visible';
+            document.getElementById("overflow-menu-download").style.visibility = 'visible';
+        }
+
+        function closeMenuDownload() {
+            //let menu = document.getElementById("overflow-menu-download").style.visibility;
+            //let result = menu === 'visible' ? 'hidden' : 'visible';
+            document.getElementById("overflow-menu-download").style.visibility = 'hidden';
+        }
+    </script>
+    @*<div class="mainMenu">
+            <img src="~/Content/Icone/sdm services logo.svg" class="logoIcon" onclick="@("window.location.href='" + @Url.Action("Index", "Home") + "'")" />
+            <button style=" height: 25px; margin: auto 3%; background: #fff; border: #fff; border-radius: 2px;" onclick="@("window.location.href='" + @Url.Action("GuidaPrimoAccesso", "Home") + "'")">Guida al primo accesso</button>
+            <h2 class="profile" onclick="@("window.location.href='" + @Url.Action("ResetPassword", "Home") + "'")">@Session["username"].ToString()</h2>
+            <h2 class="logout"><a onclick="logout()" href="https://www.sdmservices.it/">Disconnetti</a></h2>
+        </div>*@
+<div class="mainMenu">
+    <a href="@Url.Action("Index", "Home")" >
+        <img src="~/Content/Icone/sdm services logo.svg" class="logoIcon"  />
+    </a>    
+    <button onmouseover="openMenu()" onmouseout="closeMenu()" class="overflowMenuButton">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+             width="24" height="24"
+             viewBox="0 0 172 172"
+             style=" fill:#000000;">
+            <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M14.33333,35.83333v14.33333h143.33333v-14.33333zM14.33333,78.83333v14.33333h143.33333v-14.33333zM14.33333,121.83333v14.33333h143.33333v-14.33333z"></path></g></g>
+        </svg>
+    </button>
+    <div id="overflow-menu" onmouseover="openMenu()" onmouseout="closeMenu()" style="visibility: hidden">
+        <div class="overflowMenuContainer">
+            <a class="itemContainer">
+                <div>
+                    @Session["username"].ToString().ToUpper()
+                </div>
+            </a>
+            <a class="itemContainer" href="@Url.Action("GuidaPrimoAccesso", "Home")">
+                <div>
+                    GUIDA AL PRIMO ACCESSO
+                </div>
+            </a>
+            <a class="itemContainer" onmouseover="openMenuDownload()" onmouseout="closeMenuDownload()" style="position: relative">
+                <div>
+                    DOWNLOAD
+                </div>
+                <div id="overflow-menu-download" onmouseover="openMenuDownload()" onmouseout="closeMenuDownload()" style="visibility: hidden">
+                    <div class="overflowMenuContainer">
+                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 1 })" class="itemContainer">
+                            <div>
+                                AGENZIA PER IL LAVORO
+                            </div>
+                        </a>
+                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 2 })" class="itemContainer">
+                            <div>
+                                SINDACATO
+                            </div>
+                        </a>
+                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 3 })" class="itemContainer">
+                            <div>
+                                PATRONATO
+                            </div>
+                        </a>
+                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 4 })" class="itemContainer">
+                            <div>
+                                CREDITO, ASSICURAZIONI E NOLEGGIO
+                            </div>
+                        </a>
+                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 5 })" class="itemContainer">
+                            <div>
+                                PRODOTTI DIGITALI, VISURE E PRATICHE AUTO
+                            </div>
+                        </a>
+                        @*<a href="@Url.Action("Index", "DownloadFile", new { idSezione = 6 })" class="itemContainer" >
+                        <div>
+                            EVENTI
+                        </div>
+                    </a>*@
+                        @*<a href="@Url.Action("Index", "DownloadFile", new { idSezione = 7 })" class="itemContainer" >
+                        <div>
+                            ASSISTENZA CONTABILE
+                        </div>
+                    </a>*@
+                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 8 })" class="itemContainer">
+                            <div>
+                                ARCHIVIO E CONTRATTI
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </a>
+            <a class="itemContainer" href="@Url.Action("Index", "DownloadFile", new { idSezione = 9 })">
+                <div>
+                    NEWS
+                </div>
+            </a>
+            <a class="itemContainer" onclick="@("window.location.href='" + @Url.Action("ResetPassword", "Home") + "'")">
+                <div>
+                    RESET PASSWORD
+                </div>
+            </a>
+            <a class="itemContainer" onclick="logout()" href="https://www.sdmservices.it/">
+                <div>
+                    DISCONETTI
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+    <div>
+        @RenderBody()
+    </div>
+    <footer>
+        <p>&copy; 2021 - SDM SERVICES è distribuito da SDM GROUP</p>
+    </footer>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="~/Content/Icone/sdm services logo.svg" type="image/png" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="~/Content/CustomStyle/MainStyle.css" />
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    <title>Errore</title>
+</head>
+<body>
+    <div>
+        <div class="ErrorForm">
+            <div class="head">
+                <img src="~/Content/Icone/sdm services logo.svg" />
+            </div>
+            <h1>Autenticazione fallita</h1>
+            <h3>La sessione è scaduta o non si dispone delle autorizzazioni necessarie per accedere</h3>
+            <button onclick="@("window.location.href='" + @Url.Action("Login", "Home") + "'")">Torna alla login</button>
+        </div>
+    </div>
+</body>
+</html>

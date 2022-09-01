@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="~/Content/Icone/sdm services logo.svg" type="image/png" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="~/Content/CustomStyle/MainStyle.css" />
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    <title>Login</title>
+</head>
+<body>
+    @*<script>
+        login = () => {
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+
+            fetch('api/users?username=admin_dev&password=admin')
+                .then(response => response.json())
+                .then(data => console.log(data));
+        }        
+    </script>*@
+    <div>
+        @using (Html.BeginForm("LoginResult", "Home", new { viewName = TempData["viewName"], controllerName = TempData["controllerName"], idPratica = TempData["idPratica"], tipoPratica = TempData["tipoPratica"] },FormMethod.Post, new { @class = "LoginForm" }))
+        {
+            <div class="head">
+                <img src="~/Content/Icone/sdm services logo.svg" />
+            </div>
+            <label>Username</label>
+            <input id="username" name="username" placeholder="username" class="inputForm" />
+            <label>Password</label>
+            <input id="password" name="password" type="password" placeholder="password" class="inputForm" />
+            <input type="submit" title="Accedi" class="button" value="Accedi" />
+            {
+                if (TempData["loginError"] != null)
+                {
+                    <p class="errorText">@TempData["loginError"].ToString()</p>
+                }
+            }
+        }
+    </div>
+</body>
+</html>

@@ -1,0 +1,683 @@
+.LoginForm {
+  width: 310px;
+  height: 320px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 3px solid #010045;
+  border-radius: 17px;
+  position: relative;
+  padding-top: 50px;
+  box-shadow: 0px 0px 12px 6px #939393; }
+  .LoginForm .head {
+    width: 306px;
+    height: 30px;
+    background-color: #010045;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    border: 1px solid #010045;
+    border-radius: 12px 12px 0 0; }
+    .LoginForm .head img {
+      width: 65px;
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translate(-50%, 0px); }
+  .LoginForm label {
+    text-align: center;
+    color: #000000;
+    margin-top: 15px; }
+  .LoginForm .button {
+    background-color: #010045;
+    color: #ffffff;
+    margin-top: 25px; }
+  .LoginForm input {
+    margin: 5px auto;
+    width: 300px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px; }
+  .LoginForm .errorText {
+    text-align: center;
+    color: #c80000;
+    margin-top: 5px; }
+
+.mainMenu {
+  width: 100%;
+  background-color: #010045;
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  top: 0;
+  height: 50px; }
+  .mainMenu .overflowMenuButton {
+    border: none;
+    background-color: #010045; }
+  .mainMenu #overflow-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: 1000; }
+    .mainMenu #overflow-menu .overflowMenuContainer {
+      width: 200px; }
+      .mainMenu #overflow-menu .overflowMenuContainer .itemContainer {
+        text-align: right;
+        text-decoration: none;
+        cursor: pointer; }
+        .mainMenu #overflow-menu .overflowMenuContainer .itemContainer:hover div {
+          background-color: #0f0e64;
+          color: #fff;
+          width: 100%;
+          padding: 5px; }
+        .mainMenu #overflow-menu .overflowMenuContainer .itemContainer div {
+          background-color: #010045;
+          color: #fff;
+          width: 100%;
+          padding: 5px;
+          border: 1px solid #fff;
+          border-left: 0;
+          border-right: 0; }
+  .mainMenu #overflow-menu-download {
+    position: absolute;
+    top: 32px;
+    right: 150px;
+    z-index: 1000; }
+    .mainMenu #overflow-menu-download .overflowMenuContainer {
+      width: 200px; }
+      .mainMenu #overflow-menu-download .overflowMenuContainer .itemContainer {
+        text-align: right;
+        text-decoration: none;
+        cursor: pointer; }
+        .mainMenu #overflow-menu-download .overflowMenuContainer .itemContainer:hover div {
+          background-color: #0f0e64;
+          color: #fff;
+          width: 100%;
+          padding: 5px; }
+        .mainMenu #overflow-menu-download .overflowMenuContainer .itemContainer div {
+          background-color: #010045;
+          color: #fff;
+          width: 100%;
+          padding: 5px;
+          border: 1px solid #fff;
+          border-left: 0;
+          border-right: 0; }
+  .mainMenu .logoIcon {
+    position: absolute;
+    width: 100px;
+    top: 4%;
+    left: 2%;
+    cursor: pointer; }
+    @media screen and (max-width: 768px) {
+      .mainMenu .logoIcon {
+        width: 85px;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, 0%); } }
+  .mainMenu .profile {
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 20px;
+    margin: 1%;
+    cursor: pointer;
+    text-decoration: underline; }
+    @media screen and (max-width: 768px) {
+      .mainMenu .profile {
+        position: absolute;
+        top: 0;
+        left: 0; } }
+  .mainMenu .logout {
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 20px;
+    margin: 1%; }
+    .mainMenu .logout a {
+      color: #ffffff;
+      text-decoration: none; }
+      .mainMenu .logout a:hover {
+        text-decoration: none; }
+
+.homeStyle {
+  padding: 55px 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ebebeb; }
+  .homeStyle .softwareSection {
+    width: 100%;
+    background-color: #ffffff;
+    margin: 1% 0; }
+    .homeStyle .softwareSection .head {
+      background-color: #010045;
+      color: #ffffff;
+      padding: 1%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px; }
+    .homeStyle .softwareSection .body {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 1%;
+      margin: auto;
+      width: 90%; }
+      .homeStyle .softwareSection .body .cardImage {
+        width: 130px;
+        height: 130px;
+        margin: 1% 5%;
+        cursor: pointer;
+        position: relative; }
+        .homeStyle .softwareSection .body .cardImage img {
+          width: 130px;
+          height: 130px;
+          position: absolute;
+          bottom: 0;
+          visibility: visible; }
+      .homeStyle .softwareSection .body .cardBorder {
+        border: 4px solid #010045;
+        border-radius: 25px;
+        padding: 10px;
+        width: 130px;
+        height: 130px;
+        margin: 1%; }
+        .homeStyle .softwareSection .body .cardBorder .cardButton {
+          border: 3px solid #010045;
+          border-radius: 14px;
+          width: 102px;
+          height: 103px; }
+          .homeStyle .softwareSection .body .cardBorder .cardButton .headCard {
+            text-align: center; }
+            .homeStyle .softwareSection .body .cardBorder .cardButton .headCard h2 {
+              color: #000000;
+              font-size: 18px;
+              font-weight: normal;
+              margin: 0;
+              line-height: 32px; }
+            .homeStyle .softwareSection .body .cardBorder .cardButton .headCard div {
+              color: #777777;
+              font-size: 12px;
+              line-height: 10px; }
+  .homeStyle .infoSection {
+    width: 100%;
+    background-color: #ffffff;
+    margin: 1% 0; }
+    .homeStyle .infoSection .head {
+      background-color: #010045;
+      color: #ffffff;
+      padding: 1%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px; }
+    .homeStyle .infoSection .body #homeTable_wrapper {
+      margin: 2%; }
+      .homeStyle .infoSection .body #homeTable_wrapper .dataTables_scroll .dataTables_scrollHead {
+        background-color: #010045;
+        color: #ffffff; }
+        .homeStyle .infoSection .body #homeTable_wrapper .dataTables_scroll .dataTables_scrollHead .table {
+          margin: 0; }
+
+.patronatoStyle {
+  padding: 70px 2%;
+  display: flex;
+  flex-direction: column; }
+  .patronatoStyle .titlePatronato {
+    text-align: center;
+    margin: 0;
+    border-bottom: 1px solid #e7e7e7;
+    padding-bottom: 10px; }
+  .patronatoStyle .colFormError {
+    text-align: center;
+    margin: 1%; }
+    .patronatoStyle .colFormError p {
+      margin: 0;
+      color: #c80000; }
+  .patronatoStyle .validationField {
+    display: none;
+    padding-top: 2px;
+    color: #c80000; }
+    @media screen and (max-width: 768px) {
+      .patronatoStyle .validationField {
+        text-align: center;
+        margin-bottom: 20px; } }
+  .patronatoStyle .patronatoMenu {
+    display: flex;
+    list-style: none;
+    color: #ffffff;
+    justify-content: flex-end;
+    position: relative; }
+    .patronatoStyle .patronatoMenu .menuBack {
+      position: absolute;
+      left: 0; }
+      .patronatoStyle .patronatoMenu .menuBack a {
+        color: #ffffff;
+        cursor: pointer;
+        text-decoration: none;
+        background-color: #010045;
+        padding: 10px; }
+        .patronatoStyle .patronatoMenu .menuBack a:hover {
+          text-decoration: none; }
+    .patronatoStyle .patronatoMenu li a {
+      color: #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      background-color: #010045;
+      padding: 10px; }
+      .patronatoStyle .patronatoMenu li a:hover {
+        text-decoration: none; }
+  .patronatoStyle .patronatoAddForm {
+    position: relative; }
+    .patronatoStyle .patronatoAddForm .menuDocumenti {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%); }
+    .patronatoStyle .patronatoAddForm .rowForm {
+      display: flex;
+      width: 760px;
+      margin: 2% auto; }
+      .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm {
+        display: flex;
+        flex-direction: column;
+        width: 100%; }
+        .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm div {
+          width: 280px;
+          margin: auto; }
+          .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm div .inputForm {
+            color: #010045;
+            border: 1px solid #010045; }
+            .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm div .inputForm::-webkit-file-upload-button {
+              background-color: #010045;
+              color: #ffffff;
+              border-color: #010045;
+              border-radius: 2px;
+              cursor: pointer; }
+          .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm div .loadFile {
+            width: 100%;
+            background-color: #010045;
+            color: #ffffff;
+            margin: 2% 0;
+            border: none;
+            border-radius: 2px;
+            font-size: 14px;
+            padding: 7px; }
+            .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm div .loadFile.disabled {
+              background-color: #e7e7e7;
+              cursor: not-allowed;
+              color: #c0c0c0; }
+              .patronatoStyle .patronatoAddForm .rowForm.rowFormFile .colForm div .loadFile.disabled:focus {
+                outline: none; }
+      .patronatoStyle .patronatoAddForm .rowForm .colForm {
+        display: flex;
+        flex-direction: column;
+        width: calc(100%/2); }
+        .patronatoStyle .patronatoAddForm .rowForm .colForm.colFormTextArea {
+          width: 100%; }
+          .patronatoStyle .patronatoAddForm .rowForm .colForm.colFormTextArea .inputForm {
+            max-width: 660px;
+            min-height: 60px; }
+            @media screen and (max-width: 768px) {
+              .patronatoStyle .patronatoAddForm .rowForm .colForm.colFormTextArea .inputForm {
+                max-width: 280px;
+                min-height: 60px; } }
+        .patronatoStyle .patronatoAddForm .rowForm .colForm .labelForm {
+          width: 100%; }
+        .patronatoStyle .patronatoAddForm .rowForm .colForm .inputForm {
+          width: 100%;
+          height: 34px;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857143;
+          color: #555555;
+          background-color: #fff;
+          background-image: none;
+          border: 1px solid #ccc;
+          border-radius: 4px; }
+      @media screen and (max-width: 768px) {
+        .patronatoStyle .patronatoAddForm .rowForm {
+          display: flex;
+          width: 100%;
+          flex-direction: column;
+          margin: 2% auto; }
+          .patronatoStyle .patronatoAddForm .rowForm .colForm {
+            display: flex;
+            flex-direction: column;
+            width: 100%; }
+            .patronatoStyle .patronatoAddForm .rowForm .colForm .labelForm {
+              width: 100%;
+              text-align: center; }
+            .patronatoStyle .patronatoAddForm .rowForm .colForm div {
+              text-align: center; } }
+    .patronatoStyle .patronatoAddForm .rowFormButton {
+      display: flex;
+      width: 100%;
+      margin: 20px 0;
+      position: relative;
+      justify-content: flex-start; }
+      .patronatoStyle .patronatoAddForm .rowFormButton .colFormButton {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translate(0, -50%); }
+        .patronatoStyle .patronatoAddForm .rowFormButton .colFormButton input {
+          background-color: #010045;
+          border: none;
+          color: #ffffff;
+          width: 105px;
+          height: 36px; }
+          .patronatoStyle .patronatoAddForm .rowFormButton .colFormButton input.disabled {
+            background-color: #e7e7e7;
+            color: #c0c0c0;
+            cursor: not-allowed; }
+        .patronatoStyle .patronatoAddForm .rowFormButton .colFormButton a {
+          color: #ffffff;
+          text-decoration: none;
+          background-color: #010045;
+          padding: 10px 25px; }
+          .patronatoStyle .patronatoAddForm .rowFormButton .colFormButton a:hover {
+            text-decoration: none; }
+      .patronatoStyle .patronatoAddForm .rowFormButton .colFormBack a {
+        color: #ffffff;
+        text-decoration: none;
+        background-color: #010045;
+        padding: 10px; }
+        .patronatoStyle .patronatoAddForm .rowFormButton .colFormBack a:hover {
+          text-decoration: none; }
+  .patronatoStyle .patronatoSearch {
+    display: flex;
+    width: 100%;
+    background-color: #e7e7e7;
+    margin: 1% 0; }
+    .patronatoStyle .patronatoSearch .patronatoAddForm {
+      width: 100%; }
+      .patronatoStyle .patronatoSearch .patronatoAddForm .titlePatronato {
+        margin: 0;
+        font-size: 18px;
+        width: 100%;
+        color: #000000;
+        border-color: #777777;
+        font-weight: bold; }
+      .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm {
+        display: flex;
+        width: 100%;
+        margin: 2% auto;
+        padding: 0 3%; }
+        .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm .colForm {
+          display: flex;
+          flex-direction: column;
+          width: calc(100%/5);
+          margin: 0 1%; }
+          .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm .colForm .labelForm {
+            width: 100%; }
+          .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm .colForm .inputForm {
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 0 1%; }
+        @media screen and (max-width: 768px) {
+          .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            margin: 2% auto; }
+            .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm .colForm {
+              display: flex;
+              flex-direction: column;
+              width: 100%;
+              margin: 2% 0; }
+              .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm .colForm .labelForm {
+                width: 100%;
+                text-align: center; }
+              .patronatoStyle .patronatoSearch .patronatoAddForm .rowForm .colForm div {
+                text-align: center; } }
+      .patronatoStyle .patronatoSearch .patronatoAddForm .rowFormButtonSearch {
+        display: flex;
+        width: 100%;
+        margin: 2% 0;
+        background-color: #e7e7e7;
+        padding: 5px;
+        position: relative;
+        justify-content: center; }
+        .patronatoStyle .patronatoSearch .patronatoAddForm .rowFormButtonSearch .colFormButton input {
+          background-color: #010045;
+          border: none;
+          color: #ffffff;
+          font-size: 18px;
+          padding: 1px 20px;
+          border-radius: 2px; }
+  .patronatoStyle .patronatoFooter {
+    display: flex;
+    width: 100%;
+    margin: 2% 0;
+    position: relative;
+    justify-content: flex-start; }
+    .patronatoStyle .patronatoFooter .colFooterBack a {
+      color: #ffffff;
+      text-decoration: none;
+      background-color: #010045;
+      padding: 10px; }
+      .patronatoStyle .patronatoFooter .colFooterBack a:hover {
+        text-decoration: none; }
+      .patronatoStyle .patronatoFooter .colFooterBack a.disabled {
+        background-color: #e7e7e7;
+        color: #c0c0c0;
+        cursor: not-allowed; }
+    .patronatoStyle .patronatoFooter .colFooterBack.right {
+      position: absolute;
+      right: 0; }
+  .patronatoStyle #patronatoTable_wrapper th, .patronatoStyle #patronatoTable_wrapper td {
+    text-align: center; }
+  .patronatoStyle #patronatoTable_wrapper .dataTables_scroll .dataTables_scrollHead {
+    background-color: #010045;
+    color: #ffffff; }
+    .patronatoStyle #patronatoTable_wrapper .dataTables_scroll .dataTables_scrollHead .table {
+      margin: 0; }
+  .patronatoStyle #patronatoTable_wrapper .bottom {
+    display: flex;
+    justify-content: center; }
+    .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate {
+      margin: 0 2%; }
+      .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination {
+        margin: 0; }
+        .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination .active a {
+          background-color: #010045;
+          color: #ffffff; }
+        .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination a {
+          color: #010045; }
+        .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination .disabled a {
+          background-color: #e7e7e7;
+          color: #c0c0c0; }
+    @media screen and (max-width: 768px) {
+      .patronatoStyle #patronatoTable_wrapper .bottom {
+        display: block; }
+        .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_info {
+          width: 100%;
+          text-align: center; }
+        .patronatoStyle #patronatoTable_wrapper .bottom .dataTables_length {
+          display: flex;
+          justify-content: center;
+          flex-direction: row; }
+        .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate {
+          margin: 10px 2%;
+          font-size: 85%;
+          text-align: center; }
+          .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination {
+            margin: 0; }
+            .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination .active a {
+              background-color: #010045;
+              color: #ffffff; }
+            .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination a {
+              color: #010045; }
+            .patronatoStyle #patronatoTable_wrapper .bottom #patronatoTable_paginate .customPagination .disabled a {
+              background-color: #e7e7e7;
+              color: #c0c0c0; } }
+  @media screen and (max-width: 768px) {
+    .patronatoStyle #table-index .totalRow {
+      text-align: center;
+      margin: 10px 0; } }
+  .patronatoStyle #table-allegati th, .patronatoStyle #table-allegati td {
+    text-align: left; }
+  .patronatoStyle .iconTd {
+    width: 35px;
+    min-width: 35px; }
+    .patronatoStyle .iconTd .allegatiIcon {
+      width: 20px; }
+  .patronatoStyle .semaforoIcon {
+    width: 25px; }
+
+.loaderShadow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(130, 130, 130, 0.3);
+  display: none; }
+  .loaderShadow .loaderDiv {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 100px;
+    height: 100px; }
+    .loaderShadow .loaderDiv .loader {
+      border: 10px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 10px solid #3498db;
+      width: 100px;
+      height: 100px;
+      animation: spin 2s linear infinite; }
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+.ErrorPage {
+  margin: 0; }
+  .ErrorPage .ErrorHead {
+    width: 100%;
+    background-color: #010045;
+    height: 50px; }
+  .ErrorPage .ErrorBody {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    margin: 3% auto; }
+    .ErrorPage .ErrorBody h1 {
+      font-weight: bold;
+      text-align: center; }
+    .ErrorPage .ErrorBody h3 {
+      text-align: center;
+      margin: 0; }
+
+.ErrorForm {
+  width: 310px;
+  height: 320px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 3px solid #010045;
+  border-radius: 17px;
+  position: relative;
+  padding-top: 50px;
+  box-shadow: 0px 0px 12px 6px #939393; }
+  .ErrorForm .head {
+    width: 306px;
+    height: 30px;
+    background-color: #010045;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    border: 1px solid #010045;
+    border-radius: 12px 12px 0 0; }
+    .ErrorForm .head img {
+      width: 65px;
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translate(-50%, 0px); }
+  .ErrorForm h1 {
+    text-align: center;
+    color: #c80000;
+    font-weight: bold;
+    font-size: 28px;
+    margin-top: 15px; }
+  .ErrorForm h3 {
+    text-align: center;
+    font-size: 22px;
+    margin-top: 10px; }
+  .ErrorForm button {
+    margin-top: 25px;
+    width: 100%;
+    margin: auto;
+    background-color: #010045;
+    color: #ffffff;
+    border: none;
+    padding: 7px;
+    font-size: 15px;
+    border-radius: 4px; }
+
+footer {
+  width: 100%;
+  text-align: center;
+  background-color: #010045;
+  position: absolute; }
+  footer p {
+    margin: 10px;
+    color: #ffffff; }
+
+.ResetForm {
+  width: 310px;
+  height: 320px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  position: relative; }
+  .ResetForm label {
+    text-align: center;
+    color: #000000;
+    margin-top: 15px; }
+  .ResetForm .button {
+    background-color: #010045;
+    color: #ffffff;
+    margin-top: 25px; }
+  .ResetForm input {
+    margin: 5px auto;
+    width: 300px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px; }
+  .ResetForm .successText {
+    text-align: center;
+    color: #247b14;
+    margin-top: 5px; }
+  .ResetForm .errorText {
+    text-align: center;
+    color: #c80000;
+    margin-top: 5px; }
+
+/*# sourceMappingURL=MainStyle.css.map */

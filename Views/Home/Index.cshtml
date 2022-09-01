@@ -1,0 +1,329 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="homeStyle">
+    <div class="softwareSection">
+        <div class="head">Portale SDM</div>
+        <div class="body">
+            @if (Session["role"].ToString() == "smartJob")
+            {
+                <a class="cardImage" style="cursor: not-allowed;" title="Caf">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" onclick="@("window.location.href='" + @Url.Action("Index", "Sindacato") + "'")">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato.svg" />
+                </a>
+                <a class="cardImage" style="cursor: not-allowed;" title="Patronato">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                </a>
+                <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
+                </a>
+                <a class="cardImage" style="cursor: not-allowed;" title="Assistenza Contabile">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+            else if (Session["role"].ToString() == "adminSegreteria" || Session["role"].ToString() == "adminSegreteriaNoSmartJob")
+            { 
+                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" onclick="@("window.location.href='" + @Url.Action("Index", "Sindacato") + "'")">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato.svg" />
+                </a>
+                <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+            else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
+            {
+                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" style="cursor: not-allowed;">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato (inattivo).svg" />
+                </a>
+                <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
+                </a>
+                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+            else if (Session["role"].ToString() == "adminDocumenti" || Session["role"].ToString() == "adminDocumentiNoSmartJob")
+            {
+                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" style="cursor: not-allowed;">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                </a>
+                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+            else if (Session["role"].ToString() == "adminCasoria" || Session["role"].ToString() == "adminCasoriaNoSmartJob")
+            {
+                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" style="cursor: not-allowed;">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                </a>
+                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Assistenza Contabile" onclick="@("window.location.href='" + @Url.Action("Index", "AssistenzaContabile") + "'")">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
+                </a>
+                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+            else if (Session["role"].ToString() == "adminArchivio" || Session["role"].ToString() == "adminArchivioNoSmartJob")
+            {
+                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" style="cursor: not-allowed;">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato (inattivo).svg" />
+                </a>
+                <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
+                </a>
+                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
+                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+            else
+            {
+                if (Session["role"].ToString() == "adminNoSmartJob")
+                {
+                    <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                        <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                    </a>
+                }
+                else if (Session["role"].ToString() == "normalNoSmartJob")
+                {
+                    <a class="cardImage" target="_blank" title="Caf" href="https://qweb.zucchetti.com/SuiteQWeb/ActionLogin.do">
+                        <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                    </a>
+                }
+                else
+                {
+                    <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                        <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                    </a>
+                }
+
+                <a class="cardImage" title="Agenzia" onclick="@("window.location.href='" + @Url.Action("Index", "Agenzia") + "'")">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia.svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" onclick="@("window.location.href='" + @Url.Action("Index", "Sindacato") + "'")">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato.svg" />
+                </a>
+                <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
+                </a>
+                <a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
+                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                </a>
+                <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
+                </a>
+                <a class="cardImage" title="Assistenza Contabile" onclick="@("window.location.href='" + @Url.Action("Index", "AssistenzaContabile") + "'")">
+                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
+                </a>
+                <a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
+                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                </a>
+            }
+        </div>
+    </div>
+    <div class="infoSection">
+        <div class="head">Info e Contatti</div>
+        <div class="body">
+            <table id="homeTable" class="table table-striped table-sm" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th class="th-sm"></th>
+                        <th class="th-sm">Riferimento</th>
+                        <th class="th-sm">E-Mail</th>
+                        <th class="th-sm">Telefono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Responsabile Politiche Attive e Passive</td>
+                        <td>De Micco Sabino</td>
+                        <td>amministrazione@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Rete Commerciale</td>
+                        <td>De Micco Sabino</td>
+                        <td>amministrazione@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Credito, Noleggio, Pratiche Auto e Prodotti Digitali</td>
+                        <td>De Micco Fabiana</td>
+                        <td>documenti@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Sindacato</td>
+                        <td>De Micco Fabio</td>
+                        <td>segreteria@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Caf</td>
+                        <td>De Micco Giusy</td>
+                        <td>assistenza@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Assistenza Contabile</td>
+                        <td>De Micco Fabiana</td>
+                        <td>documenti@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Grafica e Comunicazione</td>
+                        <td>Franco Marco</td>
+                        <td>grafica@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Patronato</td>
+                        <td>De Micco Giusy</td>
+                        <td>assistenza@sdmservices.it</td>
+                        <td>0810365548</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#homeTable').DataTable({
+            "scrollX": true,
+            "searching": false,
+            "info": false,
+            "paginate": false,
+            "order": []
+        });
+    });
+</script>

@@ -1,0 +1,189 @@
+﻿@model SDM.Models.Pratica
+
+@{
+    ViewBag.Title = "ModificaPratica";
+}
+
+<div class="patronatoStyle">
+    <h2 class="titlePatronato">Inserimento pratica</h2>
+    @{ if (TempData["erroreInserimentoPatronato"] != null)
+        {
+            if (TempData["erroreInserimentoPatronato"].ToString() == "true")
+            {
+                <div class="colFormError">
+                    <p>Errore nella modifica della pratica</p>
+                </div>
+            }
+        }
+    }
+
+    @using (Html.BeginForm("EditPratica", "Credito", FormMethod.Post, new { id = "formPratica", @class = "patronatoAddForm" }))
+    {
+        <div class="rowForm">
+            <div class="colForm" style="display: none">
+                <input name="Id" value="@Request.QueryString["idPratica"]" />
+            </div>
+            <div class="colForm">
+                @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "inputForm", value = Model.Nome } })
+                </div>
+                <span id="NomeValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+            <div class="colForm">
+                @Html.LabelFor(model => model.Cognome, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @Html.EditorFor(model => model.Cognome, new { htmlAttributes = new { @class = "inputForm", value = Model.Cognome } })
+                </div>
+                <span id="CognomeValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+        </div>
+        <div class="rowForm">
+            <div class="colForm">
+                @Html.LabelFor(model => model.Sottocategoria, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    <select name="Sottocategoria" id="sottocategoria-value" class="inputForm">
+                        <option value="">...</option>
+                        @foreach (var item in Model.SottocategoriaList)
+                        {
+                            <option value="@item.Nome">@item.Nome</option>
+                        }
+                    </select>
+                </div>
+                <span id="SottocategoriaValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+            <div class="colForm">
+                @Html.LabelFor(model => model.Anno, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @Html.EditorFor(model => model.Anno, new { htmlAttributes = new { @class = "inputForm", value = Model.Anno } })
+                </div>
+                <span id="AnnoValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+        </div>
+        <div class="rowForm">
+            <div class="colForm colFormTextArea">
+                @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @{
+                        if (Session["role"].ToString() == "Normal" || Session["role"].ToString() == "normalNoSmartJob" || Session["role"].ToString() == "smartJob" || Session["role"].ToString() == "noPosta")
+                        {
+                            @Html.TextAreaFor(model => model.Note, 2, 2, new { @class = "inputForm", @readonly = "readonly" });
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(model => model.Note, 2, 2, new { @class = "inputForm" });
+                        }
+                    }
+                </div>
+                <span id="NoteValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+        </div>
+        <div class="rowForm">
+            <div class="colForm">
+                @Html.LabelFor(model => model.TipologiaPratica, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @Html.EditorFor(model => model.TipologiaPratica, new { htmlAttributes = new { @class = "inputForm" } })
+                </div>
+                <span id="TipologiaValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+            <div class="colForm">
+                <label class="labelForm" for="StatoList">Stato</label>
+                <div>
+                    <select name="IdStato" id="stato-value" class="inputForm">
+                        <option value="">...</option>
+                        @foreach (var item in Model.StatoList)
+                        {
+                            <option value="@item.Id">@item.Stato</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="rowFormButton">
+            <div class="colFormBack">
+                @Html.ActionLink("Torna indietro", "Index")
+            </div>
+            <div class="colFormButton">
+                <input type="submit" value="Salva" class="" />
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#sottocategoria-value option[value='@Model.Sottocategoria']").prop('selected', true);
+        $("#stato-value option[value='@Model.IdStato']").prop('selected', true);
+    });
+
+    $("#formPratica").on("submit", function () {
+        var nome = $("#Nome").val();
+        var cognome = $("#Cognome").val();
+        var sottocategoria = $("#sottocategoria-value").val();
+        var anno = $("#Anno").val();
+        var note = $("#Note").val();
+        var tipologia = $("#TipologiaPratica").val();
+
+        var n = true;
+        var c = true;
+        var s = true;
+        var a = true;
+        var no = true;
+        var t = true;
+
+        $("#NomeValidation").hide();
+        $("#Nome").css("border-color", "#ccc");
+
+        $("#SottocategoriaValidation").hide();
+        $("#sottocategoria-value").css("border-color", "#ccc");
+
+        $("#AnnoValidation").hide();
+        $("#Anno").css("border-color", "#ccc");
+
+        $("#CognomeValidation").hide();
+        $("#Cognome").css("border-color", "#ccc");
+
+        $("#NoteValidation").hide();
+        $("#Note").css("border-color", "#ccc");
+
+        $("#TipologiaValidation").hide();
+        $("#TipologiaPratica").css("border-color", "#ccc");
+
+        if (nome == null || nome == "" || nome == undefined || nome == " ") {
+            $("#NomeValidation").show();
+            $("#Nome").css("border-color", "#c80000");
+            n = false;
+        }
+        if (cognome == null || cognome == "" || cognome == undefined || cognome == " ") {
+            $("#CognomeValidation").show();
+            $("#Cognome").css("border-color", "#c80000");
+            c = false;
+        }
+        if (sottocategoria == null || sottocategoria == "" || sottocategoria == undefined || sottocategoria == " ") {
+            $("#SottocategoriaValidation").show();
+            $("#sottocategoria-value").css("border-color", "#c80000");
+            s = false;
+        }
+        if (anno == null || anno == "" || anno == undefined || anno == " ") {
+            $("#AnnoValidation").show();
+            $("#Anno").css("border-color", "#c80000");
+            a = false;
+        }
+        if (note == null || note == "" || note == undefined || note == " ") {
+            $("#NoteValidation").show();
+            $("#Note").css("border-color", "#c80000");
+            no = false;
+        }
+        if (tipologia == null || tipologia == "" || tipologia == undefined || tipologia == " ") {
+            $("#TipologiaValidation").show();
+            $("#TipologiaPratica").css("border-color", "#c80000");
+            t = false;
+        }
+
+        if (n && c && s && no && a && t) {
+            $("#submitPratica").attr("disabled", true);
+            $("#submitPratica").addClass("disabled");
+        }
+        else { return false; }
+    })
+</script>
