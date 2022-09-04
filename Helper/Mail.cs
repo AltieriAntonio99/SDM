@@ -75,7 +75,7 @@ namespace SDM.Helper
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("portalesdm@gmail.com", "pivxlstndbejseco");
+                smtp.Credentials = new NetworkCredential("portalesdm@gmail.com", "bswweyzrtmdyauqz");
                 smtp.Send(message);
             }            
         }
@@ -139,7 +139,7 @@ namespace SDM.Helper
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("portalesdm@gmail.com", "pivxlstndbejseco");
+                smtp.Credentials = new NetworkCredential("portalesdm@gmail.com", "bswweyzrtmdyauqz");
                 smtp.Send(message);
             }
         }
