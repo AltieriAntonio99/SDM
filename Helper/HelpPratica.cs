@@ -1761,7 +1761,7 @@ namespace SDM.Helper
                 {
                     Nome = item.Nome,
                     Cognome = item.Cognome,
-                    Sottocategoria = null,
+                    Sottocategoria = item.Sottocategoria,
                     Anno = item.Anno,
                     LastUpdate = item.LastUpdate,
                     IdUserUpdate = item.IdUserUpdate,
@@ -1777,7 +1777,7 @@ namespace SDM.Helper
             {
                 prev.Nome = item.Nome;
                 prev.Cognome = item.Cognome;
-                prev.Sottocategoria = null;
+                prev.Sottocategoria = item.Sottocategoria;;
                 prev.Anno = item.Anno;
                 prev.LastUpdate = item.LastUpdate;
                 prev.IdUserUpdate = item.IdUserUpdate;
@@ -1819,7 +1819,7 @@ namespace SDM.Helper
                         Nome = pratica.Nome,
                         Cognome = pratica.Cognome,
                         Anno = pratica.Anno,
-                        Sottocategoria = null,
+                        Sottocategoria = pratica.Sottocategoria,
                         IdUserUpdate = pratica.Id,
                         IdSede = pratica.IdSede,
                         NumPratica = pratica.NumPratica,
@@ -1854,7 +1854,7 @@ namespace SDM.Helper
                         Nome = pratica.Nome,
                         Cognome = pratica.Cognome,
                         Anno = pratica.Anno,
-                        Sottocategoria = null,
+                        Sottocategoria = pratica.Sottocategoria,
                         IdUserUpdate = pratica.Id,
                         IdSede = pratica.IdSede,
                         NumPratica = pratica.NumPratica,
@@ -1875,7 +1875,7 @@ namespace SDM.Helper
                     Nome = item.Nome,
                     Cognome = item.Cognome,
                     Anno = item.Anno,
-                    Sottocategoria = null,
+                    Sottocategoria = item.Sottocategoria,
                     IdUserUpdate = item.Id,
                     IdSede = item.IdSede,
                     NumPratica = item.NumPratica,
