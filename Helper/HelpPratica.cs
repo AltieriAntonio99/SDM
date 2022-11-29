@@ -212,11 +212,9 @@ namespace SDM.Helper
                     logMessage = "GetPratichePatronato";
                     items = GetPratiche<Patronato>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -417,11 +415,9 @@ namespace SDM.Helper
                     logMessage = "GetPratichePraticheAuto";
                     items = GetPratiche<PraticheAuto>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -623,11 +619,9 @@ namespace SDM.Helper
                     logMessage = "GetPraticheEventi";
                     items = GetPratiche<Eventi>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -828,11 +822,9 @@ namespace SDM.Helper
                     logMessage = "GetPraticheSindacato";
                     items = GetPratiche<Sindacato>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -1034,11 +1026,9 @@ namespace SDM.Helper
                     logMessage = "GetPraticheStudioProfessionale";
                     items = GetPratiche<StudioProfessionale>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -1240,11 +1230,9 @@ namespace SDM.Helper
                     logMessage = "GetPraticheAgenzia";
                     items = GetPratiche<Agenzia>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -1630,16 +1618,14 @@ namespace SDM.Helper
                 //        if (userFrom != null)
                 //        {
                 //            List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                //                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
+                //                    && x.Roles.Ruolo != "adminCasoria"
                 //                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                //                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                //                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                //                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
+                //                    && x.Roles.Ruolo != "adminSupportoNoSmartJob").ToList();
 
                 //            string ruolo = userFrom.Roles?.Ruolo;
                 //            if (!string.IsNullOrWhiteSpace(ruolo))
                 //            {
-                //                if (ruolo == "admin" || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria")
+                //                if (ruolo == "admin" || ruolo == "adminCasoria")
                 //                {
                 //                    if (userFromList.Count > 0)
                 //                    {

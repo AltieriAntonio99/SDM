@@ -59,7 +59,7 @@
                 @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "labelForm" })
                 <div>
                     @{
-                        if (Session["role"].ToString() == "Normal" || Session["role"].ToString() == "normalNoSmartJob" || Session["role"].ToString() == "smartJob" || Session["role"].ToString() == "noPosta")
+                        if (Session["role"].ToString() == "Normal" || Session["role"].ToString() == "normalNoSmartJob" || Session["role"].ToString() == "smartJob")
                         {
                             @Html.TextAreaFor(model => model.Note, 2, 2, new { @class = "inputForm", @readonly = "readonly" });
                         }

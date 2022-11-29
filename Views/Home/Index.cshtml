@@ -27,7 +27,7 @@
                     <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
             }
-            else if (Session["role"].ToString() == "adminSegreteria" || Session["role"].ToString() == "adminSegreteriaNoSmartJob")
+            else if (Session["role"].ToString() == "adminSegreteria")
             { 
                 <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
@@ -74,32 +74,8 @@
                 <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
                     <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-            }
-            else if (Session["role"].ToString() == "adminDocumenti" || Session["role"].ToString() == "adminDocumentiNoSmartJob")
-            {
-                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
-                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
-                </a>
-                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
-                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
-                </a>
-                <a class="cardImage" title="Sindacato" style="cursor: not-allowed;">
-                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato (inattivo).svg" />
-                </a>
-                <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
-                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
-                </a>
-                <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
-                </a>
-                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
-                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
-                </a>
-                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
-                </a>
-            }
-            else if (Session["role"].ToString() == "adminCasoria" || Session["role"].ToString() == "adminCasoriaNoSmartJob")
+            }            
+            else if (Session["role"].ToString() == "adminCasoria")
             {
                 <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
@@ -123,7 +99,7 @@
                     <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
                 </a>
             }
-            else if (Session["role"].ToString() == "adminArchivio" || Session["role"].ToString() == "adminArchivioNoSmartJob")
+            else if (Session["role"].ToString() == "adminArchivioNoSmartJob")
             {
                 <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
@@ -149,13 +125,7 @@
             }
             else
             {
-                if (Session["role"].ToString() == "adminNoSmartJob")
-                {
-                    <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
-                        <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
-                    </a>
-                }
-                else if (Session["role"].ToString() == "normalNoSmartJob")
+                if (Session["role"].ToString() == "normalNoSmartJob")
                 {
                     <a class="cardImage" target="_blank" title="Caf" href="https://qweb.zucchetti.com/SuiteQWeb/ActionLogin.do">
                         <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
