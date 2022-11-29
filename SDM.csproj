@@ -340,6 +340,7 @@
     <Content Include="Content\CustomStyle\Color.scss" />
     <Content Include="Content\CustomStyle\MainStyle.css.map" />
     <Content Include="Content\CustomStyle\MainStyle.scss" />
+    <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
