@@ -150,41 +150,38 @@ namespace SDM.Helper
                 {
                     RiepilogoPratica riepilogoPratica = new RiepilogoPratica();
 
-                    if (type == "Sindacato")
+                    switch (type)
                     {
-                        riepilogoPratica.pratica = PraticaSindacato(id, "get");
-                        riepilogoPratica.attachment = AttachmentsSindacato(id, "getall");
-                        riepilogoPratica.type = "Sindacato";
-                    }
-                    if (type == "Patronato")
-                    {
-                        riepilogoPratica.pratica = PraticaPatronato(id, "get");
-                        riepilogoPratica.attachment = AttachmentsPatronato(id, "getall");
-                        riepilogoPratica.type = "Patronato";
-                    }
-                    else if (type == "PraticheAuto")
-                    {
-                        riepilogoPratica.pratica = PraticaEventi(id, "get");
-                        riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
-                        riepilogoPratica.type = "PraticheAuto";
-                    }
-                    else if (type == "Eventi")
-                    {
-                        riepilogoPratica.pratica = PraticaEventi(id, "get");
-                        riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
-                        riepilogoPratica.type = "Eventi";
-                    }
-                    else if (type == "StudioProfessionale")
-                    {
-                        riepilogoPratica.pratica = PraticaStudioProfessionale(id, "get");
-                        riepilogoPratica.attachment = AttachmentsStudioProfessionale(id, "getall");
-                        riepilogoPratica.type = "StudioProfessionale";
-                    }
-                    else if (type == "Agenzia")
-                    {
-                        riepilogoPratica.pratica = PraticaEventi(id, "get");
-                        riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
-                        riepilogoPratica.type = "Agenzia";
+                        case "Sindacato":
+                            riepilogoPratica.pratica = PraticaSindacato(id, "get");
+                            riepilogoPratica.attachment = AttachmentsSindacato(id, "getall");
+                            riepilogoPratica.type = "Sindacato";
+                            break;
+                        case "Patronato":
+                            riepilogoPratica.pratica = PraticaPatronato(id, "get");
+                            riepilogoPratica.attachment = AttachmentsPatronato(id, "getall");
+                            riepilogoPratica.type = "Patronato";
+                            break;
+                        case "PraticheAuto":
+                            riepilogoPratica.pratica = PraticaEventi(id, "get");
+                            riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
+                            riepilogoPratica.type = "PraticheAuto";
+                            break;
+                        case "Eventi":
+                            riepilogoPratica.pratica = PraticaEventi(id, "get");
+                            riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
+                            riepilogoPratica.type = "Eventi";
+                            break;
+                        case "StudioProfessionale":
+                            riepilogoPratica.pratica = PraticaStudioProfessionale(id, "get");
+                            riepilogoPratica.attachment = AttachmentsStudioProfessionale(id, "getall");
+                            riepilogoPratica.type = "StudioProfessionale";
+                            break;
+                        case "Agenzia":
+                            riepilogoPratica.pratica = PraticaEventi(id, "get");
+                            riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
+                            riepilogoPratica.type = "Agenzia";
+                            break;
                     }
 
                     return riepilogoPratica;
@@ -1594,7 +1591,7 @@ namespace SDM.Helper
             try
             {
                 var result = Add<T>(item, tipoPratica);
-                //if (result) _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                if (result) _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
                 return result;
             }
             catch (Exception ex)
@@ -1609,36 +1606,36 @@ namespace SDM.Helper
             try
             {
                 var result = Update(item);
-                //if (result)
-                //{
-                //    using (var context = new SDMEntities())
-                //    {
-                //        Users userFrom = GetById<Users>(mailPratica.IdUserUpdate.Value);
+                if (result)
+                {
+                    using (var context = new SDMEntities())
+                    {
+                        Users userFrom = GetById<Users>(mailPratica.IdUserUpdate.Value);
 
-                //        if (userFrom != null)
-                //        {
-                //            List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                //                    && x.Roles.Ruolo != "adminCasoria"
-                //                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                //                    && x.Roles.Ruolo != "adminSupportoNoSmartJob").ToList();
+                        if (userFrom != null)
+                        {
+                            List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
+                                    && x.Roles.Ruolo != "adminCasoria"
+                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
+                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob").ToList();
 
-                //            string ruolo = userFrom.Roles?.Ruolo;
-                //            if (!string.IsNullOrWhiteSpace(ruolo))
-                //            {
-                //                if (ruolo == "admin" || ruolo == "adminCasoria")
-                //                {
-                //                    if (userFromList.Count > 0)
-                //                    {
-                //                        string email = userFromList.FirstOrDefault().Email;
-                //                        if (!string.IsNullOrWhiteSpace(email)) _mail.SendMail(mailPratica, tipoPratica, email, mailSubject);
-                //                    }
-                //                }
-                //                else _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
-                //            }
+                            string ruolo = userFrom.Roles?.Ruolo;
+                            if (!string.IsNullOrWhiteSpace(ruolo))
+                            {
+                                if (ruolo == "admin" || ruolo == "adminCasoria")
+                                {
+                                    if (userFromList.Count > 0)
+                                    {
+                                        string email = userFromList.FirstOrDefault().Email;
+                                        if (!string.IsNullOrWhiteSpace(email)) _mail.SendMail(mailPratica, tipoPratica, email, mailSubject);
+                                    }
+                                }
+                                else _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                            }
 
-                //        }
-                //    }
-                //}
+                        }
+                    }
+                }
                 return result;
             }
             catch (Exception ex)

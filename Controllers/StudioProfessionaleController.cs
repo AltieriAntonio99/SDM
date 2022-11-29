@@ -104,7 +104,7 @@ namespace SDM.Controllers
             try
             {
                 
-                if (_help.ControlloCampiNoCategoria(pratica))
+                if (_help.ControlloCampi(pratica))
                 {
                     pratica.LastUpdate = DateTime.Now;
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
@@ -134,7 +134,7 @@ namespace SDM.Controllers
         {
             try
             {
-                if (_help.ControlloCampiNoCategoria(pratica))
+                if (_help.ControlloCampi(pratica))
                 {
                     pratica.LastUpdate = DateTime.Now;
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
