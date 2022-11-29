@@ -17,20 +17,14 @@
                 <a class="cardImage" style="cursor: not-allowed;" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
-                </a>
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
-                <a class="cardImage" style="cursor: not-allowed;" title="Assistenza Contabile">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
+                <a class="cardImage" style="cursor: not-allowed;" title="Studio Professionale">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSegreteria" || Session["role"].ToString() == "adminSegreteriaNoSmartJob")
@@ -47,24 +41,15 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>*@
                 <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
-                </a>
-                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
-                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
-                </a>*@
-                @*<a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>*@
+                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                </a>                
             }
             else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
             {
@@ -80,24 +65,15 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>*@
                 <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
-                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>*@
             }
             else if (Session["role"].ToString() == "adminDocumenti" || Session["role"].ToString() == "adminDocumentiNoSmartJob")
             {
@@ -113,24 +89,15 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                @*<a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
-                </a>*@
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
-                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>*@
             }
             else if (Session["role"].ToString() == "adminCasoria" || Session["role"].ToString() == "adminCasoriaNoSmartJob")
             {
@@ -146,24 +113,15 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>*@
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Assistenza Contabile" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
+                <a class="cardImage" title="Studio Professionale" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
                 </a>
-                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
-                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>*@
             }
             else if (Session["role"].ToString() == "adminArchivio" || Session["role"].ToString() == "adminArchivioNoSmartJob")
             {
@@ -179,24 +137,15 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>*@
                 <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                @*<a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
-                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio.svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>*@
             }
             else
             {
@@ -228,24 +177,15 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                @*<a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
-                    <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
-                </a>*@
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
                     <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
-                <a class="cardImage" title="Assistenza Contabile" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
-                    <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
+                <a class="cardImage" title="Studio Professionale" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
                 </a>
-                @*<a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
-                    <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio.svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
-                    <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>*@
             }
         </div>
     </div>

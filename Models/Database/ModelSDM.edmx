@@ -22,23 +22,6 @@
           <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
           <Property Name="Note" Type="nvarchar" MaxLength="500" />
         </EntityType>
-        <EntityType Name="AssistenzaLegale">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Anno" Type="varchar" MaxLength="50" />
-          <Property Name="Nome" Type="varchar" MaxLength="50" />
-          <Property Name="Cognome" Type="varchar" MaxLength="50" />
-          <Property Name="NumPratica" Type="varchar" MaxLength="255" />
-          <Property Name="LastUpdate" Type="datetime" />
-          <Property Name="IdUserUpdate" Type="int" />
-          <Property Name="IdSede" Type="int" />
-          <Property Name="Sottocategoria" Type="varchar" MaxLength="50" />
-          <Property Name="IdStato" Type="int" />
-          <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
-          <Property Name="Note" Type="nvarchar" MaxLength="500" />
-        </EntityType>
         <EntityType Name="AttachmentsAgenzia">
           <Key>
             <PropertyRef Name="Id" />
@@ -51,31 +34,7 @@
           <Property Name="IdUserUpdate" Type="int" Nullable="false" />
           <Property Name="LastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="AttachmentsAssistenzaLegale">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nome" Type="varchar" MaxLength="255" />
-          <Property Name="Type" Type="varchar" MaxLength="255" />
-          <Property Name="Blob" Type="varbinary(max)" />
-          <Property Name="IdPratica" Type="int" Nullable="false" />
-          <Property Name="IdUserUpdate" Type="int" Nullable="false" />
-          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
-        </EntityType>
         <EntityType Name="AttachmentsEventi">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nome" Type="varchar" MaxLength="255" />
-          <Property Name="Type" Type="varchar" MaxLength="255" />
-          <Property Name="Blob" Type="varbinary(max)" />
-          <Property Name="IdPratica" Type="int" Nullable="false" />
-          <Property Name="IdUserUpdate" Type="int" Nullable="false" />
-          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
-        </EntityType>
-        <EntityType Name="AttachmentsFormazione">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -156,23 +115,6 @@
           <Property Name="LastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Eventi">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Anno" Type="varchar" MaxLength="50" />
-          <Property Name="Nome" Type="varchar" MaxLength="50" />
-          <Property Name="Cognome" Type="varchar" MaxLength="50" />
-          <Property Name="NumPratica" Type="varchar" MaxLength="255" />
-          <Property Name="LastUpdate" Type="datetime" />
-          <Property Name="IdUserUpdate" Type="int" />
-          <Property Name="IdSede" Type="int" />
-          <Property Name="Sottocategoria" Type="varchar" MaxLength="50" />
-          <Property Name="IdStato" Type="int" />
-          <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
-          <Property Name="Note" Type="nvarchar" MaxLength="500" />
-        </EntityType>
-        <EntityType Name="Formazione">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -362,54 +304,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AssistenzaContabile_AttachmentsAssistenzaLegale">
-          <End Role="AssistenzaLegale" Type="Self.AssistenzaLegale" Multiplicity="1" />
-          <End Role="AttachmentsAssistenzaLegale" Type="Self.AttachmentsAssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssistenzaLegale">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsAssistenzaLegale">
-              <PropertyRef Name="IdPratica" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssistenzaLegale_Sede">
-          <End Role="Sedi" Type="Self.Sedi" Multiplicity="0..1" />
-          <End Role="AssistenzaLegale" Type="Self.AssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sedi">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AssistenzaLegale">
-              <PropertyRef Name="IdSede" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssistenzaLegale_Status">
-          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
-          <End Role="AssistenzaLegale" Type="Self.AssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AssistenzaLegale">
-              <PropertyRef Name="IdStato" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssistenzaLegale_User">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="AssistenzaLegale" Type="Self.AssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AssistenzaLegale">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Eventi_AttachmentsEventi">
           <End Role="Eventi" Type="Self.Eventi" Multiplicity="1" />
           <End Role="AttachmentsEventi" Type="Self.AttachmentsEventi" Multiplicity="*" />
@@ -455,54 +349,6 @@
             </Principal>
             <Dependent Role="Eventi">
               <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Formazione_Sede">
-          <End Role="Sedi" Type="Self.Sedi" Multiplicity="0..1" />
-          <End Role="Formazione" Type="Self.Formazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sedi">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Formazione">
-              <PropertyRef Name="IdSede" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Formazione_Status">
-          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
-          <End Role="Formazione" Type="Self.Formazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Formazione">
-              <PropertyRef Name="IdStato" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Formazione_User">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Formazione" Type="Self.Formazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Formazione">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Noleggio_AttachmentsFormazione">
-          <End Role="Formazione" Type="Self.Formazione" Multiplicity="1" />
-          <End Role="AttachmentsFormazione" Type="Self.AttachmentsFormazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Formazione">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsFormazione">
-              <PropertyRef Name="IdPratica" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -698,18 +544,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_User_AttachmentsAssistenzaLegale">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="AttachmentsAssistenzaLegale" Type="Self.AttachmentsAssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsAssistenzaLegale">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_User_AttachmentsEventi">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="AttachmentsEventi" Type="Self.AttachmentsEventi" Multiplicity="*" />
@@ -718,18 +552,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AttachmentsEventi">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_AttachmentsFormazione">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="AttachmentsFormazione" Type="Self.AttachmentsFormazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsFormazione">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -820,11 +642,8 @@
         </Association>
         <EntityContainer Name="MSSql204389ModelStoreContainer">
           <EntitySet Name="Agenzia" EntityType="Self.Agenzia" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AssistenzaLegale" EntityType="Self.AssistenzaLegale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsAgenzia" EntityType="Self.AttachmentsAgenzia" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AttachmentsAssistenzaLegale" EntityType="Self.AttachmentsAssistenzaLegale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsEventi" EntityType="Self.AttachmentsEventi" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AttachmentsFormazione" EntityType="Self.AttachmentsFormazione" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsPatronato" EntityType="Self.AttachmentsPatronato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsPraticheAuto" EntityType="Self.AttachmentsPraticheAuto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsSindacato" EntityType="Self.AttachmentsSindacato" Schema="dbo" store:Type="Tables" />
@@ -832,7 +651,6 @@
           <EntitySet Name="Categorie" EntityType="Self.Categorie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DownloadFile" EntityType="Self.DownloadFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Eventi" EntityType="Self.Eventi" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Formazione" EntityType="Self.Formazione" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NumeroPratiche" EntityType="Self.NumeroPratiche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patronato" EntityType="Self.Patronato" Schema="dbo" store:Type="Tables" />
@@ -859,22 +677,6 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Agenzia" EntitySet="Agenzia" />
           </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaContabile_AttachmentsAssistenzaLegale" Association="Self.FK_AssistenzaContabile_AttachmentsAssistenzaLegale">
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-            <End Role="AttachmentsAssistenzaLegale" EntitySet="AttachmentsAssistenzaLegale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaLegale_Sede" Association="Self.FK_AssistenzaLegale_Sede">
-            <End Role="Sedi" EntitySet="Sedi" />
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaLegale_Status" Association="Self.FK_AssistenzaLegale_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaLegale_User" Association="Self.FK_AssistenzaLegale_User">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-          </AssociationSet>
           <AssociationSet Name="FK_Eventi_AttachmentsEventi" Association="Self.FK_Eventi_AttachmentsEventi">
             <End Role="Eventi" EntitySet="Eventi" />
             <End Role="AttachmentsEventi" EntitySet="AttachmentsEventi" />
@@ -890,22 +692,6 @@
           <AssociationSet Name="FK_Eventi_User" Association="Self.FK_Eventi_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Eventi" EntitySet="Eventi" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Formazione_Sede" Association="Self.FK_Formazione_Sede">
-            <End Role="Sedi" EntitySet="Sedi" />
-            <End Role="Formazione" EntitySet="Formazione" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Formazione_Status" Association="Self.FK_Formazione_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Formazione" EntitySet="Formazione" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Formazione_User" Association="Self.FK_Formazione_User">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Formazione" EntitySet="Formazione" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Noleggio_AttachmentsFormazione" Association="Self.FK_Noleggio_AttachmentsFormazione">
-            <End Role="Formazione" EntitySet="Formazione" />
-            <End Role="AttachmentsFormazione" EntitySet="AttachmentsFormazione" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_AttachmentsPatronato" Association="Self.FK_Patronato_AttachmentsPatronato">
             <End Role="Patronato" EntitySet="Patronato" />
@@ -971,17 +757,9 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsAgenzia" EntitySet="AttachmentsAgenzia" />
           </AssociationSet>
-          <AssociationSet Name="FK_User_AttachmentsAssistenzaLegale" Association="Self.FK_User_AttachmentsAssistenzaLegale">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="AttachmentsAssistenzaLegale" EntitySet="AttachmentsAssistenzaLegale" />
-          </AssociationSet>
           <AssociationSet Name="FK_User_AttachmentsEventi" Association="Self.FK_User_AttachmentsEventi">
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsEventi" EntitySet="AttachmentsEventi" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_AttachmentsFormazione" Association="Self.FK_User_AttachmentsFormazione">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="AttachmentsFormazione" EntitySet="AttachmentsFormazione" />
           </AssociationSet>
           <AssociationSet Name="FK_User_AttachmentsPatronato" Association="Self.FK_User_AttachmentsPatronato">
             <End Role="Users" EntitySet="Users" />
@@ -1018,11 +796,8 @@
       <Schema Namespace="MSSql204389Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="SDMEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Agenzia" EntityType="MSSql204389Model.Agenzia" />
-          <EntitySet Name="AssistenzaLegale" EntityType="MSSql204389Model.AssistenzaLegale" />
           <EntitySet Name="AttachmentsAgenzia" EntityType="MSSql204389Model.AttachmentsAgenzia" />
-          <EntitySet Name="AttachmentsAssistenzaLegale" EntityType="MSSql204389Model.AttachmentsAssistenzaLegale" />
           <EntitySet Name="AttachmentsEventi" EntityType="MSSql204389Model.AttachmentsEventi" />
-          <EntitySet Name="AttachmentsFormazione" EntityType="MSSql204389Model.AttachmentsFormazione" />
           <EntitySet Name="AttachmentsPatronato" EntityType="MSSql204389Model.AttachmentsPatronato" />
           <EntitySet Name="AttachmentsPraticheAuto" EntityType="MSSql204389Model.AttachmentsPraticheAuto" />
           <EntitySet Name="AttachmentsSindacato" EntityType="MSSql204389Model.AttachmentsSindacato" />
@@ -1030,7 +805,6 @@
           <EntitySet Name="Categorie" EntityType="MSSql204389Model.Categorie" />
           <EntitySet Name="DownloadFile" EntityType="MSSql204389Model.DownloadFile" />
           <EntitySet Name="Eventi" EntityType="MSSql204389Model.Eventi" />
-          <EntitySet Name="Formazione" EntityType="MSSql204389Model.Formazione" />
           <EntitySet Name="Logs" EntityType="MSSql204389Model.Logs" />
           <EntitySet Name="NumeroPratiche" EntityType="MSSql204389Model.NumeroPratiche" />
           <EntitySet Name="Patronato" EntityType="MSSql204389Model.Patronato" />
@@ -1057,29 +831,9 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Agenzia" EntitySet="Agenzia" />
           </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaContabile_AttachmentsAssistenzaLegale" Association="MSSql204389Model.FK_AssistenzaContabile_AttachmentsAssistenzaLegale">
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-            <End Role="AttachmentsAssistenzaLegale" EntitySet="AttachmentsAssistenzaLegale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaLegale_Sede" Association="MSSql204389Model.FK_AssistenzaLegale_Sede">
-            <End Role="Sedi" EntitySet="Sedi" />
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaLegale_Status" Association="MSSql204389Model.FK_AssistenzaLegale_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssistenzaLegale_User" Association="MSSql204389Model.FK_AssistenzaLegale_User">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="AssistenzaLegale" EntitySet="AssistenzaLegale" />
-          </AssociationSet>
           <AssociationSet Name="FK_User_AttachmentsAgenzia" Association="MSSql204389Model.FK_User_AttachmentsAgenzia">
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsAgenzia" EntitySet="AttachmentsAgenzia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_AttachmentsAssistenzaLegale" Association="MSSql204389Model.FK_User_AttachmentsAssistenzaLegale">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="AttachmentsAssistenzaLegale" EntitySet="AttachmentsAssistenzaLegale" />
           </AssociationSet>
           <AssociationSet Name="FK_Eventi_AttachmentsEventi" Association="MSSql204389Model.FK_Eventi_AttachmentsEventi">
             <End Role="Eventi" EntitySet="Eventi" />
@@ -1088,14 +842,6 @@
           <AssociationSet Name="FK_User_AttachmentsEventi" Association="MSSql204389Model.FK_User_AttachmentsEventi">
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsEventi" EntitySet="AttachmentsEventi" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Noleggio_AttachmentsFormazione" Association="MSSql204389Model.FK_Noleggio_AttachmentsFormazione">
-            <End Role="Formazione" EntitySet="Formazione" />
-            <End Role="AttachmentsFormazione" EntitySet="AttachmentsFormazione" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_AttachmentsFormazione" Association="MSSql204389Model.FK_User_AttachmentsFormazione">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="AttachmentsFormazione" EntitySet="AttachmentsFormazione" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_AttachmentsPatronato" Association="MSSql204389Model.FK_Patronato_AttachmentsPatronato">
             <End Role="Patronato" EntitySet="Patronato" />
@@ -1144,18 +890,6 @@
           <AssociationSet Name="FK_Eventi_User" Association="MSSql204389Model.FK_Eventi_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Eventi" EntitySet="Eventi" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Formazione_Sede" Association="MSSql204389Model.FK_Formazione_Sede">
-            <End Role="Sedi" EntitySet="Sedi" />
-            <End Role="Formazione" EntitySet="Formazione" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Formazione_Status" Association="MSSql204389Model.FK_Formazione_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Formazione" EntitySet="Formazione" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Formazione_User" Association="MSSql204389Model.FK_Formazione_User">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Formazione" EntitySet="Formazione" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_Sede" Association="MSSql204389Model.FK_Patronato_Sede">
             <End Role="Sedi" EntitySet="Sedi" />
@@ -1231,27 +965,6 @@
           <NavigationProperty Name="Status" Relationship="MSSql204389Model.FK_Agenzia_Status" FromRole="Agenzia" ToRole="Status" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Agenzia_User" FromRole="Agenzia" ToRole="Users" />
         </EntityType>
-        <EntityType Name="AssistenzaLegale">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Anno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Cognome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="NumPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
-          <Property Name="IdUserUpdate" Type="Int32" />
-          <Property Name="IdSede" Type="Int32" />
-          <Property Name="Sottocategoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IdStato" Type="Int32" />
-          <Property Name="TipologiaPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AttachmentsAssistenzaLegale" Relationship="MSSql204389Model.FK_AssistenzaContabile_AttachmentsAssistenzaLegale" FromRole="AssistenzaLegale" ToRole="AttachmentsAssistenzaLegale" />
-          <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_AssistenzaLegale_Sede" FromRole="AssistenzaLegale" ToRole="Sedi" />
-          <NavigationProperty Name="Status" Relationship="MSSql204389Model.FK_AssistenzaLegale_Status" FromRole="AssistenzaLegale" ToRole="Status" />
-          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_AssistenzaLegale_User" FromRole="AssistenzaLegale" ToRole="Users" />
-        </EntityType>
         <EntityType Name="AttachmentsAgenzia">
           <Key>
             <PropertyRef Name="Id" />
@@ -1266,20 +979,6 @@
           <NavigationProperty Name="Agenzia" Relationship="MSSql204389Model.FK_Agenzia_AttachmentsAgenzia" FromRole="AttachmentsAgenzia" ToRole="Agenzia" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsAgenzia" FromRole="AttachmentsAgenzia" ToRole="Users" />
         </EntityType>
-        <EntityType Name="AttachmentsAssistenzaLegale">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nome" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Blob" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="IdPratica" Type="Int32" Nullable="false" />
-          <Property Name="IdUserUpdate" Type="Int32" Nullable="false" />
-          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="AssistenzaLegale" Relationship="MSSql204389Model.FK_AssistenzaContabile_AttachmentsAssistenzaLegale" FromRole="AttachmentsAssistenzaLegale" ToRole="AssistenzaLegale" />
-          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsAssistenzaLegale" FromRole="AttachmentsAssistenzaLegale" ToRole="Users" />
-        </EntityType>
         <EntityType Name="AttachmentsEventi">
           <Key>
             <PropertyRef Name="Id" />
@@ -1293,20 +992,6 @@
           <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_AttachmentsEventi" FromRole="AttachmentsEventi" ToRole="Eventi" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsEventi" FromRole="AttachmentsEventi" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="AttachmentsFormazione">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nome" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Blob" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="IdPratica" Type="Int32" Nullable="false" />
-          <Property Name="IdUserUpdate" Type="Int32" Nullable="false" />
-          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Formazione" Relationship="MSSql204389Model.FK_Noleggio_AttachmentsFormazione" FromRole="AttachmentsFormazione" ToRole="Formazione" />
-          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsFormazione" FromRole="AttachmentsFormazione" ToRole="Users" />
         </EntityType>
         <EntityType Name="AttachmentsPatronato">
           <Key>
@@ -1406,27 +1091,6 @@
           <NavigationProperty Name="Status" Relationship="MSSql204389Model.FK_Eventi_Status" FromRole="Eventi" ToRole="Status" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Eventi_User" FromRole="Eventi" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Formazione">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Anno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Cognome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="NumPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
-          <Property Name="IdUserUpdate" Type="Int32" />
-          <Property Name="IdSede" Type="Int32" />
-          <Property Name="Sottocategoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IdStato" Type="Int32" />
-          <Property Name="TipologiaPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AttachmentsFormazione" Relationship="MSSql204389Model.FK_Noleggio_AttachmentsFormazione" FromRole="Formazione" ToRole="AttachmentsFormazione" />
-          <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_Formazione_Sede" FromRole="Formazione" ToRole="Sedi" />
-          <NavigationProperty Name="Status" Relationship="MSSql204389Model.FK_Formazione_Status" FromRole="Formazione" ToRole="Status" />
-          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Formazione_User" FromRole="Formazione" ToRole="Users" />
-        </EntityType>
         <EntityType Name="Logs">
           <Key>
             <PropertyRef Name="Id" />
@@ -1505,9 +1169,7 @@
           <Property Name="Indirizzo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Citta" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agenzia" Relationship="MSSql204389Model.FK_Agenzia_Sede" FromRole="Sedi" ToRole="Agenzia" />
-          <NavigationProperty Name="AssistenzaLegale" Relationship="MSSql204389Model.FK_AssistenzaLegale_Sede" FromRole="Sedi" ToRole="AssistenzaLegale" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_Sede" FromRole="Sedi" ToRole="Eventi" />
-          <NavigationProperty Name="Formazione" Relationship="MSSql204389Model.FK_Formazione_Sede" FromRole="Sedi" ToRole="Formazione" />
           <NavigationProperty Name="Patronato" Relationship="MSSql204389Model.FK_Patronato_Sede" FromRole="Sedi" ToRole="Patronato" />
           <NavigationProperty Name="PraticheAuto" Relationship="MSSql204389Model.FK_PraticheAuto_Sede" FromRole="Sedi" ToRole="PraticheAuto" />
           <NavigationProperty Name="Sindacato" Relationship="MSSql204389Model.FK_Sindacato_Sede" FromRole="Sedi" ToRole="Sindacato" />
@@ -1542,9 +1204,7 @@
           <Property Name="Stato" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="TipoPratica" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agenzia" Relationship="MSSql204389Model.FK_Agenzia_Status" FromRole="Status" ToRole="Agenzia" />
-          <NavigationProperty Name="AssistenzaLegale" Relationship="MSSql204389Model.FK_AssistenzaLegale_Status" FromRole="Status" ToRole="AssistenzaLegale" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_Status" FromRole="Status" ToRole="Eventi" />
-          <NavigationProperty Name="Formazione" Relationship="MSSql204389Model.FK_Formazione_Status" FromRole="Status" ToRole="Formazione" />
           <NavigationProperty Name="Patronato" Relationship="MSSql204389Model.FK_Patronato_Status" FromRole="Status" ToRole="Patronato" />
           <NavigationProperty Name="PraticheAuto" Relationship="MSSql204389Model.FK_PraticheAuto_Status" FromRole="Status" ToRole="PraticheAuto" />
           <NavigationProperty Name="StudioProfessionale" Relationship="MSSql204389Model.FK_StudioProfessionale_Status" FromRole="Status" ToRole="StudioProfessionale" />
@@ -1584,18 +1244,14 @@
           <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="IdRuolo" Type="Int32" />
           <NavigationProperty Name="Agenzia" Relationship="MSSql204389Model.FK_Agenzia_User" FromRole="Users" ToRole="Agenzia" />
-          <NavigationProperty Name="AssistenzaLegale" Relationship="MSSql204389Model.FK_AssistenzaLegale_User" FromRole="Users" ToRole="AssistenzaLegale" />
           <NavigationProperty Name="AttachmentsAgenzia" Relationship="MSSql204389Model.FK_User_AttachmentsAgenzia" FromRole="Users" ToRole="AttachmentsAgenzia" />
-          <NavigationProperty Name="AttachmentsAssistenzaLegale" Relationship="MSSql204389Model.FK_User_AttachmentsAssistenzaLegale" FromRole="Users" ToRole="AttachmentsAssistenzaLegale" />
           <NavigationProperty Name="AttachmentsEventi" Relationship="MSSql204389Model.FK_User_AttachmentsEventi" FromRole="Users" ToRole="AttachmentsEventi" />
-          <NavigationProperty Name="AttachmentsFormazione" Relationship="MSSql204389Model.FK_User_AttachmentsFormazione" FromRole="Users" ToRole="AttachmentsFormazione" />
           <NavigationProperty Name="AttachmentsPatronato" Relationship="MSSql204389Model.FK_User_AttachmentsPatronato" FromRole="Users" ToRole="AttachmentsPatronato" />
           <NavigationProperty Name="AttachmentsPraticheAuto" Relationship="MSSql204389Model.FK_User_AttachmentsPraticheAuto" FromRole="Users" ToRole="AttachmentsPraticheAuto" />
           <NavigationProperty Name="AttachmentsSindacato" Relationship="MSSql204389Model.FK_User_AttachmentsSindacato" FromRole="Users" ToRole="AttachmentsSindacato" />
           <NavigationProperty Name="AttachmentsStudioProfessionale" Relationship="MSSql204389Model.FK_User_AttachmentsStudioProfessionale" FromRole="Users" ToRole="AttachmentsStudioProfessionale" />
           <NavigationProperty Name="DownloadFile" Relationship="MSSql204389Model.FK_User_DownloadFile" FromRole="Users" ToRole="DownloadFile" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_User" FromRole="Users" ToRole="Eventi" />
-          <NavigationProperty Name="Formazione" Relationship="MSSql204389Model.FK_Formazione_User" FromRole="Users" ToRole="Formazione" />
           <NavigationProperty Name="Patronato" Relationship="MSSql204389Model.FK_Patronato_User" FromRole="Users" ToRole="Patronato" />
           <NavigationProperty Name="PraticheAuto" Relationship="MSSql204389Model.FK_PraticheAuto_User" FromRole="Users" ToRole="PraticheAuto" />
           <NavigationProperty Name="Roles" Relationship="MSSql204389Model.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
@@ -1651,54 +1307,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AssistenzaContabile_AttachmentsAssistenzaLegale">
-          <End Type="MSSql204389Model.AssistenzaLegale" Role="AssistenzaLegale" Multiplicity="1" />
-          <End Type="MSSql204389Model.AttachmentsAssistenzaLegale" Role="AttachmentsAssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssistenzaLegale">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsAssistenzaLegale">
-              <PropertyRef Name="IdPratica" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssistenzaLegale_Sede">
-          <End Type="MSSql204389Model.Sedi" Role="Sedi" Multiplicity="0..1" />
-          <End Type="MSSql204389Model.AssistenzaLegale" Role="AssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sedi">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AssistenzaLegale">
-              <PropertyRef Name="IdSede" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssistenzaLegale_Status">
-          <End Type="MSSql204389Model.Status" Role="Status" Multiplicity="0..1" />
-          <End Type="MSSql204389Model.AssistenzaLegale" Role="AssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AssistenzaLegale">
-              <PropertyRef Name="IdStato" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssistenzaLegale_User">
-          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="0..1" />
-          <End Type="MSSql204389Model.AssistenzaLegale" Role="AssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AssistenzaLegale">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_User_AttachmentsAgenzia">
           <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
           <End Type="MSSql204389Model.AttachmentsAgenzia" Role="AttachmentsAgenzia" Multiplicity="*" />
@@ -1707,18 +1315,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AttachmentsAgenzia">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_AttachmentsAssistenzaLegale">
-          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
-          <End Type="MSSql204389Model.AttachmentsAssistenzaLegale" Role="AttachmentsAssistenzaLegale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsAssistenzaLegale">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -1743,30 +1339,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AttachmentsEventi">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Noleggio_AttachmentsFormazione">
-          <End Type="MSSql204389Model.Formazione" Role="Formazione" Multiplicity="1" />
-          <End Type="MSSql204389Model.AttachmentsFormazione" Role="AttachmentsFormazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Formazione">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsFormazione">
-              <PropertyRef Name="IdPratica" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_AttachmentsFormazione">
-          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
-          <End Type="MSSql204389Model.AttachmentsFormazione" Role="AttachmentsFormazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AttachmentsFormazione">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -1911,42 +1483,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Eventi">
-              <PropertyRef Name="IdUserUpdate" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Formazione_Sede">
-          <End Type="MSSql204389Model.Sedi" Role="Sedi" Multiplicity="0..1" />
-          <End Type="MSSql204389Model.Formazione" Role="Formazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sedi">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Formazione">
-              <PropertyRef Name="IdSede" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Formazione_Status">
-          <End Type="MSSql204389Model.Status" Role="Status" Multiplicity="0..1" />
-          <End Type="MSSql204389Model.Formazione" Role="Formazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Formazione">
-              <PropertyRef Name="IdStato" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Formazione_User">
-          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="0..1" />
-          <End Type="MSSql204389Model.Formazione" Role="Formazione" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Formazione">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -2131,24 +1667,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AssistenzaLegale">
-            <EntityTypeMapping TypeName="MSSql204389Model.AssistenzaLegale">
-              <MappingFragment StoreEntitySet="AssistenzaLegale">
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
-                <ScalarProperty Name="IdStato" ColumnName="IdStato" />
-                <ScalarProperty Name="Sottocategoria" ColumnName="Sottocategoria" />
-                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
-                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
-                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
-                <ScalarProperty Name="NumPratica" ColumnName="NumPratica" />
-                <ScalarProperty Name="Cognome" ColumnName="Cognome" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
-                <ScalarProperty Name="Anno" ColumnName="Anno" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AttachmentsAgenzia">
             <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsAgenzia">
               <MappingFragment StoreEntitySet="AttachmentsAgenzia">
@@ -2162,35 +1680,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AttachmentsAssistenzaLegale">
-            <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsAssistenzaLegale">
-              <MappingFragment StoreEntitySet="AttachmentsAssistenzaLegale">
-                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
-                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
-                <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
-                <ScalarProperty Name="Blob" ColumnName="Blob" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AttachmentsEventi">
             <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsEventi">
               <MappingFragment StoreEntitySet="AttachmentsEventi">
-                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
-                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
-                <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
-                <ScalarProperty Name="Blob" ColumnName="Blob" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AttachmentsFormazione">
-            <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsFormazione">
-              <MappingFragment StoreEntitySet="AttachmentsFormazione">
                 <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
                 <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
                 <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
@@ -2278,24 +1770,6 @@
           <EntitySetMapping Name="Eventi">
             <EntityTypeMapping TypeName="MSSql204389Model.Eventi">
               <MappingFragment StoreEntitySet="Eventi">
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
-                <ScalarProperty Name="IdStato" ColumnName="IdStato" />
-                <ScalarProperty Name="Sottocategoria" ColumnName="Sottocategoria" />
-                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
-                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
-                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
-                <ScalarProperty Name="NumPratica" ColumnName="NumPratica" />
-                <ScalarProperty Name="Cognome" ColumnName="Cognome" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
-                <ScalarProperty Name="Anno" ColumnName="Anno" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Formazione">
-            <EntityTypeMapping TypeName="MSSql204389Model.Formazione">
-              <MappingFragment StoreEntitySet="Formazione">
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
                 <ScalarProperty Name="IdStato" ColumnName="IdStato" />

@@ -10,7 +10,6 @@
     }
     function AjaxBegin() {
         $('#loading-div').show();
-
     }
     function AjaxComplete() {
         $("#loading-div").hide();
@@ -52,6 +51,18 @@
                     <label for="Nome" class="labelForm">Cognome</label>
                     <div>
                         <input type="text" name="Cognome" class="inputForm" />
+                    </div>
+                </div>
+                <div class="colForm">
+                    <label for="Sottocategoria" class="labelForm">Sottocategoria</label>
+                    <div>
+                        <select name="Sottocategoria" class="inputForm">
+                            <option value="">...</option>
+                            @foreach (var item in Model.Categorie)
+                            {
+                                <option value="@item.Nome">@item.Nome</option>
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="colForm">

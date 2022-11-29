@@ -18,18 +18,14 @@ namespace SDM.Models.Database
         public Users()
         {
             this.Agenzia = new HashSet<Agenzia>();
-            this.AssistenzaLegale = new HashSet<AssistenzaLegale>();
             this.AttachmentsAgenzia = new HashSet<AttachmentsAgenzia>();
-            this.AttachmentsAssistenzaLegale = new HashSet<AttachmentsAssistenzaLegale>();
             this.AttachmentsEventi = new HashSet<AttachmentsEventi>();
-            this.AttachmentsFormazione = new HashSet<AttachmentsFormazione>();
             this.AttachmentsPatronato = new HashSet<AttachmentsPatronato>();
             this.AttachmentsPraticheAuto = new HashSet<AttachmentsPraticheAuto>();
             this.AttachmentsSindacato = new HashSet<AttachmentsSindacato>();
             this.AttachmentsStudioProfessionale = new HashSet<AttachmentsStudioProfessionale>();
             this.DownloadFile = new HashSet<DownloadFile>();
             this.Eventi = new HashSet<Eventi>();
-            this.Formazione = new HashSet<Formazione>();
             this.Patronato = new HashSet<Patronato>();
             this.PraticheAuto = new HashSet<PraticheAuto>();
             this.Sindacato = new HashSet<Sindacato>();
@@ -49,15 +45,9 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Agenzia> Agenzia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssistenzaLegale> AssistenzaLegale { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsAgenzia> AttachmentsAgenzia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AttachmentsAssistenzaLegale> AttachmentsAssistenzaLegale { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsEventi> AttachmentsEventi { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AttachmentsFormazione> AttachmentsFormazione { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsPatronato> AttachmentsPatronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -70,8 +60,6 @@ namespace SDM.Models.Database
         public virtual ICollection<DownloadFile> DownloadFile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Eventi> Eventi { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Formazione> Formazione { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patronato> Patronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

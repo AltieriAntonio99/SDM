@@ -48,16 +48,16 @@
         }
     }
 
-    $("document").ready(function () {
+    $("document").ready(function() {
         var rows = document.querySelectorAll('[id^="cestino"]').length;
-        if (rows < 2) {
+        if (rows < 3) {
             $("#salva").hide();
             $("#torna-indietro").show();
         }
         else {
             $("#salva").show();
             $("#torna-indietro").hide();
-        }
+        } 
     })
 </script>
 
@@ -82,6 +82,7 @@
     }, new { id = "formid", enctype = "multipart/form-data", @class = "patronatoAddForm" }))
     {
         <ul class="menuDocumenti">
+            <li>Mandato</li>
             <li>Documento e codice fiscale</li>
             <li>Documenti vari</li>
         </ul>
@@ -99,7 +100,7 @@
         </div>
     }
 
-
+    
     <div style="position: relative">
         <div id="loading-div" class="loaderShadow">
             <div class="loaderDiv">

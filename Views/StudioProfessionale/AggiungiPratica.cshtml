@@ -38,11 +38,17 @@
         </div>
         <div class="rowForm">
             <div class="colForm">
-                @Html.LabelFor(model => model.TipologiaPratica, htmlAttributes: new { @class = "labelForm" })
+                @Html.LabelFor(model => model.Sottocategoria, htmlAttributes: new { @class = "labelForm" })
                 <div>
-                    @Html.EditorFor(model => model.TipologiaPratica, new { htmlAttributes = new { @class = "inputForm" } })
+                    <select name="Sottocategoria" class="inputForm" id="Sottocategoria">
+                        <option value="">...</option>
+                        @foreach (var item in Model.SottocategoriaList)
+                        {
+                            <option value="@item.Nome">@item.Nome</option>
+                        }
+                    </select>
                 </div>
-                <span id="TipologiaValidation" class="validationField">Il campo è obbligatorio</span>
+                <span id="SottocategoriaValidation" class="validationField">Il campo è obbligatorio</span>
             </div>
             <div class="colForm">
                 @Html.LabelFor(model => model.Anno, htmlAttributes: new { @class = "labelForm" })
@@ -61,6 +67,15 @@
                 <span id="NoteValidation" class="validationField">Il campo è obbligatorio</span>
             </div>
         </div>
+        <div class="rowForm">
+            <div class="colForm">
+                @Html.LabelFor(model => model.TipologiaPratica, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @Html.EditorFor(model => model.TipologiaPratica, new { htmlAttributes = new { @class = "inputForm" } })
+                </div>
+                <span id="TipologiaValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+        </div>
         <div class="rowFormButton">
             <div class="colFormBack">
                 @Html.ActionLink("Torna indietro", "Index")
@@ -76,18 +91,23 @@
     $("#formPratica").on("submit", function () {
         var nome = $("#Nome").val();
         var cognome = $("#Cognome").val();
+        var sottocategoria = $("#Sottocategoria").val();
         var anno = $("#Anno").val();
         var note = $("#Note").val();
         var tipologia = $("#TipologiaPratica").val();
 
         var n = true;
         var c = true;
+        var s = true;
         var a = true;
         var no = true;
         var t = true;
 
         $("#NomeValidation").hide();
         $("#Nome").css("border-color", "#ccc");
+
+        $("#SottocategoriaValidation").hide();
+        $("#Sottocategoria").css("border-color", "#ccc");
 
         $("#AnnoValidation").hide();
         $("#Anno").css("border-color", "#ccc");
@@ -111,6 +131,11 @@
             $("#Cognome").css("border-color", "#c80000");
             c = false;
         }
+        if (sottocategoria == null || sottocategoria == "" || sottocategoria == undefined || sottocategoria == " ") {
+            $("#SottocategoriaValidation").show();
+            $("#Sottocategoria").css("border-color", "#c80000");
+            s = false;
+        }
         if (anno == null || anno == "" || anno == undefined || anno == " ") {
             $("#AnnoValidation").show();
             $("#Anno").css("border-color", "#c80000");
@@ -127,7 +152,7 @@
             t = false;
         }
 
-        if (n && c && no && a && t) {
+        if (n && c && s && no && a && t) {
             $("#submitPratica").attr("disabled", true);
             $("#submitPratica").addClass("disabled");
         }

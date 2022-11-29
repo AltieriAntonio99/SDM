@@ -18,9 +18,7 @@ namespace SDM.Models.Database
         public Sedi()
         {
             this.Agenzia = new HashSet<Agenzia>();
-            this.AssistenzaLegale = new HashSet<AssistenzaLegale>();
             this.Eventi = new HashSet<Eventi>();
-            this.Formazione = new HashSet<Formazione>();
             this.Patronato = new HashSet<Patronato>();
             this.PraticheAuto = new HashSet<PraticheAuto>();
             this.Sindacato = new HashSet<Sindacato>();
@@ -37,11 +35,7 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Agenzia> Agenzia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssistenzaLegale> AssistenzaLegale { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Eventi> Eventi { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Formazione> Formazione { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patronato> Patronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

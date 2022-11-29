@@ -29,7 +29,7 @@ namespace SDM.Controllers
                         PraticaIndex model = new PraticaIndex
                         {
                             Pratiche = _help.PraticaEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
-                            Categorie = _help.GetCategorie("credito")  //caricare le categorie di eventi
+                            Categorie = _help.GetCategorie("Eventi")  //caricare le categorie di eventi
                         };
 
                         return View(model);
@@ -56,7 +56,7 @@ namespace SDM.Controllers
                     {
                         Pratica model = new Pratica
                         {
-                            SottocategoriaList = _help.GetCategorie("credito")
+                            SottocategoriaList = _help.GetCategorie("Eventi")
                         };
 
                         return View(model);
@@ -83,7 +83,7 @@ namespace SDM.Controllers
                     {
 
                         Pratica model = _help.PraticaEventi(idPratica, "get");
-                        model.SottocategoriaList = _help.GetCategorie("credito");
+                        model.SottocategoriaList = _help.GetCategorie("Eventi");
                         model.StatoList = _help.GetStati();
 
                         return View(model);

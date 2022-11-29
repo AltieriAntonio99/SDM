@@ -164,19 +164,10 @@
     <Compile Include="Models\Database\Agenzia.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\AssistenzaLegale.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\AttachmentsAgenzia.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\AttachmentsAssistenzaLegale.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\AttachmentsEventi.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\AttachmentsFormazione.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsPatronato.cs">
@@ -189,9 +180,6 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Eventi.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\Formazione.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Logs.cs">
@@ -328,24 +316,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Archivio\AggiungiPratica.cshtml" />
-    <Content Include="Views\Archivio\CaricaAllegati.cshtml" />
-    <Content Include="Views\Archivio\Index.cshtml" />
-    <Content Include="Views\Archivio\ModificaPratica.cshtml" />
-    <Content Include="Views\Archivio\TableAllegati.cshtml" />
-    <Content Include="Views\Archivio\TableIndex.cshtml" />
-    <Content Include="Views\StudioProfessionale\AggiungiPratica.cshtml" />
-    <Content Include="Views\StudioProfessionale\CaricaAllegati.cshtml" />
-    <Content Include="Views\StudioProfessionale\Index.cshtml" />
-    <Content Include="Views\StudioProfessionale\ModificaPratica.cshtml" />
-    <Content Include="Views\StudioProfessionale\TableAllegati.cshtml" />
-    <Content Include="Views\StudioProfessionale\TableIndex.cshtml" />
-    <Content Include="Views\Credito\AggiungiPratica.cshtml" />
-    <Content Include="Views\Credito\CaricaAllegati.cshtml" />
-    <Content Include="Views\Credito\Index.cshtml" />
-    <Content Include="Views\Credito\ModificaPratica.cshtml" />
-    <Content Include="Views\Credito\TableAllegati.cshtml" />
-    <Content Include="Views\Credito\TableIndex.cshtml" />
     <Content Include="Views\Eventi\AggiungiPratica.cshtml" />
     <Content Include="Views\Eventi\CaricaAllegati.cshtml" />
     <Content Include="Views\Eventi\Index.cshtml" />
@@ -384,6 +354,12 @@
     <Content Include="Views\Agenzia\TableIndex.cshtml" />
     <Content Include="Views\DownloadFile\Download.cshtml" />
     <Content Include="Views\DownloadFile\DownloadTableAllegati.cshtml" />
+    <Content Include="Views\StudioProfessionale\AggiungiPratica.cshtml" />
+    <Content Include="Views\StudioProfessionale\CaricaAllegati.cshtml" />
+    <Content Include="Views\StudioProfessionale\Index.cshtml" />
+    <Content Include="Views\StudioProfessionale\ModificaPratica.cshtml" />
+    <Content Include="Views\StudioProfessionale\TableAllegati.cshtml" />
+    <Content Include="Views\StudioProfessionale\TableIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
