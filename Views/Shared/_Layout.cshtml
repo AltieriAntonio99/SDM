@@ -68,11 +68,11 @@
                     @Session["username"].ToString().ToUpper()
                 </div>
             </a>
-            <a class="itemContainer" href="@Url.Action("GuidaPrimoAccesso", "Home")">
+            @*<a class="itemContainer" href="@Url.Action("GuidaPrimoAccesso", "Home")">
                 <div>
                     GUIDA AL PRIMO ACCESSO
                 </div>
-            </a>
+            </a>*@
             <a class="itemContainer" onmouseover="openMenuDownload()" onmouseout="closeMenuDownload()" style="position: relative">
                 <div>
                     DOWNLOAD
@@ -96,6 +96,11 @@
                         </a>
                         <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 4 })" class="itemContainer">
                             <div>
+                                UTENZE E SERVIZI
+                            </div>
+                        </a>
+                        @*<a href="@Url.Action("Index", "DownloadFile", new { idSezione = 4 })" class="itemContainer">
+                            <div>
                                 CREDITO, ASSICURAZIONI E NOLEGGIO
                             </div>
                         </a>
@@ -114,11 +119,11 @@
                             ASSISTENZA CONTABILE
                         </div>
                     </a>*@
-                        <a href="@Url.Action("Index", "DownloadFile", new { idSezione = 8 })" class="itemContainer">
+                        @*<a href="@Url.Action("Index", "DownloadFile", new { idSezione = 8 })" class="itemContainer">
                             <div>
                                 ARCHIVIO E CONTRATTI
                             </div>
-                        </a>
+                        </a>*@
                     </div>
                 </div>
             </a>
