@@ -47,9 +47,9 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
                     <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>
+                </a>*@
                 <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
                     <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
@@ -59,12 +59,12 @@
                 <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
                     <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
                     <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
-                </a>
-                <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
+                </a>*@
+                @*<a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
                     <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>
+                </a>*@
             }
             else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
             {
@@ -80,9 +80,9 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
                     <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>
+                </a>*@
                 <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
                     <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
@@ -92,12 +92,12 @@
                 <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
                     <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
                     <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
                 </a>
                 <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
                     <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>
+                </a>*@
             }
             else if (Session["role"].ToString() == "adminDocumenti" || Session["role"].ToString() == "adminDocumentiNoSmartJob")
             {
@@ -113,9 +113,9 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
+                @*<a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
                     <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
-                </a>
+                </a>*@
                 <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
                     <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
@@ -125,12 +125,12 @@
                 <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
                     <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
                     <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
                 </a>
                 <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
                     <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>
+                </a>*@
             }
             else if (Session["role"].ToString() == "adminCasoria" || Session["role"].ToString() == "adminCasoriaNoSmartJob")
             {
@@ -146,9 +146,9 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
                     <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>
+                </a>*@
                 <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
                     <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
@@ -158,12 +158,12 @@
                 <a class="cardImage" title="Assistenza Contabile" onclick="@("window.location.href='" + @Url.Action("Index", "AssistenzaContabile") + "'")">
                     <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
                 </a>
-                <a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Archivio e Contratti" style="cursor: not-allowed;">
                     <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio (inattivo).svg" />
                 </a>
                 <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
                     <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>
+                </a>*@
             }
             else if (Session["role"].ToString() == "adminArchivio" || Session["role"].ToString() == "adminArchivioNoSmartJob")
             {
@@ -179,9 +179,9 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Credito" style="cursor: not-allowed;">
+                @*<a class="cardImage" title="Credito" style="cursor: not-allowed;">
                     <img alt="Credito" src="~/Content/Icone/pulsanti/credito (inattivo).svg" />
-                </a>
+                </a>*@
                 <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
                     <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
@@ -191,12 +191,12 @@
                 <a class="cardImage" title="Assistenza Contabile" style="cursor: not-allowed;">
                     <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
+                @*<a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
                     <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio.svg" />
                 </a>
                 <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
                     <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>
+                </a>*@
             }
             else
             {
@@ -228,9 +228,9 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
+                @*<a class="cardImage" title="Credito" onclick="@("window.location.href='" + @Url.Action("Index", "Credito") + "'")">
                     <img alt="Credito" src="~/Content/Icone/pulsanti/credito.svg" />
-                </a>
+                </a>*@
                 <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
                     <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
@@ -240,12 +240,12 @@
                 <a class="cardImage" title="Assistenza Contabile" onclick="@("window.location.href='" + @Url.Action("Index", "AssistenzaContabile") + "'")">
                     <img alt="Assistenza Contabile" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
                 </a>
-                <a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
+                @*<a class="cardImage" title="Archivio e Contratti" onclick="@("window.location.href='" + @Url.Action("Index", "Archivio") + "'")">
                     <img alt="Archivio e Contratti" src="~/Content/Icone/pulsanti/archivio.svg" />
                 </a>
                 <a class="cardImage" target="_blank" title="Posta privata" href="https://secure1.puntoricarica.it/Puntoricarica/Default.aspx?ReturnUrl=%2fpuntoricarica">
                     <img alt="Posta privata" src="~/Content/Icone/pulsanti/servizi postali.svg" />
-                </a>
+                </a>*@
             }
         </div>
     </div>
@@ -266,49 +266,49 @@
                         <td>Responsabile Politiche Attive e Passive</td>
                         <td>De Micco Sabino</td>
                         <td>amministrazione@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td>Responsabile Rete Commerciale</td>
-                        <td>De Micco Sabino</td>
-                        <td>amministrazione@sdmservices.it</td>
-                        <td>0810365548</td>
-                    </tr>
-                    <tr>
-                        <td>Responsabile Credito, Noleggio, Pratiche Auto e Prodotti Digitali</td>
+                        <td>Responsabile Utenze e Servizi</td>
                         <td>De Micco Fabiana</td>
                         <td>documenti@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Responsabile Sindacato</td>
                         <td>De Micco Fabio</td>
                         <td>segreteria@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Responsabile Caf</td>
                         <td>De Micco Giusy</td>
                         <td>assistenza@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td>Responsabile Assistenza Contabile</td>
-                        <td>De Micco Fabiana</td>
+                        <td>Responsabile Studio Legale</td>
+                        <td>De Micco Sabino</td>
                         <td>documenti@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Responsabile Rapporti</td>
+                        <td>Vitacca Martina</td>
+                        <td>info@sdmservices.it</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Responsabile Grafica e Comunicazione</td>
                         <td>Franco Marco</td>
                         <td>grafica@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Responsabile Patronato</td>
                         <td>De Micco Giusy</td>
                         <td>assistenza@sdmservices.it</td>
-                        <td>0810365548</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
