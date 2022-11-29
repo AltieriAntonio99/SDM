@@ -12,12 +12,12 @@ namespace SDM.Models.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class AssistenzaContabile
+    public partial class StudioProfessionale
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AssistenzaContabile()
+        public StudioProfessionale()
         {
-            this.AttachmentsAssistenzaContabile = new HashSet<AttachmentsAssistenzaContabile>();
+            this.AttachmentsStudioProfessionale = new HashSet<AttachmentsStudioProfessionale>();
         }
     
         public int Id { get; set; }
@@ -34,7 +34,7 @@ namespace SDM.Models.Database
         public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AttachmentsAssistenzaContabile> AttachmentsAssistenzaContabile { get; set; }
+        public virtual ICollection<AttachmentsStudioProfessionale> AttachmentsStudioProfessionale { get; set; }
         public virtual Sedi Sedi { get; set; }
         public virtual Status Status { get; set; }
         public virtual Users Users { get; set; }

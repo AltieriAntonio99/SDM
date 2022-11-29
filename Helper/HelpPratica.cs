@@ -179,11 +179,11 @@ namespace SDM.Helper
                         riepilogoPratica.attachment = GetFileEventi(id);
                         riepilogoPratica.type = "Eventi";
                     }
-                    else if (type == "AssistenzaContabile")
+                    else if (type == "StudioProfessionale")
                     {
-                        riepilogoPratica.pratica = GetPraticaAssistenzaContabile(id);
-                        riepilogoPratica.attachment = GetFileAssistenzaContabile(id);
-                        riepilogoPratica.type = "AssistenzaContabile";
+                        riepilogoPratica.pratica = GetPraticaStudioProfessionale(id);
+                        riepilogoPratica.attachment = GetFileStudioProfessionale(id);
+                        riepilogoPratica.type = "StudioProfessionale";
                     }
                     else if (type == "Archivio")
                     {
@@ -2394,15 +2394,15 @@ namespace SDM.Helper
         }
         #endregion
 
-        #region AssistenzaContabile
-        public bool SalvaPraticaAssistenzaContabile(Pratica pratica)
+        #region StudioProfessionale
+        public bool SalvaPraticaStudioProfessionale(Pratica pratica)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
                     var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "assistenza_legale");
-                    AssistenzaContabile newPratica = new AssistenzaContabile
+                    StudioProfessionale newPratica = new StudioProfessionale
                     {
                         Nome = pratica.Nome,
                         Cognome = pratica.Cognome,
@@ -2417,7 +2417,7 @@ namespace SDM.Helper
                         TipologiaPratica = pratica.TipologiaPratica
                     };
 
-                    context.AssistenzaContabile.Add(newPratica);
+                    context.StudioProfessionale.Add(newPratica);
 
                     var result = context.SaveChanges() > 0;
 
@@ -2442,7 +2442,7 @@ namespace SDM.Helper
                             TipologiaPratica = newPratica.TipologiaPratica
                         };
 
-                        _mail.SendMail(praticaMail, "AssistenzaContabile", "documenti@sdmservices.it", "Pratica Assistenza Contabile");       //documenti@
+                        _mail.SendMail(praticaMail, "StudioProfessionale", "documenti@sdmservices.it", "Pratica Studio Professionale");       //documenti@
                     }
 
                     return result;
@@ -2450,18 +2450,18 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("SalvaPraticaAssistenzaContabile", null, ex);
+                _logger.LogWrite("SalvaPraticaStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public bool ModificaPraticaAssistenzaContabile(Pratica pratica)
+        public bool ModificaPraticaStudioProfessionale(Pratica pratica)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    AssistenzaContabile newPratica = context.AssistenzaContabile.SingleOrDefault(i => i.Id == pratica.Id);
+                    StudioProfessionale newPratica = context.StudioProfessionale.SingleOrDefault(i => i.Id == pratica.Id);
 
                     if (newPratica != null)
                     {
@@ -2516,13 +2516,13 @@ namespace SDM.Helper
                                         string email = userFromList.FirstOrDefault().Email;
                                         if (!string.IsNullOrWhiteSpace(email))
                                         {
-                                            _mail.SendMail(praticaMail, "AssistenzaContabile", email, "Pratica Assistenza Contabile");
+                                            _mail.SendMail(praticaMail, "StudioProfessionale", email, "Pratica Studio Professionale");
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    _mail.SendMail(praticaMail, "AssistenzaContabile", "assistenza@sdmservices.it", "Pratica Assistenza Contabile");       //assistenza@
+                                    _mail.SendMail(praticaMail, "StudioProfessionale", "assistenza@sdmservices.it", "Pratica Studio Professionale");       //assistenza@
                                 }
                             }
 
@@ -2535,18 +2535,18 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("ModificaPraticaAssistenzaContabile", null, ex);
+                _logger.LogWrite("ModificaPraticaStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public List<Pratica> GetPraticheAssistenzaContabile(int idSede, string ruolo)
+        public List<Pratica> GetPraticheStudioProfessionale(int idSede, string ruolo)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    List<AssistenzaContabile> pratiche = new List<AssistenzaContabile>();
+                    List<StudioProfessionale> pratiche = new List<StudioProfessionale>();
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
@@ -2554,11 +2554,11 @@ namespace SDM.Helper
                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
                     {
-                        pratiche = context.AssistenzaContabile.OrderByDescending(i => i.LastUpdate).ToList();
+                        pratiche = context.StudioProfessionale.OrderByDescending(i => i.LastUpdate).ToList();
                     }
                     else
                     {
-                        pratiche = context.AssistenzaContabile.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
+                        pratiche = context.StudioProfessionale.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
                     }
 
                     List<Pratica> result = new List<Pratica>();
@@ -2586,18 +2586,18 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("GetPraticheAssistenzaContabile", null, ex);
+                _logger.LogWrite("GetPraticheStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public Pratica GetPraticaAssistenzaContabile(int idPratia)
+        public Pratica GetPraticaStudioProfessionale(int idPratia)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    AssistenzaContabile pratica = context.AssistenzaContabile.SingleOrDefault(i => i.Id == idPratia);
+                    StudioProfessionale pratica = context.StudioProfessionale.SingleOrDefault(i => i.Id == idPratia);
                     Pratica result = new Pratica
                     {
                         Id = pratica.Id,
@@ -2618,18 +2618,18 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("GetPraticaAssistenzaContabile", null, ex);
+                _logger.LogWrite("GetPraticaStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public List<Pratica> RicercaAssistenzaContabile(Pratica criteri, string role)
+        public List<Pratica> RicercaStudioProfessionale(Pratica criteri, string role)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    List<AssistenzaContabile> pratiche = context.AssistenzaContabile.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                    List<StudioProfessionale> pratiche = context.StudioProfessionale.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
                                                     && (criteri.Anno == null || i.Anno == criteri.Anno)
                                                     && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
                                                     && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
@@ -2661,19 +2661,19 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("RicercaAssistenzaContabile", null, ex);
+                _logger.LogWrite("RicercaStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public bool DelateAssistenzaContabile(int id)
+        public bool DelateStudioProfessionale(int id)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    var itemToRemove = context.AssistenzaContabile.SingleOrDefault(x => x.Id == id);
-                    var itemToRemoveAttachment = itemToRemove.AttachmentsAssistenzaContabile.ToList();
+                    var itemToRemove = context.StudioProfessionale.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsStudioProfessionale.ToList();
 
                     if (itemToRemove != null)
                     {
@@ -2681,11 +2681,11 @@ namespace SDM.Helper
                         {
                             foreach (var item in itemToRemoveAttachment)
                             {
-                                context.AttachmentsAssistenzaContabile.Remove(item);
+                                context.AttachmentsStudioProfessionale.Remove(item);
                             }
                         }
 
-                        context.AssistenzaContabile.Remove(itemToRemove);
+                        context.StudioProfessionale.Remove(itemToRemove);
                         return context.SaveChanges() > 0;
                     }
 
@@ -2694,18 +2694,18 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateAssistenzaContabile", null, ex);
+                _logger.LogWrite("DelateStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public List<Attachment> GetFileAssistenzaContabile(int idPratica)
+        public List<Attachment> GetFileStudioProfessionale(int idPratica)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    List<AttachmentsAssistenzaContabile> files = context.AttachmentsAssistenzaContabile.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
+                    List<AttachmentsStudioProfessionale> files = context.AttachmentsStudioProfessionale.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
 
                     List<Attachment> result = new List<Attachment>();
                     foreach (var file in files)
@@ -2727,12 +2727,12 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("GetFileAssistenzaContabile", null, ex);
+                _logger.LogWrite("GetFileStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public bool LoadFileAssistenzaContabile(List<Attachment> att)
+        public bool LoadFileStudioProfessionale(List<Attachment> att)
         {
             try
             {
@@ -2740,7 +2740,7 @@ namespace SDM.Helper
                 {
                     foreach (var item in att)
                     {
-                        context.AttachmentsAssistenzaContabile.Add(new AttachmentsAssistenzaContabile
+                        context.AttachmentsStudioProfessionale.Add(new AttachmentsStudioProfessionale
                         {
                             Nome = item.Nome,
                             Blob = item.Blob,
@@ -2756,22 +2756,22 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("LoadFileAssistenzaContabile", null, ex);
+                _logger.LogWrite("LoadFileStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public bool DelateFileAssistenzaContabile(int id)
+        public bool DelateFileStudioProfessionale(int id)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    var itemToRemove = context.AttachmentsAssistenzaContabile.SingleOrDefault(x => x.Id == id);
+                    var itemToRemove = context.AttachmentsStudioProfessionale.SingleOrDefault(x => x.Id == id);
 
                     if (itemToRemove != null)
                     {
-                        context.AttachmentsAssistenzaContabile.Remove(itemToRemove);
+                        context.AttachmentsStudioProfessionale.Remove(itemToRemove);
                         return context.SaveChanges() > 0;
                     }
 
@@ -2780,18 +2780,18 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFileAssistenzaContabile", null, ex);
+                _logger.LogWrite("DelateFileStudioProfessionale", null, ex);
                 throw;
             }
         }
 
-        public Attachment DownloadFileAssistenzaContabile(int idFile)
+        public Attachment DownloadFileStudioProfessionale(int idFile)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    AttachmentsAssistenzaContabile att = context.AttachmentsAssistenzaContabile.FirstOrDefault(i => i.Id == idFile);
+                    AttachmentsStudioProfessionale att = context.AttachmentsStudioProfessionale.FirstOrDefault(i => i.Id == idFile);
 
                     Attachment result = new Attachment
                     {
@@ -2809,7 +2809,7 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DownloadFileAssistenzaContabile", null, ex);
+                _logger.LogWrite("DownloadFileStudioProfessionale", null, ex);
                 throw;
             }
         }

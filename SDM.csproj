@@ -131,7 +131,7 @@
     <Compile Include="Controllers\DownloadFileController.cs" />
     <Compile Include="Controllers\AgenziaController.cs" />
     <Compile Include="Controllers\ArchivioController.cs" />
-    <Compile Include="Controllers\AssistenzaContabileController.cs" />
+    <Compile Include="Controllers\StudioProfessionaleController.cs" />
     <Compile Include="Controllers\CreditoController.cs" />
     <Compile Include="Controllers\EventiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -146,7 +146,13 @@
     <Compile Include="Helper\Login.cs" />
     <Compile Include="Helper\Mail.cs" />
     <Compile Include="Helper\Token.cs" />
+    <Compile Include="Models\Database\AttachmentsStudioProfessionale.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\DownloadFile.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\StudioProfessionale.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Download.cs" />
@@ -154,19 +160,7 @@
     <Compile Include="Models\Database\Agenzia.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\AgenziaDownload.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\Archivio.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\ArchivioDownload.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\AssistenzaContabile.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\AssistenzaDownload.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AssistenzaLegale.cs">
@@ -176,9 +170,6 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsArchivio.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\AttachmentsAssistenzaContabile.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsAssistenzaLegale.cs">
@@ -208,13 +199,7 @@
     <Compile Include="Models\Database\Credito.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\CreditoDownload.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\Eventi.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\EventiDownload.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Formazione.cs">
@@ -241,16 +226,10 @@
     <Compile Include="Models\Database\Noleggio.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\NoleggioDownload.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\NumeroPratiche.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Patronato.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\PatronatoDownload.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Roles.cs">
@@ -260,9 +239,6 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Sindacato.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\SindacatoDownload.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Status.cs">
@@ -372,12 +348,12 @@
     <Content Include="Views\Archivio\ModificaPratica.cshtml" />
     <Content Include="Views\Archivio\TableAllegati.cshtml" />
     <Content Include="Views\Archivio\TableIndex.cshtml" />
-    <Content Include="Views\AssistenzaContabile\AggiungiPratica.cshtml" />
-    <Content Include="Views\AssistenzaContabile\CaricaAllegati.cshtml" />
-    <Content Include="Views\AssistenzaContabile\Index.cshtml" />
-    <Content Include="Views\AssistenzaContabile\ModificaPratica.cshtml" />
-    <Content Include="Views\AssistenzaContabile\TableAllegati.cshtml" />
-    <Content Include="Views\AssistenzaContabile\TableIndex.cshtml" />
+    <Content Include="Views\StudioProfessionale\AggiungiPratica.cshtml" />
+    <Content Include="Views\StudioProfessionale\CaricaAllegati.cshtml" />
+    <Content Include="Views\StudioProfessionale\Index.cshtml" />
+    <Content Include="Views\StudioProfessionale\ModificaPratica.cshtml" />
+    <Content Include="Views\StudioProfessionale\TableAllegati.cshtml" />
+    <Content Include="Views\StudioProfessionale\TableIndex.cshtml" />
     <Content Include="Views\Credito\AggiungiPratica.cshtml" />
     <Content Include="Views\Credito\CaricaAllegati.cshtml" />
     <Content Include="Views\Credito\Index.cshtml" />

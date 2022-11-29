@@ -19,7 +19,6 @@ namespace SDM.Models.Database
         {
             this.Agenzia = new HashSet<Agenzia>();
             this.Archivio = new HashSet<Archivio>();
-            this.AssistenzaContabile = new HashSet<AssistenzaContabile>();
             this.AssistenzaLegale = new HashSet<AssistenzaLegale>();
             this.Credito = new HashSet<Credito>();
             this.Eventi = new HashSet<Eventi>();
@@ -27,6 +26,7 @@ namespace SDM.Models.Database
             this.Noleggio = new HashSet<Noleggio>();
             this.Patronato = new HashSet<Patronato>();
             this.Sindacato = new HashSet<Sindacato>();
+            this.StudioProfessionale = new HashSet<StudioProfessionale>();
             this.Users = new HashSet<Users>();
         }
     
@@ -41,8 +41,6 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Archivio> Archivio { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssistenzaContabile> AssistenzaContabile { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AssistenzaLegale> AssistenzaLegale { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Credito> Credito { get; set; }
@@ -56,6 +54,8 @@ namespace SDM.Models.Database
         public virtual ICollection<Patronato> Patronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sindacato> Sindacato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StudioProfessionale> StudioProfessionale { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Users> Users { get; set; }
     }

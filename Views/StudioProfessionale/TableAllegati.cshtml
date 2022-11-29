@@ -20,7 +20,7 @@
                     <td>@Html.ActionLink(@item.Nome, "DownloadFile", new { idFile = @item.Id })</td>
                     <td>@item.LastUpdate</td>
                     <td class="iconTd">
-                        @using (Ajax.BeginForm("DeleateFile", "AssistenzaContabile", new { idPratica = item.IdPratica, idFile = @item.Id }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-allegati", AllowCache = false, InsertionMode = InsertionMode.Replace, OnBegin = "AjaxBegin", OnComplete = "AjaxComplete" }, new { id = "cestino" + item.Id }))
+                        @using (Ajax.BeginForm("DeleateFile", "StudioProfessionale", new { idPratica = item.IdPratica, idFile = @item.Id }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-allegati", AllowCache = false, InsertionMode = InsertionMode.Replace, OnBegin = "AjaxBegin", OnComplete = "AjaxComplete" }, new { id = "cestino" + item.Id }))
                         {
                             <a title="Cancella" id="@item.Id" onclick="submitForm(this)" style="cursor: pointer">
                                 <img src="~/Content/Icone/cestino.svg" alt="Cancella" class="allegatiIcon" />

@@ -5,64 +5,48 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e9b4a04e4829431d84eef0ceae86dcb7" Name="Diagram1" ZoomLevel="55">
-        <EntityTypeShape EntityType="MSSql204389Model.Agenzia" Width="1.5" PointX="3" PointY="40.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.AgenziaDownload" Width="1.5" PointX="11.25" PointY="20.75" />
-        <EntityTypeShape EntityType="MSSql204389Model.Archivio" Width="1.5" PointX="11.25" PointY="35.25" />
-        <EntityTypeShape EntityType="MSSql204389Model.ArchivioDownload" Width="1.5" PointX="11.25" PointY="54.75" />
-        <EntityTypeShape EntityType="MSSql204389Model.AssistenzaContabile" Width="1.5" PointX="6" PointY="40.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.AssistenzaDownload" Width="1.5" PointX="11.25" PointY="45.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.AssistenzaLegale" Width="1.5" PointX="3" PointY="45.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsAgenzia" Width="1.5" PointX="16.25" PointY="41" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsArchivio" Width="1.5" PointX="13.5" PointY="31.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsAssistenzaContabile" Width="1.5" PointX="19.25" PointY="34" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsAssistenzaLegale" Width="1.5" PointX="14.25" PointY="44.5" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsCredito" Width="1.5" PointX="16.5" PointY="33.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsEventi" Width="1.5" PointX="16.25" PointY="29.5" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsFormazione" Width="1.5" PointX="17.25" PointY="37.5" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsNoleggio" Width="1.5" PointX="13.5" PointY="40.875" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsPatronato" Width="1.5" PointX="17.25" PointY="45.5" />
-        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsSindacato" Width="1.5" PointX="19.25" PointY="41.875" />
+        <EntityTypeShape EntityType="MSSql204389Model.Agenzia" Width="1.5" PointX="9" PointY="29.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.Archivio" Width="1.5" PointX="3" PointY="34.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.AssistenzaLegale" Width="1.5" PointX="3" PointY="29.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsAgenzia" Width="1.5" PointX="17.25" PointY="26.625" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsArchivio" Width="1.5" PointX="14.25" PointY="34.125" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsAssistenzaLegale" Width="1.5" PointX="14.25" PointY="30.625" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsCredito" Width="1.5" PointX="17.25" PointY="30.625" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsEventi" Width="1.5" PointX="17.25" PointY="34.125" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsFormazione" Width="1.5" PointX="17.25" PointY="23.125" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsNoleggio" Width="1.5" PointX="20.25" PointY="25.625" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsPatronato" Width="1.5" PointX="14.25" PointY="27.125" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsSindacato" Width="1.5" PointX="14.25" PointY="19.125" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsStudioProfessionale" Width="1.5" PointX="20.25" PointY="29.125" />
         <EntityTypeShape EntityType="MSSql204389Model.Categorie" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MSSql204389Model.Credito" Width="1.5" PointX="14.25" PointY="35.25" />
-        <EntityTypeShape EntityType="MSSql204389Model.CreditoDownload" Width="1.5" PointX="11.25" PointY="27.125" />
-        <EntityTypeShape EntityType="MSSql204389Model.DownloadFile" Width="1.5" PointX="11.25" PointY="23.875" />
-        <EntityTypeShape EntityType="MSSql204389Model.Eventi" Width="1.5" PointX="6" PointY="35.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.EventiDownload" Width="1.5" PointX="11.25" PointY="30.25" />
-        <EntityTypeShape EntityType="MSSql204389Model.Formazione" Width="1.5" PointX="3" PointY="35.375" />
+        <EntityTypeShape EntityType="MSSql204389Model.Credito" Width="1.5" PointX="6" PointY="29.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.DownloadFile" Width="1.5" PointX="14.25" PointY="23" />
+        <EntityTypeShape EntityType="MSSql204389Model.Eventi" Width="1.5" PointX="9" PointY="34.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.Formazione" Width="1.5" PointX="6" PointY="24.25" />
         <EntityTypeShape EntityType="MSSql204389Model.Logs" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MSSql204389Model.Noleggio" Width="1.5" PointX="11.25" PointY="40.25" />
-        <EntityTypeShape EntityType="MSSql204389Model.NoleggioDownload" Width="1.5" PointX="11.25" PointY="57.875" />
+        <EntityTypeShape EntityType="MSSql204389Model.Noleggio" Width="1.5" PointX="12" PointY="29.25" />
         <EntityTypeShape EntityType="MSSql204389Model.NumeroPratiche" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="MSSql204389Model.Patronato" Width="1.5" PointX="6" PointY="45.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.PatronatoDownload" Width="1.5" PointX="11.25" PointY="48.5" />
-        <EntityTypeShape EntityType="MSSql204389Model.Roles" Width="1.5" PointX="6.75" PointY="32.625" />
-        <EntityTypeShape EntityType="MSSql204389Model.Sedi" Width="1.5" PointX="0.75" PointY="40.375" />
-        <EntityTypeShape EntityType="MSSql204389Model.Sindacato" Width="1.5" PointX="9" PointY="40.5" />
-        <EntityTypeShape EntityType="MSSql204389Model.SindacatoDownload" Width="1.5" PointX="11.25" PointY="51.625" />
-        <EntityTypeShape EntityType="MSSql204389Model.Status" Width="1.5" PointX="9" PointY="25.625" />
-        <EntityTypeShape EntityType="MSSql204389Model.Users" Width="1.5" PointX="9" PointY="30.125" />
+        <EntityTypeShape EntityType="MSSql204389Model.Patronato" Width="1.5" PointX="3" PointY="24.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.Roles" Width="1.5" PointX="9.75" PointY="21.5" />
+        <EntityTypeShape EntityType="MSSql204389Model.Sedi" Width="1.5" PointX="0.75" PointY="29.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.Sindacato" Width="1.5" PointX="9" PointY="24.375" />
+        <EntityTypeShape EntityType="MSSql204389Model.Status" Width="1.5" PointX="3.75" PointY="19.625" />
+        <EntityTypeShape EntityType="MSSql204389Model.StudioProfessionale" Width="1.5" PointX="6" PointY="34.25" />
+        <EntityTypeShape EntityType="MSSql204389Model.Users" Width="1.5" PointX="12" PointY="20.75" />
         <AssociationConnector Association="MSSql204389Model.FK_Agenzia_AttachmentsAgenzia" />
         <AssociationConnector Association="MSSql204389Model.FK_Agenzia_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Agenzia_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Agenzia_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_AgenziaDownload" />
         <AssociationConnector Association="MSSql204389Model.FK_Archivio_AttachmentsArchivio" />
         <AssociationConnector Association="MSSql204389Model.FK_Archivio_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Archivio_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Archivio_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_ArchivioDownload" />
-        <AssociationConnector Association="MSSql204389Model.FK_AssistenzaContabile_AttachmentsAssistenzaContabile" />
-        <AssociationConnector Association="MSSql204389Model.FK_AssistenzaContabile_Sede" />
-        <AssociationConnector Association="MSSql204389Model.FK_AssistenzaContabile_Status" />
-        <AssociationConnector Association="MSSql204389Model.FK_AssistenzaContabile_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_AssistenzaDownload" />
         <AssociationConnector Association="MSSql204389Model.FK_AssistenzaContabile_AttachmentsAssistenzaLegale" />
         <AssociationConnector Association="MSSql204389Model.FK_AssistenzaLegale_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_AssistenzaLegale_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_AssistenzaLegale_User" />
         <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsAgenzia" />
         <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsArchivio" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsAssistenzaContabile" />
         <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsAssistenzaLegale" />
         <AssociationConnector Association="MSSql204389Model.FK_Credito_AttachmentsCredito" />
         <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsCredito" />
@@ -76,31 +60,31 @@
         <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsPatronato" />
         <AssociationConnector Association="MSSql204389Model.FK_Sindacato_AttachmentsSindacato" />
         <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsSindacato" />
+        <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_AttachmentsStudioProfessionale" />
+        <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsStudioProfessionale" />
         <AssociationConnector Association="MSSql204389Model.FK_Credito_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Credito_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Credito_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_CreditoDownload" />
         <AssociationConnector Association="MSSql204389Model.FK_User_DownloadFile" />
         <AssociationConnector Association="MSSql204389Model.FK_Eventi_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Eventi_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Eventi_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_EventiDownload" />
         <AssociationConnector Association="MSSql204389Model.FK_Formazione_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Formazione_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Formazione_User" />
         <AssociationConnector Association="MSSql204389Model.FK_Noleggio_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Noleggio_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Noleggio_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_NoleggioDownload" />
         <AssociationConnector Association="MSSql204389Model.FK_Patronato_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Patronato_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_Patronato_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_PatronatoDownload" />
         <AssociationConnector Association="MSSql204389Model.FK_Users_Roles" />
         <AssociationConnector Association="MSSql204389Model.FK_Sindacato_Sede" />
+        <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_User_Sede" />
         <AssociationConnector Association="MSSql204389Model.FK_Sindacato_User" />
-        <AssociationConnector Association="MSSql204389Model.FK_User_SindacatoDownload" />
+        <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_Status" />
+        <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,15 +12,17 @@ namespace SDM.Models.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class CreditoDownload
+    public partial class AttachmentsStudioProfessionale
     {
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Type { get; set; }
         public byte[] Blob { get; set; }
+        public int IdPratica { get; set; }
         public int IdUserUpdate { get; set; }
         public System.DateTime LastUpdate { get; set; }
     
+        public virtual StudioProfessionale StudioProfessionale { get; set; }
         public virtual Users Users { get; set; }
     }
 }

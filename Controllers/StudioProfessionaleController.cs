@@ -11,7 +11,7 @@ using SDM.Models.Database;
 
 namespace SDM.Controllers
 {
-    public class AssistenzaContabileController : Controller
+    public class StudioProfessionaleController : Controller
     {
         private readonly Logger _logger = new Logger();
         private readonly HelpPratica _help = new HelpPratica();
@@ -28,8 +28,8 @@ namespace SDM.Controllers
                     {
                         PraticaIndex model = new PraticaIndex
                         {
-                            Pratiche = _help.GetPraticheAssistenzaContabile(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString()),
-                            Categorie = _help.GetCategorie("credito")  //aggiungere categorie AssistenzaContabile
+                            Pratiche = _help.GetPraticheStudioProfessionale(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString()),
+                            Categorie = _help.GetCategorie("studioprofessionale")  //aggiungere categorie StudioProfessionale
                         };
 
                         return View(model);
@@ -40,7 +40,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -56,7 +56,7 @@ namespace SDM.Controllers
                     {
                         Pratica model = new Pratica
                         {
-                            SottocategoriaList = _help.GetCategorie("credito")
+                            SottocategoriaList = _help.GetCategorie("studioprofessionale")
                         };
 
                         return View(model);
@@ -67,7 +67,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -82,8 +82,8 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
 
-                        Pratica model = _help.GetPraticaAssistenzaContabile(idPratica);
-                        model.SottocategoriaList = _help.GetCategorie("credito");
+                        Pratica model = _help.GetPraticaStudioProfessionale(idPratica);
+                        model.SottocategoriaList = _help.GetCategorie("studioprofessionale");
                         model.StatoList = _help.GetStati();
 
                         return View(model);
@@ -94,7 +94,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -112,19 +112,19 @@ namespace SDM.Controllers
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                     pratica.NumPratica = Session["sede"].ToString() + "-" + pratica.Anno + "-";
 
-                    if (_help.SalvaPraticaAssistenzaContabile(pratica))
+                    if (_help.SalvaPraticaStudioProfessionale(pratica))
                     {
                         TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
-                        return RedirectToAction("Index", "AssistenzaContabile");
+                        return RedirectToAction("Index", "StudioProfessionale");
                     }
                 }
 
                 TempData["erroreInserimentoPatronato"] = "true";
-                return RedirectToAction("AggiungiPratica", "AssistenzaContabile");
+                return RedirectToAction("AggiungiPratica", "StudioProfessionale");
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 TempData["ExceptionError"] = ex.Message;
                 return RedirectToAction("Error", "Home");
             }
@@ -141,19 +141,19 @@ namespace SDM.Controllers
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                    
-                    if (_help.ModificaPraticaAssistenzaContabile(pratica))
+                    if (_help.ModificaPraticaStudioProfessionale(pratica))
                     {
                         TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
-                        return RedirectToAction("Index", "AssistenzaContabile");
+                        return RedirectToAction("Index", "StudioProfessionale");
                     }
                 }
 
                 TempData["erroreInserimentoPatronato"] = "true";
-                return RedirectToAction("ModificaPratica", "AssistenzaContabile", new { idPratica = pratica.Id });
+                return RedirectToAction("ModificaPratica", "StudioProfessionale", new { idPratica = pratica.Id });
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 TempData["ExceptionError"] = ex.Message;
                 return RedirectToAction("Error", "Home");
             }
@@ -166,19 +166,19 @@ namespace SDM.Controllers
             {
                 
                 PraticaIndex model = new PraticaIndex();
-                if (_help.DelateAssistenzaContabile(idPratica))
+                if (_help.DelateStudioProfessionale(idPratica))
                 {
-                    model.Pratiche = _help.GetPraticheAssistenzaContabile(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                    model.Pratiche = _help.GetPraticheStudioProfessionale(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
                     return PartialView("TableIndex", model.Pratiche);
                 }
 
                 TempData["message"] = "Errore nell'eliminazione della pratica";
-                model.Pratiche = _help.GetPraticheAssistenzaContabile(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                model.Pratiche = _help.GetPraticheStudioProfessionale(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
                 return PartialView("TableIndex", model.Pratiche);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -189,7 +189,7 @@ namespace SDM.Controllers
             try
             {
                 pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
-                List<Pratica> result = _help.RicercaAssistenzaContabile(pratica, Session["role"].ToString());
+                List<Pratica> result = _help.RicercaStudioProfessionale(pratica, Session["role"].ToString());
 
                 TempData["patronatoList"] = result;
 
@@ -197,7 +197,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 TempData["ExceptionError"] = ex.Message;
                 return RedirectToAction("Error", "Home");
             }
@@ -215,7 +215,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
 
-                        List<Attachment> model = _help.GetFileAssistenzaContabile(idPratica);
+                        List<Attachment> model = _help.GetFileStudioProfessionale(idPratica);
                         return View(model);
                     }
                     else { return RedirectToAction("ErrorAuth", "Home"); }
@@ -224,7 +224,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -262,19 +262,19 @@ namespace SDM.Controllers
 
                     if (ListFile.Count > 0)
                     {
-                        if (!_help.LoadFileAssistenzaContabile(ListFile))
+                        if (!_help.LoadFileStudioProfessionale(ListFile))
                         {
                             TempData["messaggioErroreInserimentoFile"] = "Errore nell'inserimento del documento";
                         }
                     }
                 }
 
-                List<Attachment> model = _help.GetFileAssistenzaContabile(id);
+                List<Attachment> model = _help.GetFileStudioProfessionale(id);
                 return PartialView("TableAllegati" , model);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -283,13 +283,13 @@ namespace SDM.Controllers
         {
             try
             {
-                Attachment loadFile = _help.DownloadFileAssistenzaContabile(idFile);
+                Attachment loadFile = _help.DownloadFileStudioProfessionale(idFile);
 
                 return File(loadFile.Blob, loadFile.Type, loadFile.Nome);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -301,19 +301,19 @@ namespace SDM.Controllers
             {
                 
                 List<Attachment> model = new List<Attachment>();
-                if (_help.DelateFileAssistenzaContabile(idFile))
+                if (_help.DelateFileStudioProfessionale(idFile))
                 {
-                    model = _help.GetFileAssistenzaContabile(idPratica);
+                    model = _help.GetFileStudioProfessionale(idPratica);
                     return PartialView("TableAllegati", model);
                 }
 
                 TempData["messaggioErroreInserimentoFile"] = "Errore nell'eliminazione del file";
-                model = _help.GetFileAssistenzaContabile(idPratica);
+                model = _help.GetFileStudioProfessionale(idPratica);
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("AssistenzaContabileController", null, ex);
+                _logger.LogWrite("StudioProfessionaleController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }

@@ -1,4 +1,4 @@
-﻿// Generazione del codice predefinita abilitata per il modello 'C:\Users\altie\Desktop\SDM\SDM\Models\Database\ModelSDM.edmx'. 
+﻿// Generazione del codice predefinita abilitata per il modello 'C:\Users\altie\source\repos\SDM\Models\Database\ModelSDM.edmx'. 
 // Per abilitare la generazione del codice legacy, modificare il valore della proprietà della finestra di progettazione 'Strategia di generazione del codice
 // su 'Legacy ObjectContext'. Questa proprietà è disponibile nella finestra Proprietà quando il modello è
 // aperto nella finestra di progettazione.
