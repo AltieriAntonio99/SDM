@@ -40,12 +40,12 @@
             {
                 <tr>
                     <td class="iconTd">
-                        <a title="Allegati" href='@Url.Action("CaricaAllegati", "Noleggio", new { idPratica = item.Id, categoria = item.Sottocategoria })'>
+                        <a title="Allegati" href='@Url.Action("CaricaAllegati", "PraticheAuto", new { idPratica = item.Id, categoria = item.Sottocategoria })'>
                             <img src="~/Content/Icone/allegati.svg" alt="Allegati" class="allegatiIcon" />
                         </a>
                     </td>
                     <td class="iconTd">
-                        @using (Ajax.BeginForm("DeletePratica", "Noleggio", new { idPratica = item.Id }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-index", AllowCache = false, InsertionMode = InsertionMode.Replace, OnBegin = "AjaxBeginDelete", OnComplete = "AjaxComplete" }, new { id = "cestino" + item.Id }))
+                        @using (Ajax.BeginForm("DeletePratica", "PraticheAuto", new { idPratica = item.Id }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-index", AllowCache = false, InsertionMode = InsertionMode.Replace, OnBegin = "AjaxBeginDelete", OnComplete = "AjaxComplete" }, new { id = "cestino" + item.Id }))
                         {
                             <a title="Cancella" id="@item.Id" onclick="submitForm(this)" style="cursor: pointer">
                                 <img src="~/Content/Icone/cestino.svg" alt="Cancella" class="allegatiIcon" />
@@ -53,7 +53,7 @@
                         }
                     </td>
                     <td class="iconTd">
-                        <a title="Modifica" href='@Url.Action("ModificaPratica", "Noleggio", new { idPratica = item.Id })'>
+                        <a title="Modifica" href='@Url.Action("ModificaPratica", "PraticheAuto", new { idPratica = item.Id })'>
                             <img src="~/Content/Icone/edit.svg" alt="Modifica" class="allegatiIcon" />
                         </a>
                     </td>

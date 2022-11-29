@@ -12,7 +12,7 @@ namespace SDM.Models.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class AttachmentsCredito
+    public partial class AttachmentsPraticheAuto
     {
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -22,7 +22,7 @@ namespace SDM.Models.Database
         public int IdUserUpdate { get; set; }
         public System.DateTime LastUpdate { get; set; }
     
-        public virtual Credito Credito { get; set; }
+        public virtual PraticheAuto PraticheAuto { get; set; }
         public virtual Users Users { get; set; }
     }
 }

@@ -72,7 +72,7 @@
         }
     }
 
-    @using (Ajax.BeginForm("UploadFile", "Noleggio", null, new AjaxOptions
+    @using (Ajax.BeginForm("UploadFile", "PraticheAuto", null, new AjaxOptions
     {
         HttpMethod = "POST",
         UpdateTargetId = "table-allegati",
@@ -81,7 +81,7 @@
         OnComplete = "AjaxComplete"
     }, new { id = "formid", enctype = "multipart/form-data", @class = "patronatoAddForm" }))
     {
-        if (Request.QueryString["categoria"] == "Noleggio Moto" || Request.QueryString["categoria"] == "Noleggio Auto")
+        if (Request.QueryString["categoria"] == "PraticheAuto Moto" || Request.QueryString["categoria"] == "PraticheAuto Auto")
         {
             <ul class="menuDocumenti">
                 <li>Scheda noleggio</li>

@@ -28,7 +28,7 @@ namespace SDM.Controllers
                     {
                         PraticaIndex model = new PraticaIndex
                         {
-                            Pratiche = _help.GetPraticheAgenzia(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString()),
+                            Pratiche = _help.PraticaAgenzia(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
                             Categorie = _help.GetCategorie("agenzia")
                         };
 
@@ -82,7 +82,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
 
-                        Pratica model = _help.GetPraticaAgenzia(idPratica);
+                        Pratica model = _help.PraticaAgenzia(idPratica, "get");
                         model.SottocategoriaList = _help.GetCategorie("agenzia");
                         model.StatoList = _help.GetStati();
 
@@ -112,7 +112,7 @@ namespace SDM.Controllers
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                     pratica.NumPratica = Session["sede"].ToString() + "-" + pratica.Anno + "-";
 
-                    if (_help.SalvaPraticaAgenzia(pratica))
+                    if (_help.PraticaAgenzia(pratica, "save"))
                     {
                         TempData["erroreInserimentoAgenziaHome"] = "Pratica salvata correttamente";
                         return RedirectToAction("Index", "Agenzia");
@@ -141,7 +141,7 @@ namespace SDM.Controllers
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
 
-                    if (_help.ModificaPraticaAgenzia(pratica))
+                    if (_help.PraticaAgenzia(pratica, "update"))
                     {
                         TempData["erroreInserimentoAgenziaHome"] = "Pratica modificata correttamente";
                         return RedirectToAction("Index", "Agenzia");
@@ -166,14 +166,14 @@ namespace SDM.Controllers
             {
 
                 PraticaIndex model = new PraticaIndex();
-                if (_help.DelateAgenzia(idPratica))
+                if (_help.DeleteAgenzia(idPratica))
                 {
-                    model.Pratiche = _help.GetPraticheAgenzia(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                    model.Pratiche = _help.PraticaAgenzia(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                     return PartialView("TableIndex", model.Pratiche);
                 }
 
                 TempData["message"] = "Errore nell'eliminazione della pratica";
-                model.Pratiche = _help.GetPraticheAgenzia(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                model.Pratiche = _help.PraticaAgenzia(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                 return PartialView("TableIndex", model.Pratiche);
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ namespace SDM.Controllers
             try
             {
                 pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
-                List<Pratica> result = _help.RicercaAgenzia(pratica, Session["role"].ToString());
+                List<Pratica> result = _help.PraticaAgenzia(0, Session["role"].ToString(), "search", pratica);
 
                 TempData["agenziaList"] = result;
 
@@ -214,7 +214,7 @@ namespace SDM.Controllers
                 {
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
-                        List<Attachment> model = _help.GetFileAgenzia(idPratica);
+                        List<Attachment> model = _help.AttachmentsAgenzia(idPratica, "getall");
                         return View(model);
                     }
                     else { return RedirectToAction("ErrorAuth", "Home"); }
@@ -260,14 +260,14 @@ namespace SDM.Controllers
 
                     if (ListFile.Count > 0)
                     {
-                        if (!_help.LoadFileAgenzia(ListFile))
+                        if (!_help.AttachmentsAgenzia(ListFile, "upload"))
                         {
                             TempData["messaggioErroreInserimentoFile"] = "Errore nell'inserimento del documento";
                         }
                     }
                 }
 
-                List<Attachment> model = _help.GetFileAgenzia(id);
+                List<Attachment> model = _help.AttachmentsAgenzia(id, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)
@@ -281,7 +281,7 @@ namespace SDM.Controllers
         {
             try
             {
-                Attachment loadFile = _help.DownloadFileAgenzia(idFile);
+                Attachment loadFile = _help.AttachmentsAgenzia("download", idFile);
 
                 return File(loadFile.Blob, loadFile.Type, loadFile.Nome);
             }
@@ -299,14 +299,14 @@ namespace SDM.Controllers
             {
 
                 List<Attachment> model = new List<Attachment>();
-                if (_help.DelateFileAgenzia(idFile))
+                if (_help.DeleteFileAgenzia(idFile))
                 {
-                    model = _help.GetFileAgenzia(idPratica);
+                    model = _help.AttachmentsAgenzia(idPratica, "getall");
                     return PartialView("TableAllegati", model);
                 }
 
                 TempData["messaggioErroreInserimentoFile"] = "Errore nell'eliminazione del file";
-                model = _help.GetFileAgenzia(idPratica);
+                model = _help.AttachmentsAgenzia(idPratica, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)

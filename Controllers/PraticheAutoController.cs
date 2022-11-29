@@ -11,8 +11,7 @@ using SDM.Models.Database;
 
 namespace SDM.Controllers
 {
-    //IMPORTANTE NOLEGGIO E' DIVENTATO PRODOTTI DIGITALI, VISURE E PRATICHE AUTO
-    public class NoleggioController : Controller
+    public class PraticheAutoController : Controller
     {
         private readonly Logger _logger = new Logger();
         private readonly HelpPratica _help = new HelpPratica();
@@ -29,8 +28,8 @@ namespace SDM.Controllers
                     {
                         PraticaIndex model = new PraticaIndex
                         {
-                            Pratiche = _help.GetPraticheNoleggio(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString()),
-                            Categorie = _help.GetCategorie("noleggio")
+                            Pratiche = _help.PraticaPraticheAuto(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
+                            Categorie = _help.GetCategorie("PraticheAuto")
                         };
 
                         return View(model);
@@ -41,7 +40,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -57,7 +56,7 @@ namespace SDM.Controllers
                     {
                         Pratica model = new Pratica
                         {
-                            SottocategoriaList = _help.GetCategorie("noleggio")
+                            SottocategoriaList = _help.GetCategorie("PraticheAuto")
                         };
 
                         return View(model);
@@ -68,7 +67,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -83,8 +82,8 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString()))
                     {
 
-                        Pratica model = _help.GetPraticaNoleggio(idPratica);
-                        model.SottocategoriaList = _help.GetCategorie("noleggio");
+                        Pratica model = _help.PraticaPraticheAuto(idPratica, "get");
+                        model.SottocategoriaList = _help.GetCategorie("PraticheAuto");
                         model.StatoList = _help.GetStati();
 
                         return View(model);
@@ -95,7 +94,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -113,19 +112,19 @@ namespace SDM.Controllers
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                     pratica.NumPratica = Session["sede"].ToString() + "-" + pratica.Anno + "-";
 
-                    if (_help.SalvaPraticaNoleggio(pratica))
+                    if (_help.PraticaPraticheAuto(pratica, "save"))
                     {
                         TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
-                        return RedirectToAction("Index", "Noleggio");
+                        return RedirectToAction("Index", "PraticheAuto");
                     }
                 }
 
                 TempData["erroreInserimentoPatronato"] = "true";
-                return RedirectToAction("AggiungiPratica", "Noleggio");
+                return RedirectToAction("AggiungiPratica", "PraticheAuto");
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 TempData["ExceptionError"] = ex.Message;
                 return RedirectToAction("Error", "Home");
             }
@@ -142,19 +141,19 @@ namespace SDM.Controllers
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
 
-                    if (_help.ModificaPraticaNoleggio(pratica))
+                    if (_help.PraticaPraticheAuto(pratica, "update"))
                     {
                         TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
-                        return RedirectToAction("Index", "Noleggio");
+                        return RedirectToAction("Index", "PraticheAuto");
                     }
                 }
 
                 TempData["erroreInserimentoPatronato"] = "true";
-                return RedirectToAction("ModificaPratica", "Noleggio", new { idPratica = pratica.Id });
+                return RedirectToAction("ModificaPratica", "PraticheAuto", new { idPratica = pratica.Id });
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 TempData["ExceptionError"] = ex.Message;
                 return RedirectToAction("Error", "Home");
             }
@@ -167,19 +166,19 @@ namespace SDM.Controllers
             {
 
                 PraticaIndex model = new PraticaIndex();
-                if (_help.DelateNoleggio(idPratica))
+                if (_help.DeletePraticheAuto(idPratica))
                 {
-                    model.Pratiche = _help.GetPraticheNoleggio(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                    model.Pratiche = _help.PraticaPraticheAuto(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                     return PartialView("TableIndex", model.Pratiche);
                 }
 
                 TempData["message"] = "Errore nell'eliminazione della pratica";
-                model.Pratiche = _help.GetPraticheNoleggio(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                model.Pratiche = _help.PraticaPraticheAuto(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                 return PartialView("TableIndex", model.Pratiche);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -190,7 +189,7 @@ namespace SDM.Controllers
             try
             {
                 pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
-                List<Pratica> result = _help.RicercaNoleggio(pratica, Session["role"].ToString());
+                List<Pratica> result = _help.PraticaPraticheAuto(0, Session["role"].ToString(), "search", pratica);
 
                 TempData["patronatoList"] = result;
 
@@ -198,7 +197,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 TempData["ExceptionError"] = ex.Message;
                 return RedirectToAction("Error", "Home");
             }
@@ -216,7 +215,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString()))
                     {
 
-                        List<Attachment> model = _help.GetFileNoleggio(idPratica);
+                        List<Attachment> model = _help.AttachmentsPraticheAuto(idPratica, "getall");
                         return View(model);
                     }
                     else { return RedirectToAction("ErrorAuth", "Home"); }
@@ -225,7 +224,7 @@ namespace SDM.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -263,19 +262,19 @@ namespace SDM.Controllers
 
                     if (ListFile.Count > 0)
                     {
-                        if (!_help.LoadFileNoleggio(ListFile))
+                        if (!_help.AttachmentsPraticheAuto(ListFile, "upload"))
                         {
                             TempData["messaggioErroreInserimentoFile"] = "Errore nell'inserimento del documento";
                         }
                     }
                 }
 
-                List<Attachment> model = _help.GetFileNoleggio(id);
+                List<Attachment> model = _help.AttachmentsPraticheAuto(id, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -284,13 +283,13 @@ namespace SDM.Controllers
         {
             try
             {
-                Attachment loadFile = _help.DownloadFileNoleggio(idFile);
+                Attachment loadFile = _help.AttachmentsPraticheAuto("download", idFile);
 
                 return File(loadFile.Blob, loadFile.Type, loadFile.Nome);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -302,19 +301,19 @@ namespace SDM.Controllers
             {
 
                 List<Attachment> model = new List<Attachment>();
-                if (_help.DelateFileNoleggio(idFile))
+                if (_help.DeleteFilePraticheAuto(idFile))
                 {
-                    model = _help.GetFileNoleggio(idPratica);
+                    model = _help.AttachmentsPraticheAuto(idPratica, "getall");
                     return PartialView("TableAllegati", model);
                 }
 
                 TempData["messaggioErroreInserimentoFile"] = "Errore nell'eliminazione del file";
-                model = _help.GetFileNoleggio(idPratica);
+                model = _help.AttachmentsPraticheAuto(idPratica, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("NoleggioController", null, ex);
+                _logger.LogWrite("PraticheAutoController", null, ex);
                 return RedirectToAction("Error", "Home");
             }
         }

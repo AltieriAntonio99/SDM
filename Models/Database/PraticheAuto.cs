@@ -12,12 +12,12 @@ namespace SDM.Models.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Noleggio
+    public partial class PraticheAuto
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Noleggio()
+        public PraticheAuto()
         {
-            this.AttachmentsNoleggio = new HashSet<AttachmentsNoleggio>();
+            this.AttachmentsPraticheAuto = new HashSet<AttachmentsPraticheAuto>();
         }
     
         public int Id { get; set; }
@@ -34,7 +34,7 @@ namespace SDM.Models.Database
         public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AttachmentsNoleggio> AttachmentsNoleggio { get; set; }
+        public virtual ICollection<AttachmentsPraticheAuto> AttachmentsPraticheAuto { get; set; }
         public virtual Sedi Sedi { get; set; }
         public virtual Status Status { get; set; }
         public virtual Users Users { get; set; }

@@ -116,7 +116,7 @@ namespace SDM.Controllers
             try
             {
                 List<Download> model = new List<Download>();
-                if (_help.DelateFileDownload(idFile))
+                if (_help.DeleteFileDownload(idFile))
                 {
                     model = _help.GetFileDownload(idSezione);
                     return PartialView("DownloadTableAllegati", model);

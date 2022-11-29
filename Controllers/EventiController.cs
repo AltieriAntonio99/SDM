@@ -28,7 +28,7 @@ namespace SDM.Controllers
                     {
                         PraticaIndex model = new PraticaIndex
                         {
-                            Pratiche = _help.GetPraticheEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString()),
+                            Pratiche = _help.PraticaEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
                             Categorie = _help.GetCategorie("credito")  //caricare le categorie di eventi
                         };
 
@@ -82,7 +82,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString()))
                     {
 
-                        Pratica model = _help.GetPraticaEventi(idPratica);
+                        Pratica model = _help.PraticaEventi(idPratica, "get");
                         model.SottocategoriaList = _help.GetCategorie("credito");
                         model.StatoList = _help.GetStati();
 
@@ -112,14 +112,14 @@ namespace SDM.Controllers
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                     pratica.NumPratica = Session["sede"].ToString() + "-" + pratica.Anno + "-";
 
-                    if (_help.SalvaPraticaEventi(pratica))
+                    if (_help.PraticaEventi(pratica, "save"))
                     {
-                        TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
+                        TempData["erroreInserimentoEventiHome"] = "Pratica salvata correttamente";
                         return RedirectToAction("Index", "Eventi");
                     }
                 }
 
-                TempData["erroreInserimentoPatronato"] = "true";
+                TempData["erroreInserimentoEventi"] = "true";
                 return RedirectToAction("AggiungiPratica", "Eventi");
             }
             catch (Exception ex)
@@ -141,14 +141,14 @@ namespace SDM.Controllers
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                    
-                    if (_help.ModificaPraticaEventi(pratica))
+                    if (_help.PraticaEventi(pratica, "update"))
                     {
-                        TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
+                        TempData["erroreInserimentoEventiHome"] = "Pratica modificata correttamente";
                         return RedirectToAction("Index", "Eventi");
                     }
                 }
 
-                TempData["erroreInserimentoPatronato"] = "true";
+                TempData["erroreInserimentoEventi"] = "true";
                 return RedirectToAction("ModificaPratica", "Eventi", new { idPratica = pratica.Id });
             }
             catch (Exception ex)
@@ -166,14 +166,14 @@ namespace SDM.Controllers
             {
                 
                 PraticaIndex model = new PraticaIndex();
-                if (_help.DelateEventi(idPratica))
+                if (_help.DeleteEventi(idPratica))
                 {
-                    model.Pratiche = _help.GetPraticheEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                    model.Pratiche = _help.PraticaEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                     return PartialView("TableIndex", model.Pratiche);
                 }
 
                 TempData["message"] = "Errore nell'eliminazione della pratica";
-                model.Pratiche = _help.GetPraticheEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                model.Pratiche = _help.PraticaEventi(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                 return PartialView("TableIndex", model.Pratiche);
             }
             catch (Exception ex)
@@ -189,9 +189,9 @@ namespace SDM.Controllers
             try
             {
                 pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
-                List<Pratica> result = _help.RicercaEventi(pratica, Session["role"].ToString());
+                List<Pratica> result = _help.PraticaEventi(0, Session["role"].ToString(), "search", pratica);
 
-                TempData["patronatoList"] = result;
+                TempData["EventiList"] = result;
 
                 return PartialView("TableIndex", result);
             }
@@ -215,7 +215,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString()))
                     {
 
-                        List<Attachment> model = _help.GetFileEventi(idPratica);
+                        List<Attachment> model = _help.AttachmentsEventi(idPratica, "getall");
                         return View(model);
                     }
                     else { return RedirectToAction("ErrorAuth", "Home"); }
@@ -262,14 +262,14 @@ namespace SDM.Controllers
 
                     if (ListFile.Count > 0)
                     {
-                        if (!_help.LoadFileEventi(ListFile))
+                        if (!_help.AttachmentsEventi(ListFile, "upload"))
                         {
                             TempData["messaggioErroreInserimentoFile"] = "Errore nell'inserimento del documento";
                         }
                     }
                 }
 
-                List<Attachment> model = _help.GetFileEventi(id);
+                List<Attachment> model = _help.AttachmentsEventi(id, "getall");
                 return PartialView("TableAllegati" , model);
             }
             catch (Exception ex)
@@ -283,7 +283,7 @@ namespace SDM.Controllers
         {
             try
             {
-                Attachment loadFile = _help.DownloadFileEventi(idFile);
+                Attachment loadFile = _help.AttachmentsEventi("download", idFile);
 
                 return File(loadFile.Blob, loadFile.Type, loadFile.Nome);
             }
@@ -301,14 +301,14 @@ namespace SDM.Controllers
             {
                 
                 List<Attachment> model = new List<Attachment>();
-                if (_help.DelateFileEventi(idFile))
+                if (_help.DeleteFileEventi(idFile))
                 {
-                    model = _help.GetFileEventi(idPratica);
+                    model = _help.AttachmentsEventi(idPratica, "getall");
                     return PartialView("TableAllegati", model);
                 }
 
                 TempData["messaggioErroreInserimentoFile"] = "Errore nell'eliminazione del file";
-                model = _help.GetFileEventi(idPratica);
+                model = _help.AttachmentsEventi(idPratica, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)

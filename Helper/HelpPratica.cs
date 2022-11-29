@@ -112,7 +112,7 @@ namespace SDM.Helper
             {
                 using (var context = new SDMEntities())
                 {
-                    var result = context.Categorie.Where(i => i.Categoria == type).OrderBy(i => i.Nome).ToList();
+                    var result = context.Categorie.Where(i => i.Categoria.ToLower() == type.ToLower()).OrderBy(i => i.Nome).ToList();
 
                     return result;
                 }
@@ -152,49 +152,38 @@ namespace SDM.Helper
 
                     if (type == "Sindacato")
                     {
-                        riepilogoPratica.pratica = GetPraticaSindacato(id);
-                        riepilogoPratica.attachment = GetFileSindacato(id);
+                        riepilogoPratica.pratica = PraticaSindacato(id, "get");
+                        riepilogoPratica.attachment = AttachmentsSindacato(id, "getall");
                         riepilogoPratica.type = "Sindacato";
                     }
                     if (type == "Patronato")
                     {
-                        riepilogoPratica.pratica = GetPraticaPatronato(id);
-                        riepilogoPratica.attachment = GetFilePatronato(id);
+                        riepilogoPratica.pratica = PraticaPatronato(id, "get");
+                        riepilogoPratica.attachment = AttachmentsPatronato(id, "getall");
                         riepilogoPratica.type = "Patronato";
                     }
-                    else if (type == "Noleggio")
+                    else if (type == "PraticheAuto")
                     {
-                        riepilogoPratica.pratica = GetPraticaNoleggio(id);
-                        riepilogoPratica.attachment = GetFileNoleggio(id);
-                        riepilogoPratica.type = "Noleggio";
-                    }
-                    else if (type == "Credito")
-                    {
-                        riepilogoPratica.pratica = GetPraticaCredito(id);
-                        riepilogoPratica.attachment = GetFileCredito(id);
+                        riepilogoPratica.pratica = PraticaEventi(id, "get");
+                        riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
+                        riepilogoPratica.type = "PraticheAuto";
                     }
                     else if (type == "Eventi")
                     {
-                        riepilogoPratica.pratica = GetPraticaEventi(id);
-                        riepilogoPratica.attachment = GetFileEventi(id);
+                        riepilogoPratica.pratica = PraticaEventi(id, "get");
+                        riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
                         riepilogoPratica.type = "Eventi";
                     }
                     else if (type == "StudioProfessionale")
                     {
-                        riepilogoPratica.pratica = GetPraticaStudioProfessionale(id);
-                        riepilogoPratica.attachment = GetFileStudioProfessionale(id);
+                        riepilogoPratica.pratica = PraticaStudioProfessionale(id, "get");
+                        riepilogoPratica.attachment = AttachmentsStudioProfessionale(id, "getall");
                         riepilogoPratica.type = "StudioProfessionale";
-                    }
-                    else if (type == "Archivio")
-                    {
-                        riepilogoPratica.pratica = GetPraticaArchivio(id);
-                        riepilogoPratica.attachment = GetFileArchivio(id);
-                        riepilogoPratica.type = "Archivio";
                     }
                     else if (type == "Agenzia")
                     {
-                        riepilogoPratica.pratica = GetPraticaAgenzia(id);
-                        riepilogoPratica.attachment = GetFileAgenzia(id);
+                        riepilogoPratica.pratica = PraticaEventi(id, "get");
+                        riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
                         riepilogoPratica.type = "Agenzia";
                     }
 
@@ -209,614 +198,19 @@ namespace SDM.Helper
         }
         #endregion
 
-        #region Sindacato
-        public bool SalvaPraticaSindacato(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "sindacato");
-                    Sindacato newPratica = new Sindacato
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = pratica.Sottocategoria,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Sindacato.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        _mail.SendMail(praticaMail, "Sindacato", "segreteria@sdmservices.it", "Pratica Sindacato");  //segreteria@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaSindacato(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Sindacato newPratica = context.Sindacato.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = pratica.Sottocategoria;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria" 
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto" 
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob" 
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Sindacato", email, "Pratica Sindacato");
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    _mail.SendMail(praticaMail, "Sindacato", "segreteria@sdmservices.it", "Pratica Sindacato");
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheSindacato(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Sindacato> pratiche = new List<Sindacato>();
-                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                     || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                    {
-                        pratiche = context.Sindacato.OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-                    else
-                    {
-                        pratiche = context.Sindacato.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public Pratica GetPraticaSindacato(int idPratia)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Sindacato pratica = context.Sindacato.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> RicercaSindacato(Pratica criteri, string role)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Sindacato> pratiche = context.Sindacato.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede)).OrderBy(i => i.LastUpdate).ToList();
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("RicercaSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateSindacato(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.Sindacato.SingleOrDefault(x => x.Id == id);
-                    var itemToRemoveAttachment = itemToRemove.AttachmentsSindacato.ToList();
-
-                    if (itemToRemove != null)
-                    {
-                        if (itemToRemoveAttachment != null)
-                        {
-                            foreach (var item in itemToRemoveAttachment)
-                            {
-                                context.AttachmentsSindacato.Remove(item);
-                            }
-                        }
-
-                        context.Sindacato.Remove(itemToRemove);
-                        return context.SaveChanges() > 0;
-                    }
-
-                    return false; ;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DelateSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public List<Attachment> GetFileSindacato(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsSindacato> files = context.AttachmentsSindacato.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileSindacato(List<Attachment> att)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    foreach (var item in att)
-                    {
-                        context.AttachmentsSindacato.Add(new AttachmentsSindacato
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                    }
-
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("LoadFileSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileSindacato(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.AttachmentsSindacato.SingleOrDefault(x => x.Id == id);
-
-                    if (itemToRemove != null)
-                    {
-                        context.AttachmentsSindacato.Remove(itemToRemove);
-                        return context.SaveChanges() > 0;
-                    }
-
-                    return false; ;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DelateFileSindacato", null, ex);
-                throw;
-            }
-        }
-
-        public Attachment DownloadFileSindacato(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsSindacato att = context.AttachmentsSindacato.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileSindacato", null, ex);
-                throw;
-            }
-        }
-        #endregion
-
         #region Patronato
-        public bool SalvaPraticaPatronato(Pratica pratica)
+        public List<Pratica> PraticaPatronato(int idSede, string ruolo, string metodo, Pratica criteri)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            List<Patronato> items = new List<Patronato>();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "patronato");
-                    Patronato newPratica = new Patronato
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = pratica.Sottocategoria,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Patronato.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        var getSedeUser = context.Sedi.SingleOrDefault(x => x.Id == newPratica.IdSede);
-
-                        if (getSedeUser != null && getSedeUser.Nome.Contains("SDM Services Casavatore"))
-                        {
-                            //_mail.SendMail(praticaMail, "Patronato", "amministrazione@sdmservices.it", "Pratica Patronato");
-                        }
-                        else
-                        {
-                            _mail.SendMail(praticaMail, "Patronato", "assistenza@sdmservices.it", "Pratica Patronato");
-                        }
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaPatronato", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaPatronato(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Patronato newPratica = context.Patronato.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = pratica.Sottocategoria;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Patronato", email, "Pratica Patronato");  //supporto@
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    var getSedeUser = context.Sedi.SingleOrDefault(x => x.Id == newPratica.IdSede);
-
-                                    if (getSedeUser != null && getSedeUser.Nome.Contains("SDM Services Casavatore"))
-                                    {
-                                        //_mail.SendMail(praticaMail, "Patronato", "amministrazione@sdmservices.it", "Pratica Patronato");
-                                    }
-                                    else
-                                    {
-                                        _mail.SendMail(praticaMail, "Patronato", "supporto@sdmservices.it", "Pratica Patronato");  //supporto@
-                                    }
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaPatronato", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPratichePatronato(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Patronato> pratiche = new List<Patronato>();
+                case "getall":
+                    logMessage = "GetPratichePatronato";
+                    items = GetPratiche<Patronato>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
@@ -824,126 +218,134 @@ namespace SDM.Helper
                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
                     {
-                        pratiche = context.Patronato.OrderByDescending(i => i.LastUpdate).ToList();
+                        criteri = new Pratica();
                     }
-                    else
-                    {
-                        pratiche = context.Patronato.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaPatronato";
+                    items = GetPratiche<Patronato>(logMessage);
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPratichePatronato", null, ex);
-                throw;
-            }
+
+            return MapListPatronatoToPraticaFiltered(items, criteri);
         }
 
-        public Pratica GetPraticaPatronato(int idPratia)
+        public Pratica PraticaPatronato(int idPratica, string metodo)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    Patronato pratica = context.Patronato.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
+                case "get":
+                    logMessage = "GetPraticaPatronato";
+                    var item = GetPratica<Patronato>(idPratica, logMessage);
+                    result = MapPatronatoToPratica(item);
+                    break;
+
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaPatronato", null, ex);
-                throw;
-            }
+
+            return result;
         }
 
-        public List<Pratica> RicercaPatronato(Pratica criteri, string role)
+        public bool PraticaPatronato(Pratica pratica, string metodo)
         {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Patronato> pratiche = context.Patronato.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede))
-                                                    .OrderBy(i => i.LastUpdate).ToList();
+            #region variabili gestionali
+            string tipoPratica = "Patronato";
+            string logMessage;
+            Patronato item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
 
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
+            #region variabili mail
+            string mailTos = "segreteria@sdmservices.it";
+            string mailSubject = "Pratica Patronato";
+            #endregion
 
-                    return result;
-                }
-            }
-            catch (Exception ex)
+            switch (metodo)
             {
-                _logger.LogWrite("RicercaPatronato", null, ex);
-                throw;
+                case "save":
+                    logMessage = "SalvaPraticaPatronato";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewPatronato(pratica);
+                    mailPratica = MapPatronatoToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaPatronato";
+                    var prevPratica = GetById<Patronato>(pratica.Id);
+                    item = MapPraticaToPatronato(prevPratica, pratica);
+                    mailPratica = MapPatronatoToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
             }
+
+            return result;
         }
 
-        public bool DelatePatronato(int id)
+        public List<Attachment> AttachmentsPatronato(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<AttachmentsPatronato> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetFilePatronato";
+                    items = GetFile<AttachmentsPatronato>(idPratica, logMessage);
+                    result = MapListAttachmentsPatronatoToAttachments(items);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool AttachmentsPatronato(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFilePatronato";
+                    var temp = MapListAttachmentsToAttachmentsPatronato(items);
+                    result = LoadFile<AttachmentsPatronato>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsPatronato(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFilePatronato";
+                    var item = DownloadFile<AttachmentsPatronato>(idFile, logMessage);
+                    result = MapAttachmentsPatronatoToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeletePatronato(int id)
         {
             try
             {
@@ -971,80 +373,12 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelatePatronato", null, ex);
+                _logger.LogWrite("DeletePatronato", null, ex);
                 throw;
             }
         }
 
-        public List<Attachment> GetFilePatronato(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsPatronato> files = context.AttachmentsPatronato.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFilePatronato", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFilePatronato(List<Attachment> att)
-        {
-            try
-            {
-                _logger.LogInfo("LoadFilePatronato", null, "Entra nel try");
-                using (var context = new SDMEntities())
-                {
-                    _logger.LogInfo("LoadFilePatronato", null, "Entra nel using");
-                    foreach (var item in att)
-                    {
-                        _logger.LogInfo("LoadFilePatronato", null, "Faccio add file");
-                        context.AttachmentsPatronato.Add(new AttachmentsPatronato
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                        _logger.LogInfo("LoadFilePatronato", null, "Finisco add file");
-                    }
-
-                    _logger.LogInfo("LoadFilePatronato", null, "Faccio save");
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInfo("LoadFilePatronato", null, "Save non riuscito" + ex.Message + ex.InnerException.Message);
-                _logger.LogWrite("LoadFilePatronato", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFilePatronato(int id)
+        public bool DeleteFilePatronato(int id)
         {
             try
             {
@@ -1063,199 +397,25 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFilePatronato", null, ex);
-                throw;
-            }
-        }
-
-        public Attachment DownloadFilePatronato(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsPatronato att = context.AttachmentsPatronato.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFilePatronato", null, ex);
+                _logger.LogWrite("DeleteFilePatronato", null, ex);
                 throw;
             }
         }
         #endregion
 
-        #region Credito
-        public bool SalvaPraticaCredito(Pratica pratica)
+        #region PraticheAuto
+        public List<Pratica> PraticaPraticheAuto(int idSede, string ruolo, string metodo, Pratica criteri)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            List<PraticheAuto> items = new List<PraticheAuto>();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "credito");
-                    Credito newPratica = new Credito
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = pratica.Sottocategoria,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Credito.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        _mail.SendMail(praticaMail, "Credito", "documenti@sdmservices.it", "Pratica Credito e Assicurazioni");   //documenti@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaCredito", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaCredito(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Credito newPratica = context.Credito.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = pratica.Sottocategoria;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Credito", email, "Pratica Credito e Assicurazioni");   //documenti@
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    _mail.SendMail(praticaMail, "Credito", "documenti@sdmservices.it", "Pratica Credito e Assicurazioni");   //documenti@
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaCredito", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheCredito(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Credito> pratiche = new List<Credito>();
+                case "getall":
+                    logMessage = "GetPratichePraticheAuto";
+                    items = GetPratiche<PraticheAuto>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
@@ -1263,132 +423,141 @@ namespace SDM.Helper
                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
                     {
-                        pratiche = context.Credito.OrderByDescending(i => i.LastUpdate).ToList();
+                        criteri = new Pratica();
                     }
-                    else
-                    {
-                        pratiche = context.Credito.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaPraticheAuto";
+                    items = GetPratiche<PraticheAuto>(logMessage);
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheCredito", null, ex);
-                throw;
-            }
+
+            return MapListPraticheAutoToPraticaFiltered(items, criteri);
         }
 
-        public Pratica GetPraticaCredito(int idPratia)
+        public Pratica PraticaPraticheAuto(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaPraticheAuto";
+                    var item = GetPratica<PraticheAuto>(idPratica, logMessage);
+                    result = MapPraticheAutoToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaPraticheAuto(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "PraticheAuto";
+            string logMessage;
+            PraticheAuto item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "segreteria@sdmservices.it";
+            string mailSubject = "Pratica PraticheAuto";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaPraticheAuto";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewPraticheAuto(pratica);
+                    mailPratica = MapPraticheAutoToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaPraticheAuto";
+                    var prevPratica = GetById<PraticheAuto>(pratica.Id);
+                    item = MapPraticaToPraticheAuto(prevPratica, pratica);
+                    mailPratica = MapPraticheAutoToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsPraticheAuto(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<AttachmentsPraticheAuto> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetFilePraticheAuto";
+                    items = GetFile<AttachmentsPraticheAuto>(idPratica, logMessage);
+                    result = MapListAttachmentsPraticheAutoToAttachments(items);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool AttachmentsPraticheAuto(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFilePraticheAuto";
+                    var temp = MapListAttachmentsToAttachmentsPraticheAuto(items);
+                    result = LoadFile<AttachmentsPraticheAuto>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsPraticheAuto(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFilePraticheAuto";
+                    var item = DownloadFile<AttachmentsPraticheAuto>(idFile, logMessage);
+                    result = MapAttachmentsPraticheAutoToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeletePraticheAuto(int id)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    Credito pratica = context.Credito.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaCredito", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> RicercaCredito(Pratica criteri, string role)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Credito> pratiche = context.Credito.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede)).OrderBy(i => i.LastUpdate).ToList();
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("RicercaCredito", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateCredito(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.Credito.SingleOrDefault(x => x.Id == id);
-                    var itemToRemoveAttachment = itemToRemove.AttachmentsCredito.ToList();
+                    var itemToRemove = context.PraticheAuto.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsPraticheAuto.ToList();
 
                     if (itemToRemove != null)
                     {
@@ -1396,11 +565,11 @@ namespace SDM.Helper
                         {
                             foreach (var item in itemToRemoveAttachment)
                             {
-                                context.AttachmentsCredito.Remove(item);
+                                context.AttachmentsPraticheAuto.Remove(item);
                             }
                         }
 
-                        context.Credito.Remove(itemToRemove);
+                        context.PraticheAuto.Remove(itemToRemove);
                         return context.SaveChanges() > 0;
                     }
 
@@ -1409,84 +578,22 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateCredito", null, ex);
+                _logger.LogWrite("DeletePraticheAuto", null, ex);
                 throw;
             }
         }
 
-        public List<Attachment> GetFileCredito(int idPratica)
+        public bool DeleteFilePraticheAuto(int id)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    List<AttachmentsCredito> files = context.AttachmentsCredito.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileCredito", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileCredito(List<Attachment> att)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    foreach (var item in att)
-                    {
-                        context.AttachmentsCredito.Add(new AttachmentsCredito
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                    }
-
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("LoadFileCredito", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileCredito(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.AttachmentsCredito.SingleOrDefault(x => x.Id == id);
+                    var itemToRemove = context.AttachmentsPraticheAuto.SingleOrDefault(x => x.Id == id);
 
                     if (itemToRemove != null)
                     {
-                        context.AttachmentsCredito.Remove(itemToRemove);
+                        context.AttachmentsPraticheAuto.Remove(itemToRemove);
                         return context.SaveChanges() > 0;
                     }
 
@@ -1495,631 +602,26 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFileCredito", null, ex);
+                _logger.LogWrite("DeleteFilePraticheAuto", null, ex);
                 throw;
             }
         }
-
-        public Attachment DownloadFileCredito(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsCredito att = context.AttachmentsCredito.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileCredito", null, ex);
-                throw;
-            }
-        }
-        #endregion
-
-        #region Noleggio
-        public bool SalvaPraticaNoleggio(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "noleggio");
-                    Noleggio newPratica = new Noleggio
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = pratica.Sottocategoria,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Noleggio.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        _mail.SendMail(praticaMail, "Noleggio", "documenti@sdmservices.it", "Pratica Noleggio");        //documenti@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaNoleggio(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Noleggio newPratica = context.Noleggio.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = pratica.Sottocategoria;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Noleggio", email, "Pratica Noleggio");        //documenti@
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    _mail.SendMail(praticaMail, "Noleggio", "documenti@sdmservices.it", "Pratica Noleggio");        //documenti@
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheNoleggio(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Noleggio> pratiche = new List<Noleggio>();
-                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                    {
-                        pratiche = context.Noleggio.OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-                    else
-                    {
-                        pratiche = context.Noleggio.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public Pratica GetPraticaNoleggio(int idPratia)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Noleggio pratica = context.Noleggio.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> RicercaNoleggio(Pratica criteri, string role)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Noleggio> pratiche = context.Noleggio.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede)).OrderBy(i => i.LastUpdate).ToList();
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("RicercaNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateNoleggio(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.Noleggio.SingleOrDefault(x => x.Id == id);
-                    var itemToRemoveAttachment = itemToRemove.AttachmentsNoleggio.ToList();
-
-                    if (itemToRemove != null)
-                    {
-                        if (itemToRemoveAttachment != null)
-                        {
-                            foreach (var item in itemToRemoveAttachment)
-                            {
-                                context.AttachmentsNoleggio.Remove(item);
-                            }
-                        }
-
-                        context.Noleggio.Remove(itemToRemove);
-                        return context.SaveChanges() > 0;
-                    }
-
-                    return false; ;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DelateNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public List<Attachment> GetFileNoleggio(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsNoleggio> files = context.AttachmentsNoleggio.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileNoleggio(List<Attachment> att)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    foreach (var item in att)
-                    {
-                        context.AttachmentsNoleggio.Add(new AttachmentsNoleggio
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                    }
-
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("LoadFileNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileNoleggio(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.AttachmentsNoleggio.SingleOrDefault(x => x.Id == id);
-
-                    if (itemToRemove != null)
-                    {
-                        context.AttachmentsNoleggio.Remove(itemToRemove);
-                        return context.SaveChanges() > 0;
-                    }
-
-                    return false; ;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DelateFileNoleggio", null, ex);
-                throw;
-            }
-        }
-
-        public Attachment DownloadFileNoleggio(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsNoleggio att = context.AttachmentsNoleggio.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileNoleggio", null, ex);
-                throw;
-            }
-        }
+                
         #endregion
 
         #region Eventi
-        public bool SalvaPraticaEventi(Pratica pratica)
+        public List<Pratica> PraticaEventi(int idSede, string ruolo, string metodo, Pratica criteri)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            List<Eventi> items = new List<Eventi>();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "eventi");
-                    Eventi newPratica = new Eventi
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = null,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Eventi.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = null,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        //_mail.SendMail(praticaMail, "Eventi", "amministrazione@sdmservices.it", "Pratica Eventi");      amministrazione@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaEventi", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaEventi(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Eventi newPratica = context.Eventi.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = null;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Eventi", email, "Pratica Eventi");
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    //_mail.SendMail(praticaMail, "Eventi", "amministrazione@sdmservices.it", "Pratica Eventi");      amministrazione@
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaEventi", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheEventi(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Eventi> pratiche = new List<Eventi>();
+                case "getall":
+                    logMessage = "GetPraticheEventi";
+                    items = GetPratiche<Eventi>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
@@ -2127,125 +629,134 @@ namespace SDM.Helper
                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
                     {
-                        pratiche = context.Eventi.OrderByDescending(i => i.LastUpdate).ToList();
+                        criteri = new Pratica();
                     }
-                    else
-                    {
-                        pratiche = context.Eventi.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = null,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaEventi";
+                    items = GetPratiche<Eventi>(logMessage);
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheEventi", null, ex);
-                throw;
-            }
+
+            return MapListEventiToPraticaFiltered(items, criteri);
         }
 
-        public Pratica GetPraticaEventi(int idPratia)
+        public Pratica PraticaEventi(int idPratica, string metodo)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    Eventi pratica = context.Eventi.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = null,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
+                case "get":
+                    logMessage = "GetPraticaEventi";
+                    var item = GetPratica<Eventi>(idPratica, logMessage);
+                    result = MapEventiToPratica(item);
+                    break;
+
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaEventi", null, ex);
-                throw;
-            }
+
+            return result;
         }
 
-        public List<Pratica> RicercaEventi(Pratica criteri, string role)
+        public bool PraticaEventi(Pratica pratica, string metodo)
         {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Eventi> pratiche = context.Eventi.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede)).OrderBy(i => i.LastUpdate).ToList();
+            #region variabili gestionali
+            string tipoPratica = "Eventi";
+            string logMessage;
+            Eventi item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
 
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = null,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
+            #region variabili mail
+            string mailTos = "segreteria@sdmservices.it";
+            string mailSubject = "Pratica Eventi";
+            #endregion
 
-                    return result;
-                }
-            }
-            catch (Exception ex)
+            switch (metodo)
             {
-                _logger.LogWrite("RicercaEventi", null, ex);
-                throw;
+                case "save":
+                    logMessage = "SalvaPraticaEventi";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewEventi(pratica);
+                    mailPratica = MapEventiToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaEventi";
+                    var prevPratica = GetById<Eventi>(pratica.Id);
+                    item = MapPraticaToEventi(prevPratica, pratica);
+                    mailPratica = MapEventiToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
             }
+
+            return result;
         }
 
-        public bool DelateEventi(int id)
+        public List<Attachment> AttachmentsEventi(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<AttachmentsEventi> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetFileEventi";
+                    items = GetFile<AttachmentsEventi>(idPratica, logMessage);
+                    result = MapListAttachmentsEventiToAttachments(items);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool AttachmentsEventi(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileEventi";
+                    var temp = MapListAttachmentsToAttachmentsEventi(items);
+                    result = LoadFile<AttachmentsEventi>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsEventi(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileEventi";
+                    var item = DownloadFile<AttachmentsEventi>(idFile, logMessage);
+                    result = MapAttachmentsEventiToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteEventi(int id)
         {
             try
             {
@@ -2273,74 +784,12 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateEventi", null, ex);
+                _logger.LogWrite("DeleteEventi", null, ex);
                 throw;
             }
         }
 
-        public List<Attachment> GetFileEventi(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsEventi> files = context.AttachmentsEventi.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileEventi", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileEventi(List<Attachment> att)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    foreach (var item in att)
-                    {
-                        context.AttachmentsEventi.Add(new AttachmentsEventi
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                    }
-
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("LoadFileEventi", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileEventi(int id)
+        public bool DeleteFileEventi(int id)
         {
             try
             {
@@ -2359,194 +808,25 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFileEventi", null, ex);
-                throw;
-            }
-        }
-
-        public Attachment DownloadFileEventi(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsEventi att = context.AttachmentsEventi.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileEventi", null, ex);
+                _logger.LogWrite("DeleteFileEventi", null, ex);
                 throw;
             }
         }
         #endregion
 
-        #region StudioProfessionale
-        public bool SalvaPraticaStudioProfessionale(Pratica pratica)
+        #region Sindacato
+        public List<Pratica> PraticaSindacato(int idSede, string ruolo, string metodo, Pratica criteri)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            List<Sindacato> items = new List<Sindacato>();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "assistenza_legale");
-                    StudioProfessionale newPratica = new StudioProfessionale
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = null,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.StudioProfessionale.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = null,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        _mail.SendMail(praticaMail, "StudioProfessionale", "documenti@sdmservices.it", "Pratica Studio Professionale");       //documenti@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaStudioProfessionale", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaStudioProfessionale(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    StudioProfessionale newPratica = context.StudioProfessionale.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = null;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "StudioProfessionale", email, "Pratica Studio Professionale");
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    _mail.SendMail(praticaMail, "StudioProfessionale", "assistenza@sdmservices.it", "Pratica Studio Professionale");       //assistenza@
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaStudioProfessionale", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheStudioProfessionale(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<StudioProfessionale> pratiche = new List<StudioProfessionale>();
+                case "getall":
+                    logMessage = "GetPraticheSindacato";
+                    items = GetPratiche<Sindacato>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
@@ -2554,119 +834,340 @@ namespace SDM.Helper
                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
                     {
-                        pratiche = context.StudioProfessionale.OrderByDescending(i => i.LastUpdate).ToList();
+                        criteri = new Pratica();
                     }
-                    else
-                    {
-                        pratiche = context.StudioProfessionale.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = null,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaSindacato";
+                    items = GetPratiche<Sindacato>(logMessage);
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheStudioProfessionale", null, ex);
-                throw;
-            }
+
+            return MapListSindacatoToPraticaFiltered(items, criteri);
         }
 
-        public Pratica GetPraticaStudioProfessionale(int idPratia)
+        public Pratica PraticaSindacato(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaSindacato";
+                    var item = GetPratica<Sindacato>(idPratica, logMessage);
+                    result = MapSindacatoToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaSindacato(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "Sindacato";
+            string logMessage;
+            Sindacato item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "segreteria@sdmservices.it";
+            string mailSubject = "Pratica Sindacato";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaSindacato";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewSindacato(pratica);
+                    mailPratica = MapSindacatoToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaSindacato";
+                    var prevPratica = GetById<Sindacato>(pratica.Id);
+                    item = MapPraticaToSindacato(prevPratica, pratica);
+                    mailPratica = MapSindacatoToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsSindacato(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<AttachmentsSindacato> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetFileSindacato";
+                    items = GetFile<AttachmentsSindacato>(idPratica, logMessage);
+                    result = MapListAttachmentsSindacatoToAttachments(items);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool AttachmentsSindacato(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileSindacato";
+                    var temp = MapListAttachmentsToAttachmentsSindacato(items);
+                    result = LoadFile<AttachmentsSindacato>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsSindacato(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileSindacato";
+                    var item = DownloadFile<AttachmentsSindacato>(idFile, logMessage);
+                    result = MapAttachmentsSindacatoToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+                
+        public bool DeleteSindacato(int id)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    StudioProfessionale pratica = context.StudioProfessionale.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
+                    var itemToRemove = context.Sindacato.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsSindacato.ToList();
+
+                    if (itemToRemove != null)
                     {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = null,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsSindacato.Remove(item);
+                            }
+                        }
+
+                        context.Sindacato.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("GetPraticaStudioProfessionale", null, ex);
+                _logger.LogWrite("DeleteSindacato", null, ex);
                 throw;
             }
         }
 
-        public List<Pratica> RicercaStudioProfessionale(Pratica criteri, string role)
+        public bool DeleteFileSindacato(int id)
         {
             try
             {
                 using (var context = new SDMEntities())
                 {
-                    List<StudioProfessionale> pratiche = context.StudioProfessionale.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede)).OrderBy(i => i.LastUpdate).ToList();
+                    var itemToRemove = context.AttachmentsSindacato.SingleOrDefault(x => x.Id == id);
 
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
+                    if (itemToRemove != null)
                     {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = null,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
+                        context.AttachmentsSindacato.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
                     }
 
-                    return result;
+                    return false; ;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("RicercaStudioProfessionale", null, ex);
+                _logger.LogWrite("DeleteFileSindacato", null, ex);
                 throw;
             }
         }
 
-        public bool DelateStudioProfessionale(int id)
+        #endregion
+
+        #region StudioProfessionale
+        public List<Pratica> PraticaStudioProfessionale(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<StudioProfessionale> items = new List<StudioProfessionale>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPraticheStudioProfessionale";
+                    items = GetPratiche<StudioProfessionale>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
+                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
+                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
+                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaStudioProfessionale";
+                    items = GetPratiche<StudioProfessionale>(logMessage);
+                    break;
+            }
+
+            return MapListStudioProfessionaleToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaStudioProfessionale(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaStudioProfessionale";
+                    var item = GetPratica<StudioProfessionale>(idPratica, logMessage);
+                    result = MapStudioProfessionaleToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaStudioProfessionale(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "StudioProfessionale";
+            string logMessage;
+            StudioProfessionale item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "documenti@sdmservices.it"; //documenti@
+            string mailSubject = "Pratica Studio Professionale";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaStudioProfessionale";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewStudioProfessionale(pratica);
+                    mailPratica = MapStudioProfessionaleToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaStudioProfessionale";
+                    var prevPratica = GetById<StudioProfessionale>(pratica.Id);
+                    item = MapPraticaToStudioProfessionale(prevPratica, pratica);
+                    mailPratica = MapStudioProfessionaleToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsStudioProfessionale(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<AttachmentsStudioProfessionale> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetFileStudioProfessionale";
+                    items = GetFile<AttachmentsStudioProfessionale>(idPratica, logMessage);
+                    result = MapListAttachmentsStudioProfessionaleToAttachments(items);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool AttachmentsStudioProfessionale(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileStudioProfessionale";
+                    var temp = MapListAttachmentsToAttachmentsStudioProfessionale(items);
+                    result = LoadFile<AttachmentsStudioProfessionale>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsStudioProfessionale(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileStudioProfessionale";
+                    var item = DownloadFile<AttachmentsStudioProfessionale>(idFile, logMessage);
+                    result = MapAttachmentsStudioProfessionaleToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteStudioProfessionale(int id)
         {
             try
             {
@@ -2694,74 +1195,12 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateStudioProfessionale", null, ex);
+                _logger.LogWrite("DeleteStudioProfessionale", null, ex);
                 throw;
             }
         }
-
-        public List<Attachment> GetFileStudioProfessionale(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsStudioProfessionale> files = context.AttachmentsStudioProfessionale.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileStudioProfessionale", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileStudioProfessionale(List<Attachment> att)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    foreach (var item in att)
-                    {
-                        context.AttachmentsStudioProfessionale.Add(new AttachmentsStudioProfessionale
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                    }
-
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("LoadFileStudioProfessionale", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileStudioProfessionale(int id)
+        
+        public bool DeleteFileStudioProfessionale(int id)
         {
             try
             {
@@ -2780,643 +1219,26 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFileStudioProfessionale", null, ex);
+                _logger.LogWrite("DeleteFileStudioProfessionale", null, ex);
                 throw;
             }
         }
-
-        public Attachment DownloadFileStudioProfessionale(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsStudioProfessionale att = context.AttachmentsStudioProfessionale.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileStudioProfessionale", null, ex);
-                throw;
-            }
-        }
-        #endregion
-
-        #region Archivio
-        public bool SalvaPraticaArchivio(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "archivio");
-                    Archivio newPratica = new Archivio
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = pratica.Sottocategoria,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Archivio.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        _mail.SendMail(praticaMail, "Archivio", "info@sdmservices.it", "Pratica Archivio");  //info@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaArchivio(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Archivio newPratica = context.Archivio.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = pratica.Sottocategoria;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Archivio", email, "Pratica Archivio");
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    var getSedeUser = context.Sedi.SingleOrDefault(x => x.Id == newPratica.IdSede);
-                                    
-                                    _mail.SendMail(praticaMail, "Archivio", "info@sdmservices.it", "Pratica Archivio");  //info@                                    
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheArchivio(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Archivio> pratiche = new List<Archivio>();
-                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria" 
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto" 
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob" 
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                    {
-                        pratiche = context.Archivio.OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-                    else
-                    {
-                        pratiche = context.Archivio.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public Pratica GetPraticaArchivio(int idPratia)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Archivio pratica = context.Archivio.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> RicercaArchivio(Pratica criteri, string role)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Archivio> pratiche = context.Archivio.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede))
-                                                    .OrderBy(i => i.LastUpdate).ToList();
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("RicercaArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateArchivio(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.Archivio.SingleOrDefault(x => x.Id == id);
-                    var itemToRemoveAttachment = itemToRemove.AttachmentsArchivio.ToList();
-
-                    if (itemToRemove != null)
-                    {
-                        if (itemToRemoveAttachment != null)
-                        {
-                            foreach (var item in itemToRemoveAttachment)
-                            {
-                                context.AttachmentsArchivio.Remove(item);
-                            }
-                        }
-
-                        context.Archivio.Remove(itemToRemove);
-                        return context.SaveChanges() > 0;
-                    }
-
-                    return false; ;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DelateArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public List<Attachment> GetFileArchivio(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsArchivio> files = context.AttachmentsArchivio.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileArchivio(List<Attachment> att)
-        {
-            try
-            {
-                _logger.LogInfo("LoadFileArchivio", null, "Entra nel try");
-                using (var context = new SDMEntities())
-                {
-                    _logger.LogInfo("LoadFileArchivio", null, "Entra nel using");
-                    foreach (var item in att)
-                    {
-                        _logger.LogInfo("LoadFileArchivio", null, "Faccio add file");
-
-                        context.AttachmentsArchivio.Add(new AttachmentsArchivio
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                        _logger.LogInfo("LoadFileArchivio", null, "Finisco add file");
-                    }
-
-                    _logger.LogInfo("LoadFileArchivio", null, "Faccio save");
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInfo("LoadFileArchivio", null, "Save non riuscito" + ex.Message + ex.InnerException.Message);
-                _logger.LogWrite("LoadFileArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileArchivio(int id)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    var itemToRemove = context.AttachmentsArchivio.SingleOrDefault(x => x.Id == id);
-
-                    if (itemToRemove != null)
-                    {
-                        context.AttachmentsArchivio.Remove(itemToRemove);
-                        return context.SaveChanges() > 0;
-                    }
-
-                    return false; ;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DelateFileArchivio", null, ex);
-                throw;
-            }
-        }
-
-        public Attachment DownloadFileArchivio(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsArchivio att = context.AttachmentsArchivio.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileArchivio", null, ex);
-                throw;
-            }
-        }
+                
         #endregion
 
         #region Agenzia
-        public bool SalvaPraticaAgenzia(Pratica pratica)
+        public List<Pratica> PraticaAgenzia(int idSede, string ruolo, string metodo, Pratica criteri)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            List<Agenzia> items = new List<Agenzia>();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    var numPraticaAut = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == "agenzia");
-                    Agenzia newPratica = new Agenzia
-                    {
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Sottocategoria = pratica.Sottocategoria,
-                        Anno = pratica.Anno,
-                        LastUpdate = pratica.LastUpdate,
-                        IdUserUpdate = pratica.IdUserUpdate,
-                        NumPratica = pratica.NumPratica + numPraticaAut.NumPratica.ToString(),
-                        IdSede = pratica.IdSede,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-
-                    context.Agenzia.Add(newPratica);
-
-                    var result = context.SaveChanges() > 0;
-
-                    if (result)
-                    {
-                        numPraticaAut.NumPratica += 1;
-                        context.SaveChanges();
-
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        _mail.SendMail(praticaMail, "Agenzia", "amministrazione@sdmservices.it", "Pratica Agenzia");  //amministrazione@
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("SalvaPraticaAgenzia", null, ex);
-                throw;
-            }
-        }
-
-        public bool ModificaPraticaAgenzia(Pratica pratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    Agenzia newPratica = context.Agenzia.SingleOrDefault(i => i.Id == pratica.Id);
-
-                    if (newPratica != null)
-                    {
-                        newPratica.Nome = pratica.Nome;
-                        newPratica.Cognome = pratica.Cognome;
-                        newPratica.Sottocategoria = pratica.Sottocategoria;
-                        newPratica.Anno = pratica.Anno;
-                        newPratica.LastUpdate = pratica.LastUpdate;
-                        newPratica.IdUserUpdate = pratica.IdUserUpdate;
-                        //newPratica.IdSede = pratica.IdSede;
-                        newPratica.IdStato = pratica.IdStato;
-                        newPratica.Note = pratica.Note;
-                        newPratica.TipologiaPratica = pratica.TipologiaPratica;
-                    }
-
-                    if (context.SaveChanges() > 0)
-                    {
-                        Pratica praticaMail = new Pratica
-                        {
-                            Id = newPratica.Id,
-                            Nome = newPratica.Nome,
-                            Cognome = newPratica.Cognome,
-                            Sottocategoria = newPratica.Sottocategoria,
-                            Anno = newPratica.Anno,
-                            LastUpdate = newPratica.LastUpdate,
-                            IdUserUpdate = newPratica.IdUserUpdate,
-                            NumPratica = newPratica.NumPratica,
-                            IdSede = newPratica.IdSede,
-                            IdStato = newPratica.IdStato,
-                            Note = newPratica.Note,
-                            TipologiaPratica = newPratica.TipologiaPratica
-                        };
-
-                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == praticaMail.IdUserUpdate);
-
-                        if (userFrom != null)
-                        {
-                            List<Users> userFromList = context.Users.Where(x => x.IdSede == praticaMail.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
-                                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
-                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
-                                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
-
-                            string ruolo = userFrom.Roles?.Ruolo;
-                            if (!string.IsNullOrWhiteSpace(ruolo))
-                            {
-                                if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminDocumenti" || ruolo == "adminArchivio"
-                                    || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
-                                    || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
-                                {
-                                    if (userFromList.Count > 0)
-                                    {
-                                        string email = userFromList.FirstOrDefault().Email;
-                                        if (!string.IsNullOrWhiteSpace(email))
-                                        {
-                                            _mail.SendMail(praticaMail, "Agenzia", email, "Pratica Agenzia");  //supporto@
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    var getSedeUser = context.Sedi.SingleOrDefault(x => x.Id == newPratica.IdSede);
-
-                                    _mail.SendMail(praticaMail, "Agenzia", "amministrazione@sdmservices.it", "Pratica Agenzia");  //amministrazione@
-                                }
-                            }
-
-                        }
-
-                        return true;
-                    }
-                    else { return false; }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("ModificaPraticaAgenzia", null, ex);
-                throw;
-            }
-        }
-
-        public List<Pratica> GetPraticheAgenzia(int idSede, string ruolo)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<Agenzia> pratiche = new List<Agenzia>();
+                case "getall":
+                    logMessage = "GetPraticheAgenzia";
+                    items = GetPratiche<Agenzia>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
@@ -3424,126 +1246,134 @@ namespace SDM.Helper
                                     || ruolo == "adminCasoriaNoSmartJob" || ruolo == "adminSegreteriaNoSmartJob"
                                     || ruolo == "adminSupportoNoSmartJob" || ruolo == "adminDocumentiNoSmartJob")
                     {
-                        pratiche = context.Agenzia.OrderByDescending(i => i.LastUpdate).ToList();
+                        criteri = new Pratica();
                     }
-                    else
-                    {
-                        pratiche = context.Agenzia.Where(i => i.IdSede == idSede).OrderByDescending(i => i.LastUpdate).ToList();
-                    }
-
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
-
-                    return result;
-                }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaAgenzia";
+                    items = GetPratiche<Agenzia>(logMessage);
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticheAgenzia", null, ex);
-                throw;
-            }
+
+            return MapListAgenziaToPraticaFiltered(items, criteri);
         }
 
-        public Pratica GetPraticaAgenzia(int idPratia)
+        public Pratica PraticaAgenzia(int idPratica, string metodo)
         {
-            try
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
             {
-                using (var context = new SDMEntities())
-                {
-                    Agenzia pratica = context.Agenzia.SingleOrDefault(i => i.Id == idPratia);
-                    Pratica result = new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    };
-                    return result;
-                }
+                case "get":
+                    logMessage = "GetPraticaAgenzia";
+                    var item = GetPratica<Agenzia>(idPratica, logMessage);
+                    result = MapAgenziaToPratica(item);
+                    break;
+
             }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetPraticaAgenzia", null, ex);
-                throw;
-            }
+
+            return result;
         }
 
-        public List<Pratica> RicercaAgenzia(Pratica criteri, string role)
+        public bool PraticaAgenzia(Pratica pratica, string metodo)
         {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    if (role == "admin" || role == "adminArchivioNoSmartJob"
-                                    || role == "adminNoSmartJob" || role == "adminCasoria"
-                                    || role == "adminSegreteria" || role == "adminSupporto"
-                                    || role == "adminDocumenti" || role == "adminArchivio"
-                                    || role == "adminCasoriaNoSmartJob" || role == "adminSegreteriaNoSmartJob"
-                                    || role == "adminSupportoNoSmartJob" || role == "adminDocumentiNoSmartJob") { criteri.IdSede = null; }
-                    List<Agenzia> pratiche = context.Agenzia.Where(i => (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                                                    && (criteri.Anno == null || i.Anno == criteri.Anno)
-                                                    && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                                                    && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                                                    && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                                                    && (criteri.IdSede == null || i.IdSede == criteri.IdSede))
-                                                    .OrderBy(i => i.LastUpdate).ToList();
+            #region variabili gestionali
+            string tipoPratica = "Agenzia";
+            string logMessage;
+            Agenzia item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
 
-                    List<Pratica> result = new List<Pratica>();
-                    foreach (var pratica in pratiche)
-                    {
-                        result.Add(new Pratica
-                        {
-                            Id = pratica.Id,
-                            Nome = pratica.Nome,
-                            Cognome = pratica.Cognome,
-                            Anno = pratica.Anno,
-                            Sottocategoria = pratica.Sottocategoria,
-                            IdUserUpdate = pratica.Id,
-                            IdSede = pratica.IdSede,
-                            NumPratica = pratica.NumPratica,
-                            LastUpdate = pratica.LastUpdate,
-                            IdStato = pratica.IdStato,
-                            Note = pratica.Note,
-                            TipologiaPratica = pratica.TipologiaPratica
-                        });
-                    }
+            #region variabili mail
+            string mailTos = "segreteria@sdmservices.it";
+            string mailSubject = "Pratica Agenzia";
+            #endregion
 
-                    return result;
-                }
-            }
-            catch (Exception ex)
+            switch (metodo)
             {
-                _logger.LogWrite("RicercaAgenzia", null, ex);
-                throw;
+                case "save":
+                    logMessage = "SalvaPraticaAgenzia";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewAgenzia(pratica);
+                    mailPratica = MapAgenziaToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaAgenzia";
+                    var prevPratica = GetById<Agenzia>(pratica.Id);
+                    item = MapPraticaToAgenzia(prevPratica, pratica);
+                    mailPratica = MapAgenziaToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
             }
+
+            return result;
         }
 
-        public bool DelateAgenzia(int id)
+        public List<Attachment> AttachmentsAgenzia(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<AttachmentsAgenzia> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetFileAgenzia";
+                    items = GetFile<AttachmentsAgenzia>(idPratica, logMessage);
+                    result = MapListAttachmentsAgenziaToAttachments(items);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool AttachmentsAgenzia(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileAgenzia";
+                    var temp = MapListAttachmentsToAttachmentsAgenzia(items);
+                    result = LoadFile<AttachmentsAgenzia>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsAgenzia(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileAgenzia";
+                    var item = DownloadFile<AttachmentsAgenzia>(idFile, logMessage);
+                    result = MapAttachmentsAgenziaToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteAgenzia(int id)
         {
             try
             {
@@ -3571,81 +1401,12 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateAgenzia", null, ex);
+                _logger.LogWrite("DeleteAgenzia", null, ex);
                 throw;
             }
         }
 
-        public List<Attachment> GetFileAgenzia(int idPratica)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    List<AttachmentsAgenzia> files = context.AttachmentsAgenzia.Where(i => i.IdPratica == idPratica).OrderByDescending(i => i.LastUpdate).ToList();
-
-                    List<Attachment> result = new List<Attachment>();
-                    foreach (var file in files)
-                    {
-                        result.Add(new Attachment
-                        {
-                            Id = file.Id,
-                            Nome = file.Nome,
-                            Blob = file.Blob,
-                            LastUpdate = file.LastUpdate,
-                            Type = file.Type,
-                            IdPratica = file.IdPratica,
-                            IdUserUpdate = file.IdUserUpdate
-                        });
-                    }
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("GetFileAgenzia", null, ex);
-                throw;
-            }
-        }
-
-        public bool LoadFileAgenzia(List<Attachment> att)
-        {
-            try
-            {
-                _logger.LogInfo("LoadFileAgenzia", null, "Entra nel try");
-                using (var context = new SDMEntities())
-                {
-                    _logger.LogInfo("LoadFileAgenzia", null, "Entra nel using");
-                    foreach (var item in att)
-                    {
-                        _logger.LogInfo("LoadFileAgenzia", null, "Faccio add file");
-
-                        context.AttachmentsAgenzia.Add(new AttachmentsAgenzia
-                        {
-                            Nome = item.Nome,
-                            Blob = item.Blob,
-                            Type = item.Type,
-                            IdUserUpdate = item.IdUserUpdate,
-                            IdPratica = item.IdPratica,
-                            LastUpdate = item.LastUpdate,
-                        });
-                        _logger.LogInfo("LoadFileAgenzia", null, "Finisco add file");
-                    }
-
-                    _logger.LogInfo("LoadFileAgenzia", null, "Faccio save");
-                    return context.SaveChanges() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInfo("LoadFileAgenzia", null, "Save non riuscito" + ex.Message + ex.InnerException.Message);
-                _logger.LogWrite("LoadFileAgenzia", null, ex);
-                throw;
-            }
-        }
-
-        public bool DelateFileAgenzia(int id)
+        public bool DeleteFileAgenzia(int id)
         {
             try
             {
@@ -3664,42 +1425,13 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFileAgenzia", null, ex);
+                _logger.LogWrite("DeleteFileAgenzia", null, ex);
                 throw;
             }
         }
+        #endregion
 
-        public Attachment DownloadFileAgenzia(int idFile)
-        {
-            try
-            {
-                using (var context = new SDMEntities())
-                {
-                    AttachmentsAgenzia att = context.AttachmentsAgenzia.FirstOrDefault(i => i.Id == idFile);
-
-                    Attachment result = new Attachment
-                    {
-                        Id = att.Id,
-                        Nome = att.Nome,
-                        Blob = att.Blob,
-                        Type = att.Type,
-                        IdUserUpdate = att.IdUserUpdate,
-                        IdPratica = att.IdPratica,
-                        LastUpdate = att.LastUpdate,
-                    };
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite("DownloadFileAgenzia", null, ex);
-                throw;
-            }
-        }
-
-
-
+        #region DownloadFileArea
         public List<Download> GetFileDownload(int idSezione)
         {
             try
@@ -3816,7 +1548,7 @@ namespace SDM.Helper
             }
         }
 
-        public bool DelateFileDownload(int id)
+        public bool DeleteFileDownload(int id)
         {
             try
             {
@@ -3835,11 +1567,1371 @@ namespace SDM.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogWrite("DelateFileDownload", null, ex);
+                _logger.LogWrite("DeleteFileDownload", null, ex);
                 throw;
             }
         }
         #endregion
 
+        #region Generic Methods Pratiche
+        
+        public List<T> GetPratiche<T>(string logMessage) where T : class
+        {
+            try
+            {
+                return GetAll<T>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public T GetPratica<T>(int idPratica, string logMessage) where T : class
+        {
+            try
+            {
+               return GetById<T>(idPratica);                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool SalvaPratica<T>(T item, string tipoPratica, string mailTos, string mailSubject, Pratica mailPratica, string logMessage) where T : class
+        {
+            try
+            {
+                var result = Add<T>(item, tipoPratica);
+                //if (result) _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool ModificaPratica<T>(T item, string tipoPratica, string mailTos, string mailSubject, Pratica mailPratica, string logMessage) where T : class
+        {
+            try
+            {
+                var result = Update(item);
+                //if (result)
+                //{
+                //    using (var context = new SDMEntities())
+                //    {
+                //        Users userFrom = GetById<Users>(mailPratica.IdUserUpdate.Value);
+
+                //        if (userFrom != null)
+                //        {
+                //            List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
+                //                    && x.Roles.Ruolo != "adminNoSmartJob" && x.Roles.Ruolo != "adminCasoria"
+                //                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
+                //                    && x.Roles.Ruolo != "adminDocumenti" && x.Roles.Ruolo != "adminArchivio"
+                //                    && x.Roles.Ruolo != "adminCasoriaNoSmartJob" && x.Roles.Ruolo != "adminSegreteriaNoSmartJob"
+                //                    && x.Roles.Ruolo != "adminSupportoNoSmartJob" && x.Roles.Ruolo != "adminDocumentiNoSmartJob").ToList();
+
+                //            string ruolo = userFrom.Roles?.Ruolo;
+                //            if (!string.IsNullOrWhiteSpace(ruolo))
+                //            {
+                //                if (ruolo == "admin" || ruolo == "adminNoSmartJob" || ruolo == "adminCasoria")
+                //                {
+                //                    if (userFromList.Count > 0)
+                //                    {
+                //                        string email = userFromList.FirstOrDefault().Email;
+                //                        if (!string.IsNullOrWhiteSpace(email)) _mail.SendMail(mailPratica, tipoPratica, email, mailSubject);
+                //                    }
+                //                }
+                //                else _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                //            }
+
+                //        }
+                //    }
+                //}
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public List<T> GetFile<T>(int idPratica, string logMessage) where T : class
+        {
+            try
+            {
+                return GetAll<T>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool LoadFile<T>(List<T> items, string logMessage) where T : class
+        {
+            try
+            {
+                return AddRange<T>(items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public T DownloadFile<T>(int idFile, string logMessage) where T : class
+        {
+            try
+            {
+                return GetById<T>(idFile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public string GetNextNumeroPratica(string numeroPratica, string tipoPratica)
+        {
+            using (var context = new SDMEntities())
+            {
+                var result = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == tipoPratica)?.NumPratica.ToString();
+                return numeroPratica + result;
+            }
+        }
+
+        #endregion
+
+        #region Generic Methods DB
+        public List<T> GetAll<T>() where T : class
+        {
+            using (var context = new SDMEntities())
+            {
+                return context.Set<T>().ToList();
+            }
+        }
+
+        public T GetById<T>(int id) where T : class
+        {
+            using (var context = new SDMEntities())
+            {
+                return context.Set<T>().Find(id);
+            }
+        }
+
+        public bool Add<T>(T newItem, string tipoPratica = null) where T : class
+        {
+            using (var context = new SDMEntities())
+            {
+                context.Set<T>().Add(newItem);
+                bool result = context.SaveChanges() > 0;
+                if (result && tipoPratica != null)
+                {
+                    var numeroPratica = context.NumeroPratiche.SingleOrDefault(i => i.TipoPratica == tipoPratica);
+                    numeroPratica.NumPratica += 1;
+                    context.SaveChanges();
+                }
+                return result;
+            }
+        }
+
+        public bool AddRange<T>(List<T> newItem) where T : class
+        {
+            using (var context = new SDMEntities())
+            {
+                context.Set<T>().AddRange(newItem);
+                bool result = context.SaveChanges() > 0;
+                return result;
+            }
+        }
+
+        public bool Update<T>(T item) where T : class
+        {
+            using (var context = new SDMEntities())
+            {
+                context.Set<T>().Add(item);
+                context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                return context.SaveChanges() > 0;
+            }
+        }
+        #endregion
+
+        #region Mapper
+
+            #region StudioProfessionale
+            private StudioProfessionale MapPraticaToNewStudioProfessionale(Pratica item)
+            {
+                return new StudioProfessionale
+                {
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = null,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private StudioProfessionale MapPraticaToStudioProfessionale(StudioProfessionale prev, Pratica item)
+            {
+                prev.Nome = item.Nome;
+                prev.Cognome = item.Cognome;
+                prev.Sottocategoria = null;
+                prev.Anno = item.Anno;
+                prev.LastUpdate = item.LastUpdate;
+                prev.IdUserUpdate = item.IdUserUpdate;
+                //newPratica.IdSede = pratica.IdSede;
+                prev.IdStato = item.IdStato;
+                prev.Note = item.Note;
+                prev.TipologiaPratica = item.TipologiaPratica;
+
+                return prev;
+            }
+
+            private Pratica MapStudioProfessionaleToPraticaMail(StudioProfessionale item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private List<Pratica> MapListStudioProfessionaleToPratica(List<StudioProfessionale> items)
+            {
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in items)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = null,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private List<Pratica> MapListStudioProfessionaleToPraticaFiltered(List<StudioProfessionale> items, Pratica criteri)
+            {
+                var temp = items.Where(i =>
+                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                            && (criteri.Anno == null || i.Anno == criteri.Anno)
+                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                            )
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in temp)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = null,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private Pratica MapStudioProfessionaleToPratica(StudioProfessionale item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Anno = item.Anno,
+                    Sottocategoria = null,
+                    IdUserUpdate = item.Id,
+                    IdSede = item.IdSede,
+                    NumPratica = item.NumPratica,
+                    LastUpdate = item.LastUpdate,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Attachment MapAttachmentsStudioProfessionaleToAttachments(AttachmentsStudioProfessionale item)
+            {
+                return new Attachment
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Blob = item.Blob,
+                    LastUpdate = item.LastUpdate,
+                    Type = item.Type,
+                    IdPratica = item.IdPratica,
+                    IdUserUpdate = item.IdUserUpdate
+                };
+            }
+
+            private List<Attachment> MapListAttachmentsStudioProfessionaleToAttachments(List<AttachmentsStudioProfessionale> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Attachment> result = new List<Attachment>();
+                foreach (var file in temp)
+                {
+                    result.Add(new Attachment
+                    {
+                        Id = file.Id,
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        LastUpdate = file.LastUpdate,
+                        Type = file.Type,
+                        IdPratica = file.IdPratica,
+                        IdUserUpdate = file.IdUserUpdate
+                    });
+                }
+
+                return result;
+            }
+
+            private List<AttachmentsStudioProfessionale> MapListAttachmentsToAttachmentsStudioProfessionale(List<Attachment> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<AttachmentsStudioProfessionale> result = new List<AttachmentsStudioProfessionale>();
+                foreach (var file in temp)
+                {
+                    result.Add(new AttachmentsStudioProfessionale
+                    {
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        Type = file.Type,
+                        IdUserUpdate = file.IdUserUpdate,
+                        IdPratica = file.IdPratica,
+                        LastUpdate = file.LastUpdate
+                    });
+                }
+
+                return result;
+            }
+            #endregion
+
+            #region Sindacato
+            private Sindacato MapPraticaToNewSindacato(Pratica item)
+            {
+                return new Sindacato
+                {
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Sindacato MapPraticaToSindacato(Sindacato prev, Pratica item)
+            {
+                prev.Nome = item.Nome;
+                prev.Cognome = item.Cognome;
+                prev.Sottocategoria = item.Sottocategoria;
+                prev.Anno = item.Anno;
+                prev.LastUpdate = item.LastUpdate;
+                prev.IdUserUpdate = item.IdUserUpdate;
+                //newPratica.IdSede = pratica.IdSede;
+                prev.IdStato = item.IdStato;
+                prev.Note = item.Note;
+                prev.TipologiaPratica = item.TipologiaPratica;
+
+                return prev;
+            }
+
+            private Pratica MapSindacatoToPraticaMail(Sindacato item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private List<Pratica> MapListSindacatoToPratica(List<Sindacato> items)
+            {
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in items)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private List<Pratica> MapListSindacatoToPraticaFiltered(List<Sindacato> items, Pratica criteri)
+            {
+                var temp = items.Where(i =>
+                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                            && (criteri.Anno == null || i.Anno == criteri.Anno)
+                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                            )
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in temp)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private Pratica MapSindacatoToPratica(Sindacato item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Anno = item.Anno,
+                    Sottocategoria = item.Sottocategoria,
+                    IdUserUpdate = item.Id,
+                    IdSede = item.IdSede,
+                    NumPratica = item.NumPratica,
+                    LastUpdate = item.LastUpdate,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Attachment MapAttachmentsSindacatoToAttachments(AttachmentsSindacato item)
+            {
+                return new Attachment
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Blob = item.Blob,
+                    LastUpdate = item.LastUpdate,
+                    Type = item.Type,
+                    IdPratica = item.IdPratica,
+                    IdUserUpdate = item.IdUserUpdate
+                };
+            }
+
+            private List<Attachment> MapListAttachmentsSindacatoToAttachments(List<AttachmentsSindacato> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Attachment> result = new List<Attachment>();
+                foreach (var file in temp)
+                {
+                    result.Add(new Attachment
+                    {
+                        Id = file.Id,
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        LastUpdate = file.LastUpdate,
+                        Type = file.Type,
+                        IdPratica = file.IdPratica,
+                        IdUserUpdate = file.IdUserUpdate
+                    });
+                }
+
+                return result;
+            }
+
+            private List<AttachmentsSindacato> MapListAttachmentsToAttachmentsSindacato(List<Attachment> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<AttachmentsSindacato> result = new List<AttachmentsSindacato>();
+                foreach (var file in temp)
+                {
+                    result.Add(new AttachmentsSindacato
+                    {
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        Type = file.Type,
+                        IdUserUpdate = file.IdUserUpdate,
+                        IdPratica = file.IdPratica,
+                        LastUpdate = file.LastUpdate
+                    });
+                }
+
+                return result;
+            }
+            #endregion
+
+            #region Patronato
+            private Patronato MapPraticaToNewPatronato(Pratica item)
+            {
+                return new Patronato
+                {
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Patronato MapPraticaToPatronato(Patronato prev, Pratica item)
+            {
+                prev.Nome = item.Nome;
+                prev.Cognome = item.Cognome;
+                prev.Sottocategoria = item.Sottocategoria;
+                prev.Anno = item.Anno;
+                prev.LastUpdate = item.LastUpdate;
+                prev.IdUserUpdate = item.IdUserUpdate;
+                //newPratica.IdSede = pratica.IdSede;
+                prev.IdStato = item.IdStato;
+                prev.Note = item.Note;
+                prev.TipologiaPratica = item.TipologiaPratica;
+
+                return prev;
+            }
+
+            private Pratica MapPatronatoToPraticaMail(Patronato item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private List<Pratica> MapListPatronatoToPratica(List<Patronato> items)
+            {
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in items)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private List<Pratica> MapListPatronatoToPraticaFiltered(List<Patronato> items, Pratica criteri)
+            {
+                var temp = items.Where(i =>
+                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                            && (criteri.Anno == null || i.Anno == criteri.Anno)
+                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                            )
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in temp)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private Pratica MapPatronatoToPratica(Patronato item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Anno = item.Anno,
+                    Sottocategoria = item.Sottocategoria,
+                    IdUserUpdate = item.Id,
+                    IdSede = item.IdSede,
+                    NumPratica = item.NumPratica,
+                    LastUpdate = item.LastUpdate,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Attachment MapAttachmentsPatronatoToAttachments(AttachmentsPatronato item)
+            {
+                return new Attachment
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Blob = item.Blob,
+                    LastUpdate = item.LastUpdate,
+                    Type = item.Type,
+                    IdPratica = item.IdPratica,
+                    IdUserUpdate = item.IdUserUpdate
+                };
+            }
+
+            private List<Attachment> MapListAttachmentsPatronatoToAttachments(List<AttachmentsPatronato> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Attachment> result = new List<Attachment>();
+                foreach (var file in temp)
+                {
+                    result.Add(new Attachment
+                    {
+                        Id = file.Id,
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        LastUpdate = file.LastUpdate,
+                        Type = file.Type,
+                        IdPratica = file.IdPratica,
+                        IdUserUpdate = file.IdUserUpdate
+                    });
+                }
+
+                return result;
+            }
+
+            private List<AttachmentsPatronato> MapListAttachmentsToAttachmentsPatronato(List<Attachment> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<AttachmentsPatronato> result = new List<AttachmentsPatronato>();
+                foreach (var file in temp)
+                {
+                    result.Add(new AttachmentsPatronato
+                    {
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        Type = file.Type,
+                        IdUserUpdate = file.IdUserUpdate,
+                        IdPratica = file.IdPratica,
+                        LastUpdate = file.LastUpdate
+                    });
+                }
+
+                return result;
+            }
+            #endregion
+        
+            #region Eventi
+            private Eventi MapPraticaToNewEventi(Pratica item)
+            {
+                return new Eventi
+                {
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Eventi MapPraticaToEventi(Eventi prev, Pratica item)
+            {
+                prev.Nome = item.Nome;
+                prev.Cognome = item.Cognome;
+                prev.Sottocategoria = item.Sottocategoria;
+                prev.Anno = item.Anno;
+                prev.LastUpdate = item.LastUpdate;
+                prev.IdUserUpdate = item.IdUserUpdate;
+                //newPratica.IdSede = pratica.IdSede;
+                prev.IdStato = item.IdStato;
+                prev.Note = item.Note;
+                prev.TipologiaPratica = item.TipologiaPratica;
+
+                return prev;
+            }
+
+            private Pratica MapEventiToPraticaMail(Eventi item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private List<Pratica> MapListEventiToPratica(List<Eventi> items)
+            {
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in items)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private List<Pratica> MapListEventiToPraticaFiltered(List<Eventi> items, Pratica criteri)
+            {
+                var temp = items.Where(i =>
+                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                            && (criteri.Anno == null || i.Anno == criteri.Anno)
+                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                            )
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in temp)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private Pratica MapEventiToPratica(Eventi item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Anno = item.Anno,
+                    Sottocategoria = item.Sottocategoria,
+                    IdUserUpdate = item.Id,
+                    IdSede = item.IdSede,
+                    NumPratica = item.NumPratica,
+                    LastUpdate = item.LastUpdate,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Attachment MapAttachmentsEventiToAttachments(AttachmentsEventi item)
+            {
+                return new Attachment
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Blob = item.Blob,
+                    LastUpdate = item.LastUpdate,
+                    Type = item.Type,
+                    IdPratica = item.IdPratica,
+                    IdUserUpdate = item.IdUserUpdate
+                };
+            }
+
+            private List<Attachment> MapListAttachmentsEventiToAttachments(List<AttachmentsEventi> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Attachment> result = new List<Attachment>();
+                foreach (var file in temp)
+                {
+                    result.Add(new Attachment
+                    {
+                        Id = file.Id,
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        LastUpdate = file.LastUpdate,
+                        Type = file.Type,
+                        IdPratica = file.IdPratica,
+                        IdUserUpdate = file.IdUserUpdate
+                    });
+                }
+
+                return result;
+            }
+
+            private List<AttachmentsEventi> MapListAttachmentsToAttachmentsEventi(List<Attachment> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<AttachmentsEventi> result = new List<AttachmentsEventi>();
+                foreach (var file in temp)
+                {
+                    result.Add(new AttachmentsEventi
+                    {
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        Type = file.Type,
+                        IdUserUpdate = file.IdUserUpdate,
+                        IdPratica = file.IdPratica,
+                        LastUpdate = file.LastUpdate
+                    });
+                }
+
+                return result;
+            }
+        #endregion
+
+            #region Agenzia
+            private Agenzia MapPraticaToNewAgenzia(Pratica item)
+            {
+                return new Agenzia
+                {
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Agenzia MapPraticaToAgenzia(Agenzia prev, Pratica item)
+            {
+                prev.Nome = item.Nome;
+                prev.Cognome = item.Cognome;
+                prev.Sottocategoria = item.Sottocategoria;
+                prev.Anno = item.Anno;
+                prev.LastUpdate = item.LastUpdate;
+                prev.IdUserUpdate = item.IdUserUpdate;
+                //newPratica.IdSede = pratica.IdSede;
+                prev.IdStato = item.IdStato;
+                prev.Note = item.Note;
+                prev.TipologiaPratica = item.TipologiaPratica;
+
+                return prev;
+            }
+
+            private Pratica MapAgenziaToPraticaMail(Agenzia item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private List<Pratica> MapListAgenziaToPratica(List<Agenzia> items)
+            {
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in items)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private List<Pratica> MapListAgenziaToPraticaFiltered(List<Agenzia> items, Pratica criteri)
+            {
+                var temp = items.Where(i =>
+                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                            && (criteri.Anno == null || i.Anno == criteri.Anno)
+                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                            )
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in temp)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private Pratica MapAgenziaToPratica(Agenzia item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Anno = item.Anno,
+                    Sottocategoria = item.Sottocategoria,
+                    IdUserUpdate = item.Id,
+                    IdSede = item.IdSede,
+                    NumPratica = item.NumPratica,
+                    LastUpdate = item.LastUpdate,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Attachment MapAttachmentsAgenziaToAttachments(AttachmentsAgenzia item)
+            {
+                return new Attachment
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Blob = item.Blob,
+                    LastUpdate = item.LastUpdate,
+                    Type = item.Type,
+                    IdPratica = item.IdPratica,
+                    IdUserUpdate = item.IdUserUpdate
+                };
+            }
+
+            private List<Attachment> MapListAttachmentsAgenziaToAttachments(List<AttachmentsAgenzia> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Attachment> result = new List<Attachment>();
+                foreach (var file in temp)
+                {
+                    result.Add(new Attachment
+                    {
+                        Id = file.Id,
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        LastUpdate = file.LastUpdate,
+                        Type = file.Type,
+                        IdPratica = file.IdPratica,
+                        IdUserUpdate = file.IdUserUpdate
+                    });
+                }
+
+                return result;
+            }
+
+            private List<AttachmentsAgenzia> MapListAttachmentsToAttachmentsAgenzia(List<Attachment> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<AttachmentsAgenzia> result = new List<AttachmentsAgenzia>();
+                foreach (var file in temp)
+                {
+                    result.Add(new AttachmentsAgenzia
+                    {
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        Type = file.Type,
+                        IdUserUpdate = file.IdUserUpdate,
+                        IdPratica = file.IdPratica,
+                        LastUpdate = file.LastUpdate
+                    });
+                }
+
+                return result;
+            }
+        #endregion
+
+            #region PraticheAuto
+            private PraticheAuto MapPraticaToNewPraticheAuto(Pratica item)
+            {
+                return new PraticheAuto
+                {
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private PraticheAuto MapPraticaToPraticheAuto(PraticheAuto prev, Pratica item)
+            {
+                prev.Nome = item.Nome;
+                prev.Cognome = item.Cognome;
+                prev.Sottocategoria = item.Sottocategoria;
+                prev.Anno = item.Anno;
+                prev.LastUpdate = item.LastUpdate;
+                prev.IdUserUpdate = item.IdUserUpdate;
+                //newPratica.IdSede = pratica.IdSede;
+                prev.IdStato = item.IdStato;
+                prev.Note = item.Note;
+                prev.TipologiaPratica = item.TipologiaPratica;
+
+                return prev;
+            }
+
+            private Pratica MapPraticheAutoToPraticaMail(PraticheAuto item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Sottocategoria = item.Sottocategoria,
+                    Anno = item.Anno,
+                    LastUpdate = item.LastUpdate,
+                    IdUserUpdate = item.IdUserUpdate,
+                    NumPratica = item.NumPratica,
+                    IdSede = item.IdSede,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private List<Pratica> MapListPraticheAutoToPratica(List<PraticheAuto> items)
+            {
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in items)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private List<Pratica> MapListPraticheAutoToPraticaFiltered(List<PraticheAuto> items, Pratica criteri)
+            {
+                var temp = items.Where(i =>
+                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                            && (criteri.Anno == null || i.Anno == criteri.Anno)
+                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                            )
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Pratica> result = new List<Pratica>();
+                foreach (var pratica in temp)
+                {
+                    result.Add(new Pratica
+                    {
+                        Id = pratica.Id,
+                        Nome = pratica.Nome,
+                        Cognome = pratica.Cognome,
+                        Anno = pratica.Anno,
+                        Sottocategoria = pratica.Sottocategoria,
+                        IdUserUpdate = pratica.Id,
+                        IdSede = pratica.IdSede,
+                        NumPratica = pratica.NumPratica,
+                        LastUpdate = pratica.LastUpdate,
+                        IdStato = pratica.IdStato,
+                        Note = pratica.Note,
+                        TipologiaPratica = pratica.TipologiaPratica
+                    });
+                }
+                return result;
+            }
+
+            private Pratica MapPraticheAutoToPratica(PraticheAuto item)
+            {
+                return new Pratica
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Cognome = item.Cognome,
+                    Anno = item.Anno,
+                    Sottocategoria = item.Sottocategoria,
+                    IdUserUpdate = item.Id,
+                    IdSede = item.IdSede,
+                    NumPratica = item.NumPratica,
+                    LastUpdate = item.LastUpdate,
+                    IdStato = item.IdStato,
+                    Note = item.Note,
+                    TipologiaPratica = item.TipologiaPratica
+                };
+            }
+
+            private Attachment MapAttachmentsPraticheAutoToAttachments(AttachmentsPraticheAuto item)
+            {
+                return new Attachment
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    Blob = item.Blob,
+                    LastUpdate = item.LastUpdate,
+                    Type = item.Type,
+                    IdPratica = item.IdPratica,
+                    IdUserUpdate = item.IdUserUpdate
+                };
+            }
+
+            private List<Attachment> MapListAttachmentsPraticheAutoToAttachments(List<AttachmentsPraticheAuto> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<Attachment> result = new List<Attachment>();
+                foreach (var file in temp)
+                {
+                    result.Add(new Attachment
+                    {
+                        Id = file.Id,
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        LastUpdate = file.LastUpdate,
+                        Type = file.Type,
+                        IdPratica = file.IdPratica,
+                        IdUserUpdate = file.IdUserUpdate
+                    });
+                }
+
+                return result;
+            }
+
+            private List<AttachmentsPraticheAuto> MapListAttachmentsToAttachmentsPraticheAuto(List<Attachment> items)
+            {
+                var temp = items
+                            .OrderByDescending(i => i.LastUpdate)
+                            .ToList();
+
+                List<AttachmentsPraticheAuto> result = new List<AttachmentsPraticheAuto>();
+                foreach (var file in temp)
+                {
+                    result.Add(new AttachmentsPraticheAuto
+                    {
+                        Nome = file.Nome,
+                        Blob = file.Blob,
+                        Type = file.Type,
+                        IdUserUpdate = file.IdUserUpdate,
+                        IdPratica = file.IdPratica,
+                        LastUpdate = file.LastUpdate
+                    });
+                }
+
+                return result;
+            }
+            #endregion
+
+        #endregion
     }
 }

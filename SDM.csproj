@@ -130,12 +130,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DownloadFileController.cs" />
     <Compile Include="Controllers\AgenziaController.cs" />
-    <Compile Include="Controllers\ArchivioController.cs" />
     <Compile Include="Controllers\StudioProfessionaleController.cs" />
-    <Compile Include="Controllers\CreditoController.cs" />
     <Compile Include="Controllers\EventiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\NoleggioController.cs" />
+    <Compile Include="Controllers\PraticheAutoController.cs" />
     <Compile Include="Controllers\PatronatoController.cs" />
     <Compile Include="Controllers\SindacatoController.cs" />
     <Compile Include="Global.asax.cs">
@@ -146,10 +144,16 @@
     <Compile Include="Helper\Login.cs" />
     <Compile Include="Helper\Mail.cs" />
     <Compile Include="Helper\Token.cs" />
+    <Compile Include="Models\Database\AttachmentsPraticheAuto.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\AttachmentsStudioProfessionale.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\DownloadFile.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\PraticheAuto.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\StudioProfessionale.cs">
@@ -160,31 +164,19 @@
     <Compile Include="Models\Database\Agenzia.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\Archivio.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\AssistenzaLegale.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsAgenzia.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Database\AttachmentsArchivio.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\AttachmentsAssistenzaLegale.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\AttachmentsCredito.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsEventi.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsFormazione.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\AttachmentsNoleggio.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsPatronato.cs">
@@ -194,9 +186,6 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Categorie.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\Credito.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Eventi.cs">
@@ -222,9 +211,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelSDM.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Database\Noleggio.cs">
-      <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\NumeroPratiche.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
@@ -372,12 +358,12 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\ResetPassword.cshtml" />
     <Content Include="Views\Home\RiepilogoPratica.cshtml" />
-    <Content Include="Views\Noleggio\AggiungiPratica.cshtml" />
-    <Content Include="Views\Noleggio\CaricaAllegati.cshtml" />
-    <Content Include="Views\Noleggio\Index.cshtml" />
-    <Content Include="Views\Noleggio\ModificaPratica.cshtml" />
-    <Content Include="Views\Noleggio\TableAllegati.cshtml" />
-    <Content Include="Views\Noleggio\TableIndex.cshtml" />
+    <Content Include="Views\PraticheAuto\AggiungiPratica.cshtml" />
+    <Content Include="Views\PraticheAuto\CaricaAllegati.cshtml" />
+    <Content Include="Views\PraticheAuto\Index.cshtml" />
+    <Content Include="Views\PraticheAuto\ModificaPratica.cshtml" />
+    <Content Include="Views\PraticheAuto\TableAllegati.cshtml" />
+    <Content Include="Views\PraticheAuto\TableIndex.cshtml" />
     <Content Include="Views\Patronato\AggiungiPratica.cshtml" />
     <Content Include="Views\Patronato\CaricaAllegati.cshtml" />
     <Content Include="Views\Patronato\Index.cshtml" />

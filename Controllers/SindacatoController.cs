@@ -28,7 +28,7 @@ namespace SDM.Controllers
                     {
                         PraticaIndex model = new PraticaIndex
                         {
-                            Pratiche = _help.GetPraticheSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString()),
+                            Pratiche = _help.PraticaSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
                             Categorie = Session["role"].ToString() != "smartJob" ? _help.GetCategorie("sindacato") : _help.GetCategorie("sindacatoSmartJob")
                         };
 
@@ -82,7 +82,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
 
-                        Pratica model = _help.GetPraticaSindacato(idPratica);
+                        Pratica model = _help.PraticaSindacato(idPratica, "get");
                         model.SottocategoriaList = Session["role"].ToString() != "smartJob" ? _help.GetCategorie("sindacato") : _help.GetCategorie("sindacatoSmartJob");
                         model.StatoList = _help.GetStati();
 
@@ -112,7 +112,7 @@ namespace SDM.Controllers
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                     pratica.NumPratica = Session["sede"].ToString() + "-" + pratica.Anno + "-";
 
-                    if (_help.SalvaPraticaSindacato(pratica))
+                    if (_help.PraticaSindacato(pratica, "save"))
                     {
                         TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
                         return RedirectToAction("Index", "Sindacato");
@@ -141,7 +141,7 @@ namespace SDM.Controllers
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
 
-                    if (_help.ModificaPraticaSindacato(pratica))
+                    if (_help.PraticaSindacato(pratica, "update"))
                     {
                         TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
                         return RedirectToAction("Index", "Sindacato");
@@ -166,14 +166,14 @@ namespace SDM.Controllers
             {
 
                 PraticaIndex model = new PraticaIndex();
-                if (_help.DelateSindacato(idPratica))
+                if (_help.DeleteSindacato(idPratica))
                 {
-                    model.Pratiche = _help.GetPraticheSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                    model.Pratiche = _help.PraticaSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                     return PartialView("TableIndex", model.Pratiche);
                 }
 
                 TempData["message"] = "Errore nell'eliminazione della pratica";
-                model.Pratiche = _help.GetPraticheSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString());
+                model.Pratiche = _help.PraticaSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
                 return PartialView("TableIndex", model.Pratiche);
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ namespace SDM.Controllers
             try
             {
                 pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
-                List<Pratica> result = _help.RicercaSindacato(pratica, Session["role"].ToString());
+                List<Pratica> result = _help.PraticaSindacato(0, Session["role"].ToString(), "search", pratica);
 
                 TempData["patronatoList"] = result;
 
@@ -215,7 +215,7 @@ namespace SDM.Controllers
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
 
-                        List<Attachment> model = _help.GetFileSindacato(idPratica);
+                        List<Attachment> model = _help.AttachmentsSindacato(idPratica, "getall");
                         return View(model);
                     }
                     else { return RedirectToAction("ErrorAuth", "Home"); }
@@ -262,14 +262,14 @@ namespace SDM.Controllers
 
                     if (ListFile.Count > 0)
                     {
-                        if (!_help.LoadFileSindacato(ListFile))
+                        if (!_help.AttachmentsSindacato(ListFile, "upload"))
                         {
                             TempData["messaggioErroreInserimentoFile"] = "Errore nell'inserimento del documento";
                         }
                     }
                 }
 
-                List<Attachment> model = _help.GetFileSindacato(id);
+                List<Attachment> model = _help.AttachmentsSindacato(id, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)
@@ -283,7 +283,7 @@ namespace SDM.Controllers
         {
             try
             {
-                Attachment loadFile = _help.DownloadFileSindacato(idFile);
+                Attachment loadFile = _help.AttachmentsSindacato("download", idFile);
 
                 return File(loadFile.Blob, loadFile.Type, loadFile.Nome);
             }
@@ -301,14 +301,14 @@ namespace SDM.Controllers
             {
 
                 List<Attachment> model = new List<Attachment>();
-                if (_help.DelateFileSindacato(idFile))
+                if (_help.DeleteFileSindacato(idFile))
                 {
-                    model = _help.GetFileSindacato(idPratica);
+                    model = _help.AttachmentsSindacato(idPratica, "getall");
                     return PartialView("TableAllegati", model);
                 }
 
                 TempData["messaggioErroreInserimentoFile"] = "Errore nell'eliminazione del file";
-                model = _help.GetFileSindacato(idPratica);
+                model = _help.AttachmentsSindacato(idPratica, "getall");
                 return PartialView("TableAllegati", model);
             }
             catch (Exception ex)

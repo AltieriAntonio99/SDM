@@ -6,7 +6,7 @@
 
 <script>
     addPratica = () => {
-        window.location.href = "/Noleggio/AggiungiPratica";
+        window.location.href = "/PraticheAuto/AggiungiPratica";
     }
     function AjaxBegin() {
         $('#loading-div').show();
@@ -24,7 +24,7 @@
     </ul>
     @TempData["message"]
     <div class="patronatoSearch">
-        @using (Ajax.BeginForm("SearchPratica", "Noleggio", null, new AjaxOptions
+        @using (Ajax.BeginForm("SearchPratica", "PraticheAuto", null, new AjaxOptions
         {
             HttpMethod = "POST",
             UpdateTargetId = "table-index",
