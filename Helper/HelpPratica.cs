@@ -405,16 +405,16 @@ namespace SDM.Helper
             string logMessage;
             List<PraticheAuto> items = new List<PraticheAuto>();
             #endregion
-
+            
             switch (metodo)
             {
                 case "getall":
                     logMessage = "GetPratichePraticheAuto";
                     items = GetPratiche<PraticheAuto>(logMessage);
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
-                                    || ruolo == "adminCasoria"
-                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                            || ruolo == "adminCasoria"
+                            || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                            || ruolo == "adminSupportoNoSmartJob")
                     {
                         criteri = new Pratica();
                     }
@@ -1610,7 +1610,7 @@ namespace SDM.Helper
                 {
                     using (var context = new SDMEntities())
                     {
-                        Users userFrom = GetById<Users>(mailPratica.IdUserUpdate.Value);
+                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == mailPratica.IdUserUpdate.Value);
 
                         if (userFrom != null)
                         {

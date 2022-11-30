@@ -11,6 +11,12 @@
                 <a class="cardImage" style="cursor: not-allowed;" title="Caf">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf (inattivo).svg" />
                 </a>
+                <a class="cardImage" style="cursor: not-allowed;" title="Infocert">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert (inattivo).svg" />
+                </a>
+                <a class="cardImage" style="cursor: not-allowed;" title="Sos utente e servizi">
+                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi (inattivo).svg" />
+                </a>
                 <a class="cardImage" title="Sindacato" onclick="@("window.location.href='" + @Url.Action("Index", "Sindacato") + "'")">
                     <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato.svg" />
                 </a>
@@ -18,19 +24,25 @@
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
                 <a class="cardImage" style="cursor: not-allowed;" title="Studio Professionale">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSegreteria")
-            { 
-                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+            {
+                <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -42,19 +54,25 @@
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
+                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
-                </a>                
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                </a>
             }
             else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
             {
-                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -66,19 +84,25 @@
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
                 <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
+                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
                 </a>
-            }            
+            }
             else if (Session["role"].ToString() == "adminCasoria")
             {
-                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -90,19 +114,25 @@
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Studio Professionale" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminArchivioNoSmartJob")
             {
-                <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
                     <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -114,13 +144,13 @@
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
                 <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
+                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile (inattivo).svg" />
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
                 </a>
             }
             else
@@ -133,11 +163,16 @@
                 }
                 else
                 {
-                    <a class="cardImage" target="_blank" title="Caf" href="https://servizismartjobpro.it/portale/">
+                    <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
                         <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
                     </a>
-                }
-
+                }                
+                <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
+                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                </a>
                 <a class="cardImage" title="Agenzia" onclick="@("window.location.href='" + @Url.Action("Index", "Agenzia") + "'")">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia.svg" />
                 </a>
@@ -148,13 +183,13 @@
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
                 <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/noleggio.svg" />
+                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
                 <a class="cardImage" title="Studio Professionale" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/assistenza contabile.svg" />
+                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
                 </a>
             }
         </div>
