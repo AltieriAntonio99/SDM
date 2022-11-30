@@ -257,7 +257,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "segreteria@sdmservices.it";
+            string mailTos = "assistenza@sdmservices.it";
             string mailSubject = "Pratica Patronato";
             #endregion
 
@@ -460,7 +460,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "segreteria@sdmservices.it";
+            string mailTos = "documenti@sdmservices.it";
             string mailSubject = "Pratica PraticheAuto";
             #endregion
 
@@ -664,7 +664,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "segreteria@sdmservices.it";
+            string mailTos = "amministrazione@sdmservices.it";
             string mailSubject = "Pratica Eventi";
             #endregion
 
@@ -1071,7 +1071,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "documenti@sdmservices.it"; //documenti@
+            string mailTos = "studioassociato@sdmservices.it";
             string mailSubject = "Pratica Studio Professionale";
             #endregion
 
@@ -1275,7 +1275,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "segreteria@sdmservices.it";
+            string mailTos = "amministrazione@sdmservices.it";
             string mailSubject = "Pratica Agenzia";
             #endregion
 
