@@ -14,8 +14,8 @@
                 <a class="cardImage" style="cursor: not-allowed;" title="Infocert">
                     <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert (inattivo).svg" />
                 </a>
-                <a class="cardImage" style="cursor: not-allowed;" title="Sos utente e servizi">
-                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi (inattivo).svg" />
+                <a class="cardImage" style="cursor: not-allowed;" title="Utenze e credito">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Sindacato" onclick="@("window.location.href='" + @Url.Action("Index", "Sindacato") + "'")">
                     <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato.svg" />
@@ -23,14 +23,17 @@
                 <a class="cardImage" style="cursor: not-allowed;" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
-                <a class="cardImage" style="cursor: not-allowed;" title="Studio Professionale">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                <a class="cardImage" style="cursor: not-allowed;" title="Studio professionale associato SDM & Partner">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/caf.svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSegreteria")
@@ -41,8 +44,8 @@
                 <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
                     <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
-                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                <a class="cardImage" target="_blank" title="Utenze e credito" href="https://partners.sosutenzeservizi.it/">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -53,14 +56,17 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                <a class="cardImage" title="Studio professionale associato SDM & Partner" style="cursor: not-allowed;">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/caf.svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
@@ -71,8 +77,8 @@
                 <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
                     <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
-                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                <a class="cardImage" target="_blank" title="Utenze e credito" href="https://partners.sosutenzeservizi.it/">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -83,14 +89,17 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                <a class="cardImage" title="Studio professionale associato SDM & Partner" style="cursor: not-allowed;">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/caf.svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminCasoria")
@@ -101,8 +110,8 @@
                 <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
                     <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
-                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                <a class="cardImage" target="_blank" title="Utenze e credito" href="https://partners.sosutenzeservizi.it/">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -113,14 +122,17 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Studio Professionale" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
+                <a class="cardImage" title="Studio professionale associato SDM & Partner" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/caf.svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminArchivioNoSmartJob")
@@ -131,8 +143,8 @@
                 <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
                     <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
-                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                <a class="cardImage" target="_blank" title="Utenze e credito" href="https://partners.sosutenzeservizi.it/">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
@@ -143,35 +155,29 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="PraticheAuto" style="cursor: not-allowed;">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Studio Professionale" style="cursor: not-allowed;">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                <a class="cardImage" title="Studio professionale associato SDM & Partner" style="cursor: not-allowed;">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/caf.svg" />
                 </a>
             }
             else
             {
-                if (Session["role"].ToString() == "normalNoSmartJob")
-                {
-                    <a class="cardImage" target="_blank" title="Caf" href="https://qweb.zucchetti.com/SuiteQWeb/ActionLogin.do">
-                        <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
-                    </a>
-                }
-                else
-                {
-                    <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
-                        <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
-                    </a>
-                }                
+                <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
                 <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
                     <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Sos utente e servizi" href="https://servizismartjobpro.it/portale/">
-                    <img alt="Sos utente e servizi" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                <a class="cardImage" target="_blank" title="Utenze e credito" href="https://partners.sosutenzeservizi.it/">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
                 </a>
                 <a class="cardImage" title="Agenzia" onclick="@("window.location.href='" + @Url.Action("Index", "Agenzia") + "'")">
                     <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia.svg" />
@@ -182,14 +188,17 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="PraticheAuto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="PraticheAuto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
-                <a class="cardImage" title="Studio Professionale" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
-                    <img alt="Studio Professionale" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
+                <a class="cardImage" title="Studio professionale associato SDM & Partner" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/caf.svg" />
                 </a>
             }
         </div>
