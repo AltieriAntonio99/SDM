@@ -285,21 +285,25 @@ namespace SDM.Helper
         public List<Attachment> AttachmentsPatronato(int idPratica, string metodo)
         {
             #region variabili gestionali
-            string logMessage;
+            string logMessage = "GetFilePatronato";
             List<AttachmentsPatronato> items;
             List<Attachment> result = new List<Attachment>();
             #endregion
 
-            switch (metodo)
+            try
             {
-                case "getall":
-                    logMessage = "GetFilePatronato";
-                    items = GetFile<AttachmentsPatronato>(idPratica, logMessage);
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsPatronato.Where(x => x.IdPratica == idPratica).ToList();
                     result = MapListAttachmentsPatronatoToAttachments(items);
-                    break;
+                    return result;
+                }
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
         }
 
         public bool AttachmentsPatronato(List<Attachment> items, string metodo)
@@ -488,21 +492,25 @@ namespace SDM.Helper
         public List<Attachment> AttachmentsPraticheAuto(int idPratica, string metodo)
         {
             #region variabili gestionali
-            string logMessage;
+            string logMessage = "GetFilePraticheAuto";
             List<AttachmentsPraticheAuto> items;
             List<Attachment> result = new List<Attachment>();
             #endregion
 
-            switch (metodo)
+            try
             {
-                case "getall":
-                    logMessage = "GetFilePraticheAuto";
-                    items = GetFile<AttachmentsPraticheAuto>(idPratica, logMessage);
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsPraticheAuto.Where(x => x.IdPratica == idPratica).ToList();
                     result = MapListAttachmentsPraticheAutoToAttachments(items);
-                    break;
+                    return result;
+                }
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
         }
 
         public bool AttachmentsPraticheAuto(List<Attachment> items, string metodo)
@@ -692,21 +700,25 @@ namespace SDM.Helper
         public List<Attachment> AttachmentsEventi(int idPratica, string metodo)
         {
             #region variabili gestionali
-            string logMessage;
+            string logMessage = "GetFileEventi";
             List<AttachmentsEventi> items;
             List<Attachment> result = new List<Attachment>();
             #endregion
 
-            switch (metodo)
+            try
             {
-                case "getall":
-                    logMessage = "GetFileEventi";
-                    items = GetFile<AttachmentsEventi>(idPratica, logMessage);
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsEventi.Where(x => x.IdPratica == idPratica).ToList();
                     result = MapListAttachmentsEventiToAttachments(items);
-                    break;
+                    return result;
+                }
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
         }
 
         public bool AttachmentsEventi(List<Attachment> items, string metodo)
@@ -895,21 +907,25 @@ namespace SDM.Helper
         public List<Attachment> AttachmentsSindacato(int idPratica, string metodo)
         {
             #region variabili gestionali
-            string logMessage;
+            string logMessage = "GetFileSindacato";
             List<AttachmentsSindacato> items;
             List<Attachment> result = new List<Attachment>();
             #endregion
 
-            switch (metodo)
+            try
             {
-                case "getall":
-                    logMessage = "GetFileSindacato";
-                    items = GetFile<AttachmentsSindacato>(idPratica, logMessage);
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsSindacato.Where(x => x.IdPratica == idPratica).ToList();
                     result = MapListAttachmentsSindacatoToAttachments(items);
-                    break;
+                    return result;
+                }
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
         }
 
         public bool AttachmentsSindacato(List<Attachment> items, string metodo)
@@ -1099,21 +1115,25 @@ namespace SDM.Helper
         public List<Attachment> AttachmentsStudioProfessionale(int idPratica, string metodo)
         {
             #region variabili gestionali
-            string logMessage;
+            string logMessage = "GetFileStudioProfessionale";
             List<AttachmentsStudioProfessionale> items;
             List<Attachment> result = new List<Attachment>();
             #endregion
 
-            switch (metodo)
+            try
             {
-                case "getall":
-                    logMessage = "GetFileStudioProfessionale";
-                    items = GetFile<AttachmentsStudioProfessionale>(idPratica, logMessage);
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsStudioProfessionale.Where(x => x.IdPratica == idPratica).ToList();
                     result = MapListAttachmentsStudioProfessionaleToAttachments(items);
-                    break;
+                    return result;
+                }
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
         }
 
         public bool AttachmentsStudioProfessionale(List<Attachment> items, string metodo)
@@ -1303,21 +1323,25 @@ namespace SDM.Helper
         public List<Attachment> AttachmentsAgenzia(int idPratica, string metodo)
         {
             #region variabili gestionali
-            string logMessage;
+            string logMessage = "GetFileAgenzia";
             List<AttachmentsAgenzia> items;
             List<Attachment> result = new List<Attachment>();
             #endregion
 
-            switch (metodo)
+            try
             {
-                case "getall":
-                    logMessage = "GetFileAgenzia";
-                    items = GetFile<AttachmentsAgenzia>(idPratica, logMessage);
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsAgenzia.Where(x => x.IdPratica == idPratica).ToList();
                     result = MapListAttachmentsAgenziaToAttachments(items);
-                    break;
+                    return result;
+                }
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
         }
 
         public bool AttachmentsAgenzia(List<Attachment> items, string metodo)
@@ -1645,18 +1669,18 @@ namespace SDM.Helper
             }
         }
 
-        public List<T> GetFile<T>(int idPratica, string logMessage) where T : class
-        {
-            try
-            {
-                return GetAll<T>();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWrite(logMessage, null, ex);
-                throw;
-            }
-        }
+        //public List<T> GetFile<T>(int idPratica, string logMessage) where T : class
+        //{
+        //    try
+        //    {
+        //        return GetAll<T>();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogWrite(logMessage, null, ex);
+        //        throw;
+        //    }
+        //}
 
         public bool LoadFile<T>(List<T> items, string logMessage) where T : class
         {
