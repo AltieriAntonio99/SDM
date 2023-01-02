@@ -409,7 +409,7 @@ namespace SDM.Helper
             string logMessage;
             List<PraticheAuto> items = new List<PraticheAuto>();
             #endregion
-            
+
             switch (metodo)
             {
                 case "getall":
@@ -607,7 +607,7 @@ namespace SDM.Helper
                 throw;
             }
         }
-                
+
         #endregion
 
         #region Eventi
@@ -965,7 +965,7 @@ namespace SDM.Helper
 
             return result;
         }
-                
+
         public bool DeleteSindacato(int id)
         {
             try
@@ -1206,7 +1206,7 @@ namespace SDM.Helper
                 throw;
             }
         }
-        
+
         public bool DeleteFileStudioProfessionale(int id)
         {
             try
@@ -1230,7 +1230,7 @@ namespace SDM.Helper
                 throw;
             }
         }
-                
+
         #endregion
 
         #region Agenzia
@@ -1440,6 +1440,422 @@ namespace SDM.Helper
         }
         #endregion
 
+        #region Visure
+        public List<Pratica> PraticaVisure(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<Visure> items = new List<Visure>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPraticheVisure";
+                    items = GetPratiche<Visure>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                                    || ruolo == "adminCasoria"
+                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                                    || ruolo == "adminSupportoNoSmartJob")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaVisure";
+                    items = GetPratiche<Visure>(logMessage);
+                    break;
+            }
+
+            return MapListVisureToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaVisure(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaVisure";
+                    var item = GetPratica<Visure>(idPratica, logMessage);
+                    result = MapVisureToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaVisure(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "Visure";
+            string logMessage;
+            Visure item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "documenti@sdmservices.it";
+            string mailSubject = "Pratica Visure";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaVisure";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewVisure(pratica);
+                    mailPratica = MapVisureToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaVisure";
+                    var prevPratica = GetById<Visure>(pratica.Id);
+                    item = MapPraticaToVisure(prevPratica, pratica);
+                    mailPratica = MapVisureToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsVisure(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage = "GetFileVisure";
+            List<AttachmentsVisure> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsVisure.Where(x => x.IdPratica == idPratica).ToList();
+                    result = MapListAttachmentsVisureToAttachments(items);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool AttachmentsVisure(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileVisure";
+                    var temp = MapListAttachmentsToAttachmentsVisure(items);
+                    result = LoadFile<AttachmentsVisure>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsVisure(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileVisure";
+                    var item = DownloadFile<AttachmentsVisure>(idFile, logMessage);
+                    result = MapAttachmentsVisureToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteVisure(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.Visure.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsVisure.ToList();
+
+                    if (itemToRemove != null)
+                    {
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsVisure.Remove(item);
+                            }
+                        }
+
+                        context.Visure.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteVisure", null, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteFileVisure(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.AttachmentsVisure.SingleOrDefault(x => x.Id == id);
+
+                    if (itemToRemove != null)
+                    {
+                        context.AttachmentsVisure.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFileVisure", null, ex);
+                throw;
+            }
+        }
+
+        #endregion
+
+
+        #region Finanza
+        public List<Pratica> PraticaFinanza(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<Finanza> items = new List<Finanza>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPraticheFinanza";
+                    items = GetPratiche<Finanza>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                                    || ruolo == "adminCasoria"
+                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                                    || ruolo == "adminSupportoNoSmartJob")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaFinanza";
+                    items = GetPratiche<Finanza>(logMessage);
+                    break;
+            }
+
+            return MapListFinanzaToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaFinanza(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaFinanza";
+                    var item = GetPratica<Finanza>(idPratica, logMessage);
+                    result = MapFinanzaToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaFinanza(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "Finanza";
+            string logMessage;
+            Finanza item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "amministrazione@sdmservices.it";
+            string mailSubject = "Pratica Finanza";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaFinanza";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewFinanza(pratica);
+                    mailPratica = MapFinanzaToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaFinanza";
+                    var prevPratica = GetById<Finanza>(pratica.Id);
+                    item = MapPraticaToFinanza(prevPratica, pratica);
+                    mailPratica = MapFinanzaToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsFinanza(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage = "GetFileFinanza";
+            List<AttachmentsFinanza> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsFinanza.Where(x => x.IdPratica == idPratica).ToList();
+                    result = MapListAttachmentsFinanzaToAttachments(items);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool AttachmentsFinanza(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileFinanza";
+                    var temp = MapListAttachmentsToAttachmentsFinanza(items);
+                    result = LoadFile<AttachmentsFinanza>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsFinanza(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileFinanza";
+                    var item = DownloadFile<AttachmentsFinanza>(idFile, logMessage);
+                    result = MapAttachmentsFinanzaToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteFinanza(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.Finanza.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsFinanza.ToList();
+
+                    if (itemToRemove != null)
+                    {
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsFinanza.Remove(item);
+                            }
+                        }
+
+                        context.Finanza.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFinanza", null, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteFileFinanza(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.AttachmentsFinanza.SingleOrDefault(x => x.Id == id);
+
+                    if (itemToRemove != null)
+                    {
+                        context.AttachmentsFinanza.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFileFinanza", null, ex);
+                throw;
+            }
+        }
+        #endregion
+
         #region DownloadFileArea
         public List<Download> GetFileDownload(int idSezione)
         {
@@ -1583,7 +1999,7 @@ namespace SDM.Helper
         #endregion
 
         #region Generic Methods Pratiche
-        
+
         public List<T> GetPratiche<T>(string logMessage) where T : class
         {
             try
@@ -1601,7 +2017,7 @@ namespace SDM.Helper
         {
             try
             {
-               return GetById<T>(idPratica);                
+                return GetById<T>(idPratica);
             }
             catch (Exception ex)
             {
@@ -1775,1169 +2191,1557 @@ namespace SDM.Helper
 
         #region Mapper
 
-            #region StudioProfessionale
-            private StudioProfessionale MapPraticaToNewStudioProfessionale(Pratica item)
+        #region StudioProfessionale
+        private StudioProfessionale MapPraticaToNewStudioProfessionale(Pratica item)
+        {
+            return new StudioProfessionale
             {
-                return new StudioProfessionale
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private StudioProfessionale MapPraticaToStudioProfessionale(StudioProfessionale prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapStudioProfessionaleToPraticaMail(StudioProfessionale item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListStudioProfessionaleToPratica(List<StudioProfessionale> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
                 {
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
+            return result;
+        }
 
-            private StudioProfessionale MapPraticaToStudioProfessionale(StudioProfessionale prev, Pratica item)
+        private List<Pratica> MapListStudioProfessionaleToPraticaFiltered(List<StudioProfessionale> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
             {
-                prev.Nome = item.Nome;
-                prev.Cognome = item.Cognome;
-                prev.Sottocategoria = item.Sottocategoria;;
-                prev.Anno = item.Anno;
-                prev.LastUpdate = item.LastUpdate;
-                prev.IdUserUpdate = item.IdUserUpdate;
-                //newPratica.IdSede = pratica.IdSede;
-                prev.IdStato = item.IdStato;
-                prev.Note = item.Note;
-                prev.TipologiaPratica = item.TipologiaPratica;
-
-                return prev;
-            }
-
-            private Pratica MapStudioProfessionaleToPraticaMail(StudioProfessionale item)
-            {
-                return new Pratica
+                result.Add(new Pratica
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
+            return result;
+        }
 
-            private List<Pratica> MapListStudioProfessionaleToPratica(List<StudioProfessionale> items)
+        private Pratica MapStudioProfessionaleToPratica(StudioProfessionale item)
+        {
+            return new Pratica
             {
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in items)
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsStudioProfessionaleToAttachments(AttachmentsStudioProfessionale item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsStudioProfessionaleToAttachments(List<AttachmentsStudioProfessionale> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
                 {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
             }
 
-            private List<Pratica> MapListStudioProfessionaleToPraticaFiltered(List<StudioProfessionale> items, Pratica criteri)
-            {
-                var temp = items.Where(i =>
-                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                            && (criteri.Anno == null || i.Anno == criteri.Anno)
-                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
-                            )
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
+            return result;
+        }
 
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in temp)
+        private List<AttachmentsStudioProfessionale> MapListAttachmentsToAttachmentsStudioProfessionale(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsStudioProfessionale> result = new List<AttachmentsStudioProfessionale>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsStudioProfessionale
                 {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
             }
 
-            private Pratica MapStudioProfessionaleToPratica(StudioProfessionale item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Anno = item.Anno,
-                    Sottocategoria = item.Sottocategoria,
-                    IdUserUpdate = item.Id,
-                    IdSede = item.IdSede,
-                    NumPratica = item.NumPratica,
-                    LastUpdate = item.LastUpdate,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Attachment MapAttachmentsStudioProfessionaleToAttachments(AttachmentsStudioProfessionale item)
-            {
-                return new Attachment
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Blob = item.Blob,
-                    LastUpdate = item.LastUpdate,
-                    Type = item.Type,
-                    IdPratica = item.IdPratica,
-                    IdUserUpdate = item.IdUserUpdate
-                };
-            }
-
-            private List<Attachment> MapListAttachmentsStudioProfessionaleToAttachments(List<AttachmentsStudioProfessionale> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Attachment> result = new List<Attachment>();
-                foreach (var file in temp)
-                {
-                    result.Add(new Attachment
-                    {
-                        Id = file.Id,
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        LastUpdate = file.LastUpdate,
-                        Type = file.Type,
-                        IdPratica = file.IdPratica,
-                        IdUserUpdate = file.IdUserUpdate
-                    });
-                }
-
-                return result;
-            }
-
-            private List<AttachmentsStudioProfessionale> MapListAttachmentsToAttachmentsStudioProfessionale(List<Attachment> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<AttachmentsStudioProfessionale> result = new List<AttachmentsStudioProfessionale>();
-                foreach (var file in temp)
-                {
-                    result.Add(new AttachmentsStudioProfessionale
-                    {
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        Type = file.Type,
-                        IdUserUpdate = file.IdUserUpdate,
-                        IdPratica = file.IdPratica,
-                        LastUpdate = file.LastUpdate
-                    });
-                }
-
-                return result;
-            }
-            #endregion
-
-            #region Sindacato
-            private Sindacato MapPraticaToNewSindacato(Pratica item)
-            {
-                return new Sindacato
-                {
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Sindacato MapPraticaToSindacato(Sindacato prev, Pratica item)
-            {
-                prev.Nome = item.Nome;
-                prev.Cognome = item.Cognome;
-                prev.Sottocategoria = item.Sottocategoria;
-                prev.Anno = item.Anno;
-                prev.LastUpdate = item.LastUpdate;
-                prev.IdUserUpdate = item.IdUserUpdate;
-                //newPratica.IdSede = pratica.IdSede;
-                prev.IdStato = item.IdStato;
-                prev.Note = item.Note;
-                prev.TipologiaPratica = item.TipologiaPratica;
-
-                return prev;
-            }
-
-            private Pratica MapSindacatoToPraticaMail(Sindacato item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private List<Pratica> MapListSindacatoToPratica(List<Sindacato> items)
-            {
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in items)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
-
-            private List<Pratica> MapListSindacatoToPraticaFiltered(List<Sindacato> items, Pratica criteri)
-            {
-                var temp = items.Where(i =>
-                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                            && (criteri.Anno == null || i.Anno == criteri.Anno)
-                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
-                            )
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in temp)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
-
-            private Pratica MapSindacatoToPratica(Sindacato item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Anno = item.Anno,
-                    Sottocategoria = item.Sottocategoria,
-                    IdUserUpdate = item.Id,
-                    IdSede = item.IdSede,
-                    NumPratica = item.NumPratica,
-                    LastUpdate = item.LastUpdate,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Attachment MapAttachmentsSindacatoToAttachments(AttachmentsSindacato item)
-            {
-                return new Attachment
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Blob = item.Blob,
-                    LastUpdate = item.LastUpdate,
-                    Type = item.Type,
-                    IdPratica = item.IdPratica,
-                    IdUserUpdate = item.IdUserUpdate
-                };
-            }
-
-            private List<Attachment> MapListAttachmentsSindacatoToAttachments(List<AttachmentsSindacato> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Attachment> result = new List<Attachment>();
-                foreach (var file in temp)
-                {
-                    result.Add(new Attachment
-                    {
-                        Id = file.Id,
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        LastUpdate = file.LastUpdate,
-                        Type = file.Type,
-                        IdPratica = file.IdPratica,
-                        IdUserUpdate = file.IdUserUpdate
-                    });
-                }
-
-                return result;
-            }
-
-            private List<AttachmentsSindacato> MapListAttachmentsToAttachmentsSindacato(List<Attachment> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<AttachmentsSindacato> result = new List<AttachmentsSindacato>();
-                foreach (var file in temp)
-                {
-                    result.Add(new AttachmentsSindacato
-                    {
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        Type = file.Type,
-                        IdUserUpdate = file.IdUserUpdate,
-                        IdPratica = file.IdPratica,
-                        LastUpdate = file.LastUpdate
-                    });
-                }
-
-                return result;
-            }
-            #endregion
-
-            #region Patronato
-            private Patronato MapPraticaToNewPatronato(Pratica item)
-            {
-                return new Patronato
-                {
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Patronato MapPraticaToPatronato(Patronato prev, Pratica item)
-            {
-                prev.Nome = item.Nome;
-                prev.Cognome = item.Cognome;
-                prev.Sottocategoria = item.Sottocategoria;
-                prev.Anno = item.Anno;
-                prev.LastUpdate = item.LastUpdate;
-                prev.IdUserUpdate = item.IdUserUpdate;
-                //newPratica.IdSede = pratica.IdSede;
-                prev.IdStato = item.IdStato;
-                prev.Note = item.Note;
-                prev.TipologiaPratica = item.TipologiaPratica;
-
-                return prev;
-            }
-
-            private Pratica MapPatronatoToPraticaMail(Patronato item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private List<Pratica> MapListPatronatoToPratica(List<Patronato> items)
-            {
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in items)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
-
-            private List<Pratica> MapListPatronatoToPraticaFiltered(List<Patronato> items, Pratica criteri)
-            {
-                var temp = items.Where(i =>
-                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                            && (criteri.Anno == null || i.Anno == criteri.Anno)
-                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
-                            )
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in temp)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
-
-            private Pratica MapPatronatoToPratica(Patronato item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Anno = item.Anno,
-                    Sottocategoria = item.Sottocategoria,
-                    IdUserUpdate = item.Id,
-                    IdSede = item.IdSede,
-                    NumPratica = item.NumPratica,
-                    LastUpdate = item.LastUpdate,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Attachment MapAttachmentsPatronatoToAttachments(AttachmentsPatronato item)
-            {
-                return new Attachment
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Blob = item.Blob,
-                    LastUpdate = item.LastUpdate,
-                    Type = item.Type,
-                    IdPratica = item.IdPratica,
-                    IdUserUpdate = item.IdUserUpdate
-                };
-            }
-
-            private List<Attachment> MapListAttachmentsPatronatoToAttachments(List<AttachmentsPatronato> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Attachment> result = new List<Attachment>();
-                foreach (var file in temp)
-                {
-                    result.Add(new Attachment
-                    {
-                        Id = file.Id,
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        LastUpdate = file.LastUpdate,
-                        Type = file.Type,
-                        IdPratica = file.IdPratica,
-                        IdUserUpdate = file.IdUserUpdate
-                    });
-                }
-
-                return result;
-            }
-
-            private List<AttachmentsPatronato> MapListAttachmentsToAttachmentsPatronato(List<Attachment> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<AttachmentsPatronato> result = new List<AttachmentsPatronato>();
-                foreach (var file in temp)
-                {
-                    result.Add(new AttachmentsPatronato
-                    {
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        Type = file.Type,
-                        IdUserUpdate = file.IdUserUpdate,
-                        IdPratica = file.IdPratica,
-                        LastUpdate = file.LastUpdate
-                    });
-                }
-
-                return result;
-            }
-            #endregion
-        
-            #region Eventi
-            private Eventi MapPraticaToNewEventi(Pratica item)
-            {
-                return new Eventi
-                {
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Eventi MapPraticaToEventi(Eventi prev, Pratica item)
-            {
-                prev.Nome = item.Nome;
-                prev.Cognome = item.Cognome;
-                prev.Sottocategoria = item.Sottocategoria;
-                prev.Anno = item.Anno;
-                prev.LastUpdate = item.LastUpdate;
-                prev.IdUserUpdate = item.IdUserUpdate;
-                //newPratica.IdSede = pratica.IdSede;
-                prev.IdStato = item.IdStato;
-                prev.Note = item.Note;
-                prev.TipologiaPratica = item.TipologiaPratica;
-
-                return prev;
-            }
-
-            private Pratica MapEventiToPraticaMail(Eventi item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private List<Pratica> MapListEventiToPratica(List<Eventi> items)
-            {
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in items)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
-
-            private List<Pratica> MapListEventiToPraticaFiltered(List<Eventi> items, Pratica criteri)
-            {
-                var temp = items.Where(i =>
-                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                            && (criteri.Anno == null || i.Anno == criteri.Anno)
-                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
-                            )
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in temp)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
-
-            private Pratica MapEventiToPratica(Eventi item)
-            {
-                return new Pratica
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Anno = item.Anno,
-                    Sottocategoria = item.Sottocategoria,
-                    IdUserUpdate = item.Id,
-                    IdSede = item.IdSede,
-                    NumPratica = item.NumPratica,
-                    LastUpdate = item.LastUpdate,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
-            }
-
-            private Attachment MapAttachmentsEventiToAttachments(AttachmentsEventi item)
-            {
-                return new Attachment
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Blob = item.Blob,
-                    LastUpdate = item.LastUpdate,
-                    Type = item.Type,
-                    IdPratica = item.IdPratica,
-                    IdUserUpdate = item.IdUserUpdate
-                };
-            }
-
-            private List<Attachment> MapListAttachmentsEventiToAttachments(List<AttachmentsEventi> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Attachment> result = new List<Attachment>();
-                foreach (var file in temp)
-                {
-                    result.Add(new Attachment
-                    {
-                        Id = file.Id,
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        LastUpdate = file.LastUpdate,
-                        Type = file.Type,
-                        IdPratica = file.IdPratica,
-                        IdUserUpdate = file.IdUserUpdate
-                    });
-                }
-
-                return result;
-            }
-
-            private List<AttachmentsEventi> MapListAttachmentsToAttachmentsEventi(List<Attachment> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<AttachmentsEventi> result = new List<AttachmentsEventi>();
-                foreach (var file in temp)
-                {
-                    result.Add(new AttachmentsEventi
-                    {
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        Type = file.Type,
-                        IdUserUpdate = file.IdUserUpdate,
-                        IdPratica = file.IdPratica,
-                        LastUpdate = file.LastUpdate
-                    });
-                }
-
-                return result;
-            }
+            return result;
+        }
         #endregion
 
-            #region Agenzia
-            private Agenzia MapPraticaToNewAgenzia(Pratica item)
+        #region Sindacato
+        private Sindacato MapPraticaToNewSindacato(Pratica item)
+        {
+            return new Sindacato
             {
-                return new Agenzia
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Sindacato MapPraticaToSindacato(Sindacato prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapSindacatoToPraticaMail(Sindacato item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListSindacatoToPratica(List<Sindacato> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
                 {
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
+            return result;
+        }
 
-            private Agenzia MapPraticaToAgenzia(Agenzia prev, Pratica item)
+        private List<Pratica> MapListSindacatoToPraticaFiltered(List<Sindacato> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
             {
-                prev.Nome = item.Nome;
-                prev.Cognome = item.Cognome;
-                prev.Sottocategoria = item.Sottocategoria;
-                prev.Anno = item.Anno;
-                prev.LastUpdate = item.LastUpdate;
-                prev.IdUserUpdate = item.IdUserUpdate;
-                //newPratica.IdSede = pratica.IdSede;
-                prev.IdStato = item.IdStato;
-                prev.Note = item.Note;
-                prev.TipologiaPratica = item.TipologiaPratica;
-
-                return prev;
-            }
-
-            private Pratica MapAgenziaToPraticaMail(Agenzia item)
-            {
-                return new Pratica
+                result.Add(new Pratica
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
+            return result;
+        }
 
-            private List<Pratica> MapListAgenziaToPratica(List<Agenzia> items)
+        private Pratica MapSindacatoToPratica(Sindacato item)
+        {
+            return new Pratica
             {
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in items)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
 
-            private List<Pratica> MapListAgenziaToPraticaFiltered(List<Agenzia> items, Pratica criteri)
+        private Attachment MapAttachmentsSindacatoToAttachments(AttachmentsSindacato item)
+        {
+            return new Attachment
             {
-                var temp = items.Where(i =>
-                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                            && (criteri.Anno == null || i.Anno == criteri.Anno)
-                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
-                            )
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
 
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in temp)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
+        private List<Attachment> MapListAttachmentsSindacatoToAttachments(List<AttachmentsSindacato> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
 
-            private Pratica MapAgenziaToPratica(Agenzia item)
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
             {
-                return new Pratica
+                result.Add(new Attachment
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Anno = item.Anno,
-                    Sottocategoria = item.Sottocategoria,
-                    IdUserUpdate = item.Id,
-                    IdSede = item.IdSede,
-                    NumPratica = item.NumPratica,
-                    LastUpdate = item.LastUpdate,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
             }
 
-            private Attachment MapAttachmentsAgenziaToAttachments(AttachmentsAgenzia item)
+            return result;
+        }
+
+        private List<AttachmentsSindacato> MapListAttachmentsToAttachmentsSindacato(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsSindacato> result = new List<AttachmentsSindacato>();
+            foreach (var file in temp)
             {
-                return new Attachment
+                result.Add(new AttachmentsSindacato
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Blob = item.Blob,
-                    LastUpdate = item.LastUpdate,
-                    Type = item.Type,
-                    IdPratica = item.IdPratica,
-                    IdUserUpdate = item.IdUserUpdate
-                };
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
             }
 
-            private List<Attachment> MapListAttachmentsAgenziaToAttachments(List<AttachmentsAgenzia> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<Attachment> result = new List<Attachment>();
-                foreach (var file in temp)
-                {
-                    result.Add(new Attachment
-                    {
-                        Id = file.Id,
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        LastUpdate = file.LastUpdate,
-                        Type = file.Type,
-                        IdPratica = file.IdPratica,
-                        IdUserUpdate = file.IdUserUpdate
-                    });
-                }
-
-                return result;
-            }
-
-            private List<AttachmentsAgenzia> MapListAttachmentsToAttachmentsAgenzia(List<Attachment> items)
-            {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
-
-                List<AttachmentsAgenzia> result = new List<AttachmentsAgenzia>();
-                foreach (var file in temp)
-                {
-                    result.Add(new AttachmentsAgenzia
-                    {
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        Type = file.Type,
-                        IdUserUpdate = file.IdUserUpdate,
-                        IdPratica = file.IdPratica,
-                        LastUpdate = file.LastUpdate
-                    });
-                }
-
-                return result;
-            }
+            return result;
+        }
         #endregion
 
-            #region PraticheAuto
-            private PraticheAuto MapPraticaToNewPraticheAuto(Pratica item)
+        #region Patronato
+        private Patronato MapPraticaToNewPatronato(Pratica item)
+        {
+            return new Patronato
             {
-                return new PraticheAuto
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Patronato MapPraticaToPatronato(Patronato prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapPatronatoToPraticaMail(Patronato item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListPatronatoToPratica(List<Patronato> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
                 {
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
+            return result;
+        }
 
-            private PraticheAuto MapPraticaToPraticheAuto(PraticheAuto prev, Pratica item)
+        private List<Pratica> MapListPatronatoToPraticaFiltered(List<Patronato> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
             {
-                prev.Nome = item.Nome;
-                prev.Cognome = item.Cognome;
-                prev.Sottocategoria = item.Sottocategoria;
-                prev.Anno = item.Anno;
-                prev.LastUpdate = item.LastUpdate;
-                prev.IdUserUpdate = item.IdUserUpdate;
-                //newPratica.IdSede = pratica.IdSede;
-                prev.IdStato = item.IdStato;
-                prev.Note = item.Note;
-                prev.TipologiaPratica = item.TipologiaPratica;
-
-                return prev;
-            }
-
-            private Pratica MapPraticheAutoToPraticaMail(PraticheAuto item)
-            {
-                return new Pratica
+                result.Add(new Pratica
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Sottocategoria = item.Sottocategoria,
-                    Anno = item.Anno,
-                    LastUpdate = item.LastUpdate,
-                    IdUserUpdate = item.IdUserUpdate,
-                    NumPratica = item.NumPratica,
-                    IdSede = item.IdSede,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
+            return result;
+        }
 
-            private List<Pratica> MapListPraticheAutoToPratica(List<PraticheAuto> items)
+        private Pratica MapPatronatoToPratica(Patronato item)
+        {
+            return new Pratica
             {
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in items)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
 
-            private List<Pratica> MapListPraticheAutoToPraticaFiltered(List<PraticheAuto> items, Pratica criteri)
+        private Attachment MapAttachmentsPatronatoToAttachments(AttachmentsPatronato item)
+        {
+            return new Attachment
             {
-                var temp = items.Where(i =>
-                            (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
-                            && (criteri.Anno == null || i.Anno == criteri.Anno)
-                            && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
-                            && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
-                            && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
-                            && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
-                            )
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
 
-                List<Pratica> result = new List<Pratica>();
-                foreach (var pratica in temp)
-                {
-                    result.Add(new Pratica
-                    {
-                        Id = pratica.Id,
-                        Nome = pratica.Nome,
-                        Cognome = pratica.Cognome,
-                        Anno = pratica.Anno,
-                        Sottocategoria = pratica.Sottocategoria,
-                        IdUserUpdate = pratica.Id,
-                        IdSede = pratica.IdSede,
-                        NumPratica = pratica.NumPratica,
-                        LastUpdate = pratica.LastUpdate,
-                        IdStato = pratica.IdStato,
-                        Note = pratica.Note,
-                        TipologiaPratica = pratica.TipologiaPratica
-                    });
-                }
-                return result;
-            }
+        private List<Attachment> MapListAttachmentsPatronatoToAttachments(List<AttachmentsPatronato> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
 
-            private Pratica MapPraticheAutoToPratica(PraticheAuto item)
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
             {
-                return new Pratica
+                result.Add(new Attachment
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Cognome = item.Cognome,
-                    Anno = item.Anno,
-                    Sottocategoria = item.Sottocategoria,
-                    IdUserUpdate = item.Id,
-                    IdSede = item.IdSede,
-                    NumPratica = item.NumPratica,
-                    LastUpdate = item.LastUpdate,
-                    IdStato = item.IdStato,
-                    Note = item.Note,
-                    TipologiaPratica = item.TipologiaPratica
-                };
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
             }
 
-            private Attachment MapAttachmentsPraticheAutoToAttachments(AttachmentsPraticheAuto item)
+            return result;
+        }
+
+        private List<AttachmentsPatronato> MapListAttachmentsToAttachmentsPatronato(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsPatronato> result = new List<AttachmentsPatronato>();
+            foreach (var file in temp)
             {
-                return new Attachment
+                result.Add(new AttachmentsPatronato
                 {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Blob = item.Blob,
-                    LastUpdate = item.LastUpdate,
-                    Type = item.Type,
-                    IdPratica = item.IdPratica,
-                    IdUserUpdate = item.IdUserUpdate
-                };
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
             }
 
-            private List<Attachment> MapListAttachmentsPraticheAutoToAttachments(List<AttachmentsPraticheAuto> items)
+            return result;
+        }
+        #endregion
+
+        #region Eventi
+        private Eventi MapPraticaToNewEventi(Pratica item)
+        {
+            return new Eventi
             {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
 
-                List<Attachment> result = new List<Attachment>();
-                foreach (var file in temp)
-                {
-                    result.Add(new Attachment
-                    {
-                        Id = file.Id,
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        LastUpdate = file.LastUpdate,
-                        Type = file.Type,
-                        IdPratica = file.IdPratica,
-                        IdUserUpdate = file.IdUserUpdate
-                    });
-                }
+        private Eventi MapPraticaToEventi(Eventi prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
 
-                return result;
-            }
+            return prev;
+        }
 
-            private List<AttachmentsPraticheAuto> MapListAttachmentsToAttachmentsPraticheAuto(List<Attachment> items)
+        private Pratica MapEventiToPraticaMail(Eventi item)
+        {
+            return new Pratica
             {
-                var temp = items
-                            .OrderByDescending(i => i.LastUpdate)
-                            .ToList();
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
 
-                List<AttachmentsPraticheAuto> result = new List<AttachmentsPraticheAuto>();
-                foreach (var file in temp)
+        private List<Pratica> MapListEventiToPratica(List<Eventi> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
                 {
-                    result.Add(new AttachmentsPraticheAuto
-                    {
-                        Nome = file.Nome,
-                        Blob = file.Blob,
-                        Type = file.Type,
-                        IdUserUpdate = file.IdUserUpdate,
-                        IdPratica = file.IdPratica,
-                        LastUpdate = file.LastUpdate
-                    });
-                }
-
-                return result;
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
             }
-            #endregion
+            return result;
+        }
+
+        private List<Pratica> MapListEventiToPraticaFiltered(List<Eventi> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapEventiToPratica(Eventi item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsEventiToAttachments(AttachmentsEventi item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsEventiToAttachments(List<AttachmentsEventi> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsEventi> MapListAttachmentsToAttachmentsEventi(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsEventi> result = new List<AttachmentsEventi>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsEventi
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Agenzia
+        private Agenzia MapPraticaToNewAgenzia(Pratica item)
+        {
+            return new Agenzia
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Agenzia MapPraticaToAgenzia(Agenzia prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapAgenziaToPraticaMail(Agenzia item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListAgenziaToPratica(List<Agenzia> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListAgenziaToPraticaFiltered(List<Agenzia> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapAgenziaToPratica(Agenzia item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsAgenziaToAttachments(AttachmentsAgenzia item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsAgenziaToAttachments(List<AttachmentsAgenzia> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsAgenzia> MapListAttachmentsToAttachmentsAgenzia(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsAgenzia> result = new List<AttachmentsAgenzia>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsAgenzia
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region PraticheAuto
+        private PraticheAuto MapPraticaToNewPraticheAuto(Pratica item)
+        {
+            return new PraticheAuto
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private PraticheAuto MapPraticaToPraticheAuto(PraticheAuto prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapPraticheAutoToPraticaMail(PraticheAuto item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListPraticheAutoToPratica(List<PraticheAuto> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListPraticheAutoToPraticaFiltered(List<PraticheAuto> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapPraticheAutoToPratica(PraticheAuto item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsPraticheAutoToAttachments(AttachmentsPraticheAuto item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsPraticheAutoToAttachments(List<AttachmentsPraticheAuto> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsPraticheAuto> MapListAttachmentsToAttachmentsPraticheAuto(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsPraticheAuto> result = new List<AttachmentsPraticheAuto>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsPraticheAuto
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Visure
+        private Visure MapPraticaToNewVisure(Pratica item)
+        {
+            return new Visure
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Visure MapPraticaToVisure(Visure prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapVisureToPraticaMail(Visure item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListVisureToPratica(List<Visure> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListVisureToPraticaFiltered(List<Visure> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapVisureToPratica(Visure item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsVisureToAttachments(AttachmentsVisure item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsVisureToAttachments(List<AttachmentsVisure> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsVisure> MapListAttachmentsToAttachmentsVisure(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsVisure> result = new List<AttachmentsVisure>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsVisure
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Finanza
+        private Finanza MapPraticaToNewFinanza(Pratica item)
+        {
+            return new Finanza
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Finanza MapPraticaToFinanza(Finanza prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapFinanzaToPraticaMail(Finanza item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListFinanzaToPratica(List<Finanza> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListFinanzaToPraticaFiltered(List<Finanza> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapFinanzaToPratica(Finanza item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsFinanzaToAttachments(AttachmentsFinanza item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsFinanzaToAttachments(List<AttachmentsFinanza> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsFinanza> MapListAttachmentsToAttachmentsFinanza(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsFinanza> result = new List<AttachmentsFinanza>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsFinanza
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
 
         #endregion
     }

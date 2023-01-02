@@ -130,6 +130,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DownloadFileController.cs" />
     <Compile Include="Controllers\AgenziaController.cs" />
+    <Compile Include="Controllers\FinanzaController.cs" />
+    <Compile Include="Controllers\VisureController.cs" />
     <Compile Include="Controllers\StudioProfessionaleController.cs" />
     <Compile Include="Controllers\EventiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -144,19 +146,31 @@
     <Compile Include="Helper\Login.cs" />
     <Compile Include="Helper\Mail.cs" />
     <Compile Include="Helper\Token.cs" />
+    <Compile Include="Models\Database\AttachmentsFinanza.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\AttachmentsPraticheAuto.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsStudioProfessionale.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Database\AttachmentsVisure.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\DownloadFile.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\Finanza.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\PraticheAuto.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\StudioProfessionale.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\Visure.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Download.cs" />
@@ -250,6 +264,8 @@
     <Content Include="Content\Icone\pulsanti\credito.svg" />
     <Content Include="Content\Icone\pulsanti\eventi %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\eventi.svg" />
+    <Content Include="Content\Icone\pulsanti\finanza agevolata %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\finanza agevolata.svg" />
     <Content Include="Content\Icone\pulsanti\infocert %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\infocert.svg" />
     <Content Include="Content\Icone\pulsanti\noleggio %28inattivo%29.svg" />
@@ -268,6 +284,8 @@
     <Content Include="Content\Icone\pulsanti\sos utenze e servizi.svg" />
     <Content Include="Content\Icone\pulsanti\studio professionale associato %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\studio professionale associato.svg" />
+    <Content Include="Content\Icone\pulsanti\visure e certificati %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\visure e certificati.svg" />
     <Content Include="Content\Icone\rosso.svg" />
     <Content Include="Content\Icone\sdm services logo.svg" />
     <Content Include="Content\Icone\verde.svg" />
@@ -370,6 +388,18 @@
     <Content Include="Views\StudioProfessionale\ModificaPratica.cshtml" />
     <Content Include="Views\StudioProfessionale\TableAllegati.cshtml" />
     <Content Include="Views\StudioProfessionale\TableIndex.cshtml" />
+    <Content Include="Views\Visure\AggiungiPratica.cshtml" />
+    <Content Include="Views\Visure\CaricaAllegati.cshtml" />
+    <Content Include="Views\Visure\Index.cshtml" />
+    <Content Include="Views\Visure\ModificaPratica.cshtml" />
+    <Content Include="Views\Visure\TableAllegati.cshtml" />
+    <Content Include="Views\Visure\TableIndex.cshtml" />
+    <Content Include="Views\Finanza\AggiungiPratica.cshtml" />
+    <Content Include="Views\Finanza\CaricaAllegati.cshtml" />
+    <Content Include="Views\Finanza\Index.cshtml" />
+    <Content Include="Views\Finanza\ModificaPratica.cshtml" />
+    <Content Include="Views\Finanza\TableAllegati.cshtml" />
+    <Content Include="Views\Finanza\TableIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

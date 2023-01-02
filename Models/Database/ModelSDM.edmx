@@ -46,6 +46,18 @@
           <Property Name="IdUserUpdate" Type="int" Nullable="false" />
           <Property Name="LastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="AttachmentsFinanza">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="255" />
+          <Property Name="Type" Type="varchar" MaxLength="255" />
+          <Property Name="Blob" Type="varbinary(max)" />
+          <Property Name="IdPratica" Type="int" Nullable="false" />
+          <Property Name="IdUserUpdate" Type="int" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="AttachmentsPatronato">
           <Key>
             <PropertyRef Name="Id" />
@@ -94,6 +106,18 @@
           <Property Name="IdUserUpdate" Type="int" Nullable="false" />
           <Property Name="LastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="AttachmentsVisure">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="255" />
+          <Property Name="Type" Type="varchar" MaxLength="255" />
+          <Property Name="Blob" Type="varbinary(max)" />
+          <Property Name="IdPratica" Type="int" Nullable="false" />
+          <Property Name="IdUserUpdate" Type="int" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Categorie">
           <Key>
             <PropertyRef Name="Id" />
@@ -127,6 +151,23 @@
           <Property Name="IdUserUpdate" Type="int" />
           <Property Name="IdSede" Type="int" />
           <Property Name="Sottocategoria" Type="varchar" MaxLength="50" />
+          <Property Name="IdStato" Type="int" />
+          <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
+          <Property Name="Note" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Finanza">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Anno" Type="varchar" MaxLength="50" />
+          <Property Name="Nome" Type="varchar" MaxLength="50" />
+          <Property Name="Cognome" Type="varchar" MaxLength="50" />
+          <Property Name="Sottocategoria" Type="varchar" MaxLength="50" />
+          <Property Name="NumPratica" Type="varchar" MaxLength="255" />
+          <Property Name="LastUpdate" Type="datetime" />
+          <Property Name="IdUserUpdate" Type="int" />
+          <Property Name="IdSede" Type="int" />
           <Property Name="IdStato" Type="int" />
           <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
           <Property Name="Note" Type="nvarchar" MaxLength="500" />
@@ -256,6 +297,23 @@
           <Property Name="Username" Type="varchar" MaxLength="255" />
           <Property Name="IdRuolo" Type="int" />
         </EntityType>
+        <EntityType Name="Visure">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Anno" Type="varchar" MaxLength="50" />
+          <Property Name="Nome" Type="varchar" MaxLength="50" />
+          <Property Name="Cognome" Type="varchar" MaxLength="50" />
+          <Property Name="Sottocategoria" Type="varchar" MaxLength="50" />
+          <Property Name="NumPratica" Type="varchar" MaxLength="255" />
+          <Property Name="LastUpdate" Type="datetime" />
+          <Property Name="IdUserUpdate" Type="int" />
+          <Property Name="IdSede" Type="int" />
+          <Property Name="IdStato" Type="int" />
+          <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
+          <Property Name="Note" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <Association Name="FK_Agenzia_AttachmentsAgenzia">
           <End Role="Agenzia" Type="Self.Agenzia" Multiplicity="1" />
           <End Role="AttachmentsAgenzia" Type="Self.AttachmentsAgenzia" Multiplicity="*" />
@@ -348,6 +406,42 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Eventi">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Finanza_AttachmentsFinanza">
+          <End Role="Finanza" Type="Self.Finanza" Multiplicity="1" />
+          <End Role="AttachmentsFinanza" Type="Self.AttachmentsFinanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Finanza">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsFinanza">
+              <PropertyRef Name="IdPratica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Finanza_Sede">
+          <End Role="Sedi" Type="Self.Sedi" Multiplicity="0..1" />
+          <End Role="Finanza" Type="Self.Finanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sedi">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Finanza">
+              <PropertyRef Name="IdSede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Finanza_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Finanza" Type="Self.Finanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Finanza">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -556,6 +650,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_AttachmentsFinanza">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AttachmentsFinanza" Type="Self.AttachmentsFinanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsFinanza">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_AttachmentsPatronato">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="AttachmentsPatronato" Type="Self.AttachmentsPatronato" Multiplicity="*" />
@@ -604,6 +710,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_AttachmentsVisure">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AttachmentsVisure" Type="Self.AttachmentsVisure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsVisure">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_DownloadFile">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="DownloadFile" Type="Self.DownloadFile" Multiplicity="*" />
@@ -640,17 +758,56 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Visure_AttachmentsVisure">
+          <End Role="Visure" Type="Self.Visure" Multiplicity="1" />
+          <End Role="AttachmentsVisure" Type="Self.AttachmentsVisure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visure">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsVisure">
+              <PropertyRef Name="IdPratica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visure_Sede">
+          <End Role="Sedi" Type="Self.Sedi" Multiplicity="0..1" />
+          <End Role="Visure" Type="Self.Visure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sedi">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visure">
+              <PropertyRef Name="IdSede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visure_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Visure" Type="Self.Visure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visure">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MSSql204389ModelStoreContainer">
           <EntitySet Name="Agenzia" EntityType="Self.Agenzia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsAgenzia" EntityType="Self.AttachmentsAgenzia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsEventi" EntityType="Self.AttachmentsEventi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachmentsFinanza" EntityType="Self.AttachmentsFinanza" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsPatronato" EntityType="Self.AttachmentsPatronato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsPraticheAuto" EntityType="Self.AttachmentsPraticheAuto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsSindacato" EntityType="Self.AttachmentsSindacato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsStudioProfessionale" EntityType="Self.AttachmentsStudioProfessionale" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachmentsVisure" EntityType="Self.AttachmentsVisure" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categorie" EntityType="Self.Categorie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DownloadFile" EntityType="Self.DownloadFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Eventi" EntityType="Self.Eventi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Finanza" EntityType="Self.Finanza" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NumeroPratiche" EntityType="Self.NumeroPratiche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patronato" EntityType="Self.Patronato" Schema="dbo" store:Type="Tables" />
@@ -661,6 +818,7 @@
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudioProfessionale" EntityType="Self.StudioProfessionale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visure" EntityType="Self.Visure" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Agenzia_AttachmentsAgenzia" Association="Self.FK_Agenzia_AttachmentsAgenzia">
             <End Role="Agenzia" EntitySet="Agenzia" />
             <End Role="AttachmentsAgenzia" EntitySet="AttachmentsAgenzia" />
@@ -692,6 +850,18 @@
           <AssociationSet Name="FK_Eventi_User" Association="Self.FK_Eventi_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Eventi" EntitySet="Eventi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Finanza_AttachmentsFinanza" Association="Self.FK_Finanza_AttachmentsFinanza">
+            <End Role="Finanza" EntitySet="Finanza" />
+            <End Role="AttachmentsFinanza" EntitySet="AttachmentsFinanza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Finanza_Sede" Association="Self.FK_Finanza_Sede">
+            <End Role="Sedi" EntitySet="Sedi" />
+            <End Role="Finanza" EntitySet="Finanza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Finanza_User" Association="Self.FK_Finanza_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Finanza" EntitySet="Finanza" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_AttachmentsPatronato" Association="Self.FK_Patronato_AttachmentsPatronato">
             <End Role="Patronato" EntitySet="Patronato" />
@@ -761,6 +931,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsEventi" EntitySet="AttachmentsEventi" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_AttachmentsFinanza" Association="Self.FK_User_AttachmentsFinanza">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AttachmentsFinanza" EntitySet="AttachmentsFinanza" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_AttachmentsPatronato" Association="Self.FK_User_AttachmentsPatronato">
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsPatronato" EntitySet="AttachmentsPatronato" />
@@ -777,6 +951,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsStudioProfessionale" EntitySet="AttachmentsStudioProfessionale" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_AttachmentsVisure" Association="Self.FK_User_AttachmentsVisure">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AttachmentsVisure" EntitySet="AttachmentsVisure" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_DownloadFile" Association="Self.FK_User_DownloadFile">
             <End Role="Users" EntitySet="Users" />
             <End Role="DownloadFile" EntitySet="DownloadFile" />
@@ -789,6 +967,18 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
+          <AssociationSet Name="FK_Visure_AttachmentsVisure" Association="Self.FK_Visure_AttachmentsVisure">
+            <End Role="Visure" EntitySet="Visure" />
+            <End Role="AttachmentsVisure" EntitySet="AttachmentsVisure" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visure_Sede" Association="Self.FK_Visure_Sede">
+            <End Role="Sedi" EntitySet="Sedi" />
+            <End Role="Visure" EntitySet="Visure" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visure_User" Association="Self.FK_Visure_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Visure" EntitySet="Visure" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -798,13 +988,16 @@
           <EntitySet Name="Agenzia" EntityType="MSSql204389Model.Agenzia" />
           <EntitySet Name="AttachmentsAgenzia" EntityType="MSSql204389Model.AttachmentsAgenzia" />
           <EntitySet Name="AttachmentsEventi" EntityType="MSSql204389Model.AttachmentsEventi" />
+          <EntitySet Name="AttachmentsFinanza" EntityType="MSSql204389Model.AttachmentsFinanza" />
           <EntitySet Name="AttachmentsPatronato" EntityType="MSSql204389Model.AttachmentsPatronato" />
           <EntitySet Name="AttachmentsPraticheAuto" EntityType="MSSql204389Model.AttachmentsPraticheAuto" />
           <EntitySet Name="AttachmentsSindacato" EntityType="MSSql204389Model.AttachmentsSindacato" />
           <EntitySet Name="AttachmentsStudioProfessionale" EntityType="MSSql204389Model.AttachmentsStudioProfessionale" />
+          <EntitySet Name="AttachmentsVisure" EntityType="MSSql204389Model.AttachmentsVisure" />
           <EntitySet Name="Categorie" EntityType="MSSql204389Model.Categorie" />
           <EntitySet Name="DownloadFile" EntityType="MSSql204389Model.DownloadFile" />
           <EntitySet Name="Eventi" EntityType="MSSql204389Model.Eventi" />
+          <EntitySet Name="Finanza" EntityType="MSSql204389Model.Finanza" />
           <EntitySet Name="Logs" EntityType="MSSql204389Model.Logs" />
           <EntitySet Name="NumeroPratiche" EntityType="MSSql204389Model.NumeroPratiche" />
           <EntitySet Name="Patronato" EntityType="MSSql204389Model.Patronato" />
@@ -815,6 +1008,7 @@
           <EntitySet Name="Status" EntityType="MSSql204389Model.Status" />
           <EntitySet Name="StudioProfessionale" EntityType="MSSql204389Model.StudioProfessionale" />
           <EntitySet Name="Users" EntityType="MSSql204389Model.Users" />
+          <EntitySet Name="Visure" EntityType="MSSql204389Model.Visure" />
           <AssociationSet Name="FK_Agenzia_AttachmentsAgenzia" Association="MSSql204389Model.FK_Agenzia_AttachmentsAgenzia">
             <End Role="Agenzia" EntitySet="Agenzia" />
             <End Role="AttachmentsAgenzia" EntitySet="AttachmentsAgenzia" />
@@ -842,6 +1036,14 @@
           <AssociationSet Name="FK_User_AttachmentsEventi" Association="MSSql204389Model.FK_User_AttachmentsEventi">
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsEventi" EntitySet="AttachmentsEventi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Finanza_AttachmentsFinanza" Association="MSSql204389Model.FK_Finanza_AttachmentsFinanza">
+            <End Role="Finanza" EntitySet="Finanza" />
+            <End Role="AttachmentsFinanza" EntitySet="AttachmentsFinanza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_AttachmentsFinanza" Association="MSSql204389Model.FK_User_AttachmentsFinanza">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AttachmentsFinanza" EntitySet="AttachmentsFinanza" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_AttachmentsPatronato" Association="MSSql204389Model.FK_Patronato_AttachmentsPatronato">
             <End Role="Patronato" EntitySet="Patronato" />
@@ -875,6 +1077,14 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsStudioProfessionale" EntitySet="AttachmentsStudioProfessionale" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_AttachmentsVisure" Association="MSSql204389Model.FK_User_AttachmentsVisure">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AttachmentsVisure" EntitySet="AttachmentsVisure" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visure_AttachmentsVisure" Association="MSSql204389Model.FK_Visure_AttachmentsVisure">
+            <End Role="Visure" EntitySet="Visure" />
+            <End Role="AttachmentsVisure" EntitySet="AttachmentsVisure" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_DownloadFile" Association="MSSql204389Model.FK_User_DownloadFile">
             <End Role="Users" EntitySet="Users" />
             <End Role="DownloadFile" EntitySet="DownloadFile" />
@@ -890,6 +1100,14 @@
           <AssociationSet Name="FK_Eventi_User" Association="MSSql204389Model.FK_Eventi_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Eventi" EntitySet="Eventi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Finanza_Sede" Association="MSSql204389Model.FK_Finanza_Sede">
+            <End Role="Sedi" EntitySet="Sedi" />
+            <End Role="Finanza" EntitySet="Finanza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Finanza_User" Association="MSSql204389Model.FK_Finanza_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Finanza" EntitySet="Finanza" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_Sede" Association="MSSql204389Model.FK_Patronato_Sede">
             <End Role="Sedi" EntitySet="Sedi" />
@@ -931,6 +1149,10 @@
             <End Role="Sedi" EntitySet="Sedi" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
+          <AssociationSet Name="FK_Visure_Sede" Association="MSSql204389Model.FK_Visure_Sede">
+            <End Role="Sedi" EntitySet="Sedi" />
+            <End Role="Visure" EntitySet="Visure" />
+          </AssociationSet>
           <AssociationSet Name="FK_Sindacato_User" Association="MSSql204389Model.FK_Sindacato_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Sindacato" EntitySet="Sindacato" />
@@ -942,6 +1164,10 @@
           <AssociationSet Name="FK_StudioProfessionale_User" Association="MSSql204389Model.FK_StudioProfessionale_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="StudioProfessionale" EntitySet="StudioProfessionale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visure_User" Association="MSSql204389Model.FK_Visure_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Visure" EntitySet="Visure" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Agenzia">
@@ -992,6 +1218,20 @@
           <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_AttachmentsEventi" FromRole="AttachmentsEventi" ToRole="Eventi" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsEventi" FromRole="AttachmentsEventi" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="AttachmentsFinanza">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Blob" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IdPratica" Type="Int32" Nullable="false" />
+          <Property Name="IdUserUpdate" Type="Int32" Nullable="false" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Finanza" Relationship="MSSql204389Model.FK_Finanza_AttachmentsFinanza" FromRole="AttachmentsFinanza" ToRole="Finanza" />
+          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsFinanza" FromRole="AttachmentsFinanza" ToRole="Users" />
         </EntityType>
         <EntityType Name="AttachmentsPatronato">
           <Key>
@@ -1049,6 +1289,20 @@
           <NavigationProperty Name="StudioProfessionale" Relationship="MSSql204389Model.FK_StudioProfessionale_AttachmentsStudioProfessionale" FromRole="AttachmentsStudioProfessionale" ToRole="StudioProfessionale" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsStudioProfessionale" FromRole="AttachmentsStudioProfessionale" ToRole="Users" />
         </EntityType>
+        <EntityType Name="AttachmentsVisure">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Blob" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IdPratica" Type="Int32" Nullable="false" />
+          <Property Name="IdUserUpdate" Type="Int32" Nullable="false" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsVisure" FromRole="AttachmentsVisure" ToRole="Users" />
+          <NavigationProperty Name="Visure" Relationship="MSSql204389Model.FK_Visure_AttachmentsVisure" FromRole="AttachmentsVisure" ToRole="Visure" />
+        </EntityType>
         <EntityType Name="Categorie">
           <Key>
             <PropertyRef Name="Id" />
@@ -1090,6 +1344,26 @@
           <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_Eventi_Sede" FromRole="Eventi" ToRole="Sedi" />
           <NavigationProperty Name="Status" Relationship="MSSql204389Model.FK_Eventi_Status" FromRole="Eventi" ToRole="Status" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Eventi_User" FromRole="Eventi" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Finanza">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cognome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sottocategoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NumPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+          <Property Name="IdUserUpdate" Type="Int32" />
+          <Property Name="IdSede" Type="Int32" />
+          <Property Name="IdStato" Type="Int32" />
+          <Property Name="TipologiaPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AttachmentsFinanza" Relationship="MSSql204389Model.FK_Finanza_AttachmentsFinanza" FromRole="Finanza" ToRole="AttachmentsFinanza" />
+          <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_Finanza_Sede" FromRole="Finanza" ToRole="Sedi" />
+          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Finanza_User" FromRole="Finanza" ToRole="Users" />
         </EntityType>
         <EntityType Name="Logs">
           <Key>
@@ -1170,11 +1444,13 @@
           <Property Name="Citta" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agenzia" Relationship="MSSql204389Model.FK_Agenzia_Sede" FromRole="Sedi" ToRole="Agenzia" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_Sede" FromRole="Sedi" ToRole="Eventi" />
+          <NavigationProperty Name="Finanza" Relationship="MSSql204389Model.FK_Finanza_Sede" FromRole="Sedi" ToRole="Finanza" />
           <NavigationProperty Name="Patronato" Relationship="MSSql204389Model.FK_Patronato_Sede" FromRole="Sedi" ToRole="Patronato" />
           <NavigationProperty Name="PraticheAuto" Relationship="MSSql204389Model.FK_PraticheAuto_Sede" FromRole="Sedi" ToRole="PraticheAuto" />
           <NavigationProperty Name="Sindacato" Relationship="MSSql204389Model.FK_Sindacato_Sede" FromRole="Sedi" ToRole="Sindacato" />
           <NavigationProperty Name="StudioProfessionale" Relationship="MSSql204389Model.FK_StudioProfessionale_Sede" FromRole="Sedi" ToRole="StudioProfessionale" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_Sede" FromRole="Sedi" ToRole="Users" />
+          <NavigationProperty Name="Visure" Relationship="MSSql204389Model.FK_Visure_Sede" FromRole="Sedi" ToRole="Visure" />
         </EntityType>
         <EntityType Name="Sindacato">
           <Key>
@@ -1246,18 +1522,42 @@
           <NavigationProperty Name="Agenzia" Relationship="MSSql204389Model.FK_Agenzia_User" FromRole="Users" ToRole="Agenzia" />
           <NavigationProperty Name="AttachmentsAgenzia" Relationship="MSSql204389Model.FK_User_AttachmentsAgenzia" FromRole="Users" ToRole="AttachmentsAgenzia" />
           <NavigationProperty Name="AttachmentsEventi" Relationship="MSSql204389Model.FK_User_AttachmentsEventi" FromRole="Users" ToRole="AttachmentsEventi" />
+          <NavigationProperty Name="AttachmentsFinanza" Relationship="MSSql204389Model.FK_User_AttachmentsFinanza" FromRole="Users" ToRole="AttachmentsFinanza" />
           <NavigationProperty Name="AttachmentsPatronato" Relationship="MSSql204389Model.FK_User_AttachmentsPatronato" FromRole="Users" ToRole="AttachmentsPatronato" />
           <NavigationProperty Name="AttachmentsPraticheAuto" Relationship="MSSql204389Model.FK_User_AttachmentsPraticheAuto" FromRole="Users" ToRole="AttachmentsPraticheAuto" />
           <NavigationProperty Name="AttachmentsSindacato" Relationship="MSSql204389Model.FK_User_AttachmentsSindacato" FromRole="Users" ToRole="AttachmentsSindacato" />
           <NavigationProperty Name="AttachmentsStudioProfessionale" Relationship="MSSql204389Model.FK_User_AttachmentsStudioProfessionale" FromRole="Users" ToRole="AttachmentsStudioProfessionale" />
+          <NavigationProperty Name="AttachmentsVisure" Relationship="MSSql204389Model.FK_User_AttachmentsVisure" FromRole="Users" ToRole="AttachmentsVisure" />
           <NavigationProperty Name="DownloadFile" Relationship="MSSql204389Model.FK_User_DownloadFile" FromRole="Users" ToRole="DownloadFile" />
           <NavigationProperty Name="Eventi" Relationship="MSSql204389Model.FK_Eventi_User" FromRole="Users" ToRole="Eventi" />
+          <NavigationProperty Name="Finanza" Relationship="MSSql204389Model.FK_Finanza_User" FromRole="Users" ToRole="Finanza" />
           <NavigationProperty Name="Patronato" Relationship="MSSql204389Model.FK_Patronato_User" FromRole="Users" ToRole="Patronato" />
           <NavigationProperty Name="PraticheAuto" Relationship="MSSql204389Model.FK_PraticheAuto_User" FromRole="Users" ToRole="PraticheAuto" />
           <NavigationProperty Name="Roles" Relationship="MSSql204389Model.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
           <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_User_Sede" FromRole="Users" ToRole="Sedi" />
           <NavigationProperty Name="Sindacato" Relationship="MSSql204389Model.FK_Sindacato_User" FromRole="Users" ToRole="Sindacato" />
           <NavigationProperty Name="StudioProfessionale" Relationship="MSSql204389Model.FK_StudioProfessionale_User" FromRole="Users" ToRole="StudioProfessionale" />
+          <NavigationProperty Name="Visure" Relationship="MSSql204389Model.FK_Visure_User" FromRole="Users" ToRole="Visure" />
+        </EntityType>
+        <EntityType Name="Visure">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cognome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sottocategoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NumPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+          <Property Name="IdUserUpdate" Type="Int32" />
+          <Property Name="IdSede" Type="Int32" />
+          <Property Name="IdStato" Type="Int32" />
+          <Property Name="TipologiaPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AttachmentsVisure" Relationship="MSSql204389Model.FK_Visure_AttachmentsVisure" FromRole="Visure" ToRole="AttachmentsVisure" />
+          <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_Visure_Sede" FromRole="Visure" ToRole="Sedi" />
+          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Visure_User" FromRole="Visure" ToRole="Users" />
         </EntityType>
         <Association Name="FK_Agenzia_AttachmentsAgenzia">
           <End Type="MSSql204389Model.Agenzia" Role="Agenzia" Multiplicity="1" />
@@ -1339,6 +1639,30 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AttachmentsEventi">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Finanza_AttachmentsFinanza">
+          <End Type="MSSql204389Model.Finanza" Role="Finanza" Multiplicity="1" />
+          <End Type="MSSql204389Model.AttachmentsFinanza" Role="AttachmentsFinanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Finanza">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsFinanza">
+              <PropertyRef Name="IdPratica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_AttachmentsFinanza">
+          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
+          <End Type="MSSql204389Model.AttachmentsFinanza" Role="AttachmentsFinanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsFinanza">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -1439,6 +1763,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_AttachmentsVisure">
+          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
+          <End Type="MSSql204389Model.AttachmentsVisure" Role="AttachmentsVisure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsVisure">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visure_AttachmentsVisure">
+          <End Type="MSSql204389Model.Visure" Role="Visure" Multiplicity="1" />
+          <End Type="MSSql204389Model.AttachmentsVisure" Role="AttachmentsVisure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visure">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsVisure">
+              <PropertyRef Name="IdPratica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_DownloadFile">
           <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
           <End Type="MSSql204389Model.DownloadFile" Role="DownloadFile" Multiplicity="*" />
@@ -1483,6 +1831,30 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Eventi">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Finanza_Sede">
+          <End Type="MSSql204389Model.Sedi" Role="Sedi" Multiplicity="0..1" />
+          <End Type="MSSql204389Model.Finanza" Role="Finanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sedi">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Finanza">
+              <PropertyRef Name="IdSede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Finanza_User">
+          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="MSSql204389Model.Finanza" Role="Finanza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Finanza">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -1607,6 +1979,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Visure_Sede">
+          <End Type="MSSql204389Model.Sedi" Role="Sedi" Multiplicity="0..1" />
+          <End Type="MSSql204389Model.Visure" Role="Visure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sedi">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visure">
+              <PropertyRef Name="IdSede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Sindacato_User">
           <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="0..1" />
           <End Type="MSSql204389Model.Sindacato" Role="Sindacato" Multiplicity="*" />
@@ -1639,6 +2023,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="StudioProfessionale">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visure_User">
+          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="MSSql204389Model.Visure" Role="Visure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visure">
               <PropertyRef Name="IdUserUpdate" />
             </Dependent>
           </ReferentialConstraint>
@@ -1683,6 +2079,19 @@
           <EntitySetMapping Name="AttachmentsEventi">
             <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsEventi">
               <MappingFragment StoreEntitySet="AttachmentsEventi">
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
+                <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
+                <ScalarProperty Name="Blob" ColumnName="Blob" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttachmentsFinanza">
+            <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsFinanza">
+              <MappingFragment StoreEntitySet="AttachmentsFinanza">
                 <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
                 <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
                 <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
@@ -1745,6 +2154,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AttachmentsVisure">
+            <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsVisure">
+              <MappingFragment StoreEntitySet="AttachmentsVisure">
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
+                <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
+                <ScalarProperty Name="Blob" ColumnName="Blob" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Categorie">
             <EntityTypeMapping TypeName="MSSql204389Model.Categorie">
               <MappingFragment StoreEntitySet="Categorie">
@@ -1778,6 +2200,24 @@
                 <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
                 <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
                 <ScalarProperty Name="NumPratica" ColumnName="NumPratica" />
+                <ScalarProperty Name="Cognome" ColumnName="Cognome" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Anno" ColumnName="Anno" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Finanza">
+            <EntityTypeMapping TypeName="MSSql204389Model.Finanza">
+              <MappingFragment StoreEntitySet="Finanza">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
+                <ScalarProperty Name="IdStato" ColumnName="IdStato" />
+                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
+                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="NumPratica" ColumnName="NumPratica" />
+                <ScalarProperty Name="Sottocategoria" ColumnName="Sottocategoria" />
                 <ScalarProperty Name="Cognome" ColumnName="Cognome" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="Anno" ColumnName="Anno" />
@@ -1916,6 +2356,24 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Cognome" ColumnName="Cognome" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visure">
+            <EntityTypeMapping TypeName="MSSql204389Model.Visure">
+              <MappingFragment StoreEntitySet="Visure">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
+                <ScalarProperty Name="IdStato" ColumnName="IdStato" />
+                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
+                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="NumPratica" ColumnName="NumPratica" />
+                <ScalarProperty Name="Sottocategoria" ColumnName="Sottocategoria" />
+                <ScalarProperty Name="Cognome" ColumnName="Cognome" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Anno" ColumnName="Anno" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -20,16 +20,20 @@ namespace SDM.Models.Database
             this.Agenzia = new HashSet<Agenzia>();
             this.AttachmentsAgenzia = new HashSet<AttachmentsAgenzia>();
             this.AttachmentsEventi = new HashSet<AttachmentsEventi>();
+            this.AttachmentsFinanza = new HashSet<AttachmentsFinanza>();
             this.AttachmentsPatronato = new HashSet<AttachmentsPatronato>();
             this.AttachmentsPraticheAuto = new HashSet<AttachmentsPraticheAuto>();
             this.AttachmentsSindacato = new HashSet<AttachmentsSindacato>();
             this.AttachmentsStudioProfessionale = new HashSet<AttachmentsStudioProfessionale>();
+            this.AttachmentsVisure = new HashSet<AttachmentsVisure>();
             this.DownloadFile = new HashSet<DownloadFile>();
             this.Eventi = new HashSet<Eventi>();
+            this.Finanza = new HashSet<Finanza>();
             this.Patronato = new HashSet<Patronato>();
             this.PraticheAuto = new HashSet<PraticheAuto>();
             this.Sindacato = new HashSet<Sindacato>();
             this.StudioProfessionale = new HashSet<StudioProfessionale>();
+            this.Visure = new HashSet<Visure>();
         }
     
         public int Id { get; set; }
@@ -49,6 +53,8 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsEventi> AttachmentsEventi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AttachmentsFinanza> AttachmentsFinanza { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsPatronato> AttachmentsPatronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsPraticheAuto> AttachmentsPraticheAuto { get; set; }
@@ -57,9 +63,13 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsStudioProfessionale> AttachmentsStudioProfessionale { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AttachmentsVisure> AttachmentsVisure { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DownloadFile> DownloadFile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Eventi> Eventi { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Finanza> Finanza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patronato> Patronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -70,5 +80,7 @@ namespace SDM.Models.Database
         public virtual ICollection<Sindacato> Sindacato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudioProfessionale> StudioProfessionale { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visure> Visure { get; set; }
     }
 }

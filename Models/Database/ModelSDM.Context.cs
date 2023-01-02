@@ -28,13 +28,16 @@ namespace SDM.Models.Database
         public virtual DbSet<Agenzia> Agenzia { get; set; }
         public virtual DbSet<AttachmentsAgenzia> AttachmentsAgenzia { get; set; }
         public virtual DbSet<AttachmentsEventi> AttachmentsEventi { get; set; }
+        public virtual DbSet<AttachmentsFinanza> AttachmentsFinanza { get; set; }
         public virtual DbSet<AttachmentsPatronato> AttachmentsPatronato { get; set; }
         public virtual DbSet<AttachmentsPraticheAuto> AttachmentsPraticheAuto { get; set; }
         public virtual DbSet<AttachmentsSindacato> AttachmentsSindacato { get; set; }
         public virtual DbSet<AttachmentsStudioProfessionale> AttachmentsStudioProfessionale { get; set; }
+        public virtual DbSet<AttachmentsVisure> AttachmentsVisure { get; set; }
         public virtual DbSet<Categorie> Categorie { get; set; }
         public virtual DbSet<DownloadFile> DownloadFile { get; set; }
         public virtual DbSet<Eventi> Eventi { get; set; }
+        public virtual DbSet<Finanza> Finanza { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
         public virtual DbSet<NumeroPratiche> NumeroPratiche { get; set; }
         public virtual DbSet<Patronato> Patronato { get; set; }
@@ -45,5 +48,6 @@ namespace SDM.Models.Database
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<StudioProfessionale> StudioProfessionale { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Visure> Visure { get; set; }
     }
 }
