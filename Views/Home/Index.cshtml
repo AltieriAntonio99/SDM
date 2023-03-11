@@ -71,8 +71,8 @@
                 <a class="cardImage" title="Studio professionale associato SDM & Partner" style="cursor: not-allowed;">
                     <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
-                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay.svg" />
+                <a class="cardImage" title="Servizi di pagamento SDM pay">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Visure e certificati">
                     <img alt="Visure e certificati" src="~/Content/Icone/pulsanti/visure e certificati (inattivo).svg" />
@@ -110,8 +110,8 @@
                 <a class="cardImage" title="Studio professionale associato SDM & Partner" style="cursor: not-allowed;">
                     <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
-                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay.svg" />
+                <a class="cardImage" title="Servizi di pagamento SDM pay">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Visure e certificati">
                     <img alt="Visure e certificati" src="~/Content/Icone/pulsanti/visure e certificati (inattivo).svg" />
@@ -149,8 +149,8 @@
                 <a class="cardImage" title="Studio professionale associato SDM & Partner" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
                     <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
-                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay.svg" />
+                <a class="cardImage" title="Servizi di pagamento SDM pay">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Visure e certificati">
                     <img alt="Visure e certificati" src="~/Content/Icone/pulsanti/visure e certificati (inattivo).svg" />
@@ -189,8 +189,47 @@
                 <a class="cardImage" title="Studio professionale associato SDM & Partner" style="cursor: not-allowed;">
                     <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato (inattivo).svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
-                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay.svg" />
+                <a class="cardImage" title="Servizi di pagamento SDM pay">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Visure e certificati">
+                    <img alt="Visure e certificati" src="~/Content/Icone/pulsanti/visure e certificati (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Finanza agevolata">
+                    <img alt="Finanza agevolata" src="~/Content/Icone/pulsanti/finanza agevolata (inattivo).svg" />
+                </a>
+            }
+            else if (Session["role"].ToString() == "adminStudioProfessionale")
+            {
+                <a class="cardImage" target="_blank" title="Caf" href="http://www.ilmiocaf.it/#">
+                    <img alt="Caf" src="~/Content/Icone/pulsanti/caf.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Infocert" href="https://webid.infocert.it/webid/webid/index.html">
+                    <img alt="Infocert" src="~/Content/Icone/pulsanti/infocert.svg" />
+                </a>
+                <a class="cardImage" target="_blank" title="Utenze e credito" href="https://partners.sosutenzeservizi.it/">
+                    <img alt="Utenze e credito" src="~/Content/Icone/pulsanti/sos utenze e servizi.svg" />
+                </a>
+                <a class="cardImage" title="Agenzia" style="cursor: not-allowed;">
+                    <img alt="Agenzia" src="~/Content/Icone/pulsanti/agenzia (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Sindacato" style="cursor: not-allowed;">
+                    <img alt="Sindacato" src="~/Content/Icone/pulsanti/sindacato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
+                    <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
+                    <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
+                </a>
+                <a class="cardImage" title="Studio professionale associato SDM & Partner" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
+                    <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
+                </a>
+                <a class="cardImage" title="Servizi di pagamento SDM pay">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Visure e certificati">
                     <img alt="Visure e certificati" src="~/Content/Icone/pulsanti/visure e certificati (inattivo).svg" />
@@ -228,8 +267,8 @@
                 <a class="cardImage" title="Studio professionale associato SDM & Partner" onclick="@("window.location.href='" + @Url.Action("Index", "StudioProfessionale") + "'")">
                     <img alt="Studio professionale associato SDM & Partner" src="~/Content/Icone/pulsanti/studio professionale associato.svg" />
                 </a>
-                <a class="cardImage" target="_blank" title="Servizi di pagamento SDM pay" href="https://point.moneyx.it/">
-                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay.svg" />
+                <a class="cardImage" title="Servizi di pagamento SDM pay">
+                    <img alt="Servizi di pagamento SDM pay" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Visure e certificati" onclick="@("window.location.href='" + @Url.Action("Index", "Visure") + "'")">
                     <img alt="Visure e certificati" src="~/Content/Icone/pulsanti/visure e certificati.svg" />
