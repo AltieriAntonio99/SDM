@@ -211,7 +211,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -418,7 +419,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                             || ruolo == "adminCasoria"
                             || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                            || ruolo == "adminSupportoNoSmartJob")
+                            || ruolo == "adminSupportoNoSmartJob"
+                            || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -626,7 +628,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -833,7 +836,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -1041,7 +1045,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -1087,9 +1092,32 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "studioassociato@sdmservices.it";
+            string mailTos = "studioassociato@grupposdm.it";
+            List<string> mailCCs = new List<string>();
             string mailSubject = "Pratica Studio Professionale";
             #endregion
+
+            if(pratica != null && pratica.Sottocategoria == "Consulenza Legale Civile")
+            {
+                mailCCs.Add("avvpasqualefuschino@virgilio.it");
+                mailCCs.Add("studiolegalebifulco@gmail.it");
+            }
+            //else if(pratica != null && pratica.Sottocategoria == "Consulenza Catastale")
+            //{
+            //    mailCCs.Add("");
+            //}
+            else if (pratica != null && pratica.Sottocategoria == "Consulenza del lavoro")
+            {
+                mailCCs.Add("marcotorrecuso@yahoo.it");
+            }
+            else if (pratica != null && pratica.Sottocategoria == "Consulenza Contabile")
+            {
+                mailCCs.Add("redconsulenz.italia@gmail.com");
+            }
+            else if (pratica != null && pratica.Sottocategoria == "Consulenza Legale Penale")
+            {
+                mailCCs.Add("galdierocinzia@gmail.com");
+            }
 
             switch (metodo)
             {
@@ -1098,14 +1126,14 @@ namespace SDM.Helper
                     pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
                     item = MapPraticaToNewStudioProfessionale(pratica);
                     mailPratica = MapStudioProfessionaleToPraticaMail(item);
-                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    result = SalvaPraticaWithCC(item, tipoPratica, mailTos, mailCCs, mailSubject, mailPratica, logMessage);
                     break;
                 case "update":
                     logMessage = "ModificaPraticaStudioProfessionale";
                     var prevPratica = GetById<StudioProfessionale>(pratica.Id);
                     item = MapPraticaToStudioProfessionale(prevPratica, pratica);
                     mailPratica = MapStudioProfessionaleToPraticaMail(item);
-                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    result = ModificaPraticaWithCC(item, tipoPratica, mailTos, mailCCs, mailSubject, mailPratica, logMessage);
                     break;
             }
 
@@ -1249,7 +1277,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -1456,7 +1485,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -1665,7 +1695,8 @@ namespace SDM.Helper
                     if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
                                     || ruolo == "adminCasoria"
                                     || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
-                                    || ruolo == "adminSupportoNoSmartJob")
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
                     {
                         criteri = new Pratica();
                     }
@@ -2041,6 +2072,21 @@ namespace SDM.Helper
             }
         }
 
+        public bool SalvaPraticaWithCC<T>(T item, string tipoPratica, string mailTos, List<string> mailCCs, string mailSubject, Pratica mailPratica, string logMessage) where T : class
+        {
+            try
+            {
+                var result = Add<T>(item, tipoPratica);
+                if (result) _mail.SendMail(mailPratica, tipoPratica, mailTos, mailCCs, mailSubject);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
         public bool ModificaPratica<T>(T item, string tipoPratica, string mailTos, string mailSubject, Pratica mailPratica, string logMessage) where T : class
         {
             try
@@ -2057,7 +2103,8 @@ namespace SDM.Helper
                             List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
                                     && x.Roles.Ruolo != "adminCasoria"
                                     && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
-                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob").ToList();
+                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob"
+                                    && x.Roles.Ruolo == "adminStudioProfessionale").ToList();
 
                             string ruolo = userFrom.Roles?.Ruolo;
                             if (!string.IsNullOrWhiteSpace(ruolo))
@@ -2085,6 +2132,50 @@ namespace SDM.Helper
             }
         }
 
+        public bool ModificaPraticaWithCC<T>(T item, string tipoPratica, string mailTos, List<string> mailCCs, string mailSubject, Pratica mailPratica, string logMessage) where T : class
+        {
+            try
+            {
+                var result = Update(item);
+                if (result)
+                {
+                    using (var context = new SDMEntities())
+                    {
+                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == mailPratica.IdUserUpdate.Value);
+
+                        if (userFrom != null)
+                        {
+                            List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
+                                    && x.Roles.Ruolo != "adminCasoria"
+                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
+                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob"
+                                    && x.Roles.Ruolo == "adminStudioProfessionale").ToList();
+
+                            string ruolo = userFrom.Roles?.Ruolo;
+                            if (!string.IsNullOrWhiteSpace(ruolo))
+                            {
+                                if (ruolo == "admin" || ruolo == "adminCasoria")
+                                {
+                                    if (userFromList.Count > 0)
+                                    {
+                                        string email = userFromList.FirstOrDefault().Email;
+                                        if (!string.IsNullOrWhiteSpace(email)) _mail.SendMail(mailPratica, tipoPratica, email, mailSubject);
+                                    }
+                                }
+                                else _mail.SendMail(mailPratica, tipoPratica, mailTos, mailCCs, mailSubject);
+                            }
+
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
         //public List<T> GetFile<T>(int idPratica, string logMessage) where T : class
         //{
         //    try
