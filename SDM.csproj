@@ -274,6 +274,8 @@
     <Content Include="Content\Icone\pulsanti\patronato.svg" />
     <Content Include="Content\Icone\pulsanti\pratiche auto %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\pratiche auto.svg" />
+    <Content Include="Content\Icone\pulsanti\scuola ed ente di formazione %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\scuola ed ente di formazione.svg" />
     <Content Include="Content\Icone\pulsanti\sdm pay %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\sdm pay.svg" />
     <Content Include="Content\Icone\pulsanti\servizi postali %28inattivo%29.svg" />
