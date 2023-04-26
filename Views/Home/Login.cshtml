@@ -21,16 +21,6 @@
     <title>Login</title>
 </head>
 <body>
-    @*<script>
-        login = () => {
-            var user = document.getElementById("username").value;
-            var pass = document.getElementById("password").value;
-
-            fetch('api/users?username=admin_dev&password=admin')
-                .then(response => response.json())
-                .then(data => console.log(data));
-        }        
-    </script>*@
     <div>
         @using (Html.BeginForm("LoginResult", "Home", new { viewName = TempData["viewName"], controllerName = TempData["controllerName"], idPratica = TempData["idPratica"], tipoPratica = TempData["tipoPratica"] },FormMethod.Post, new { @class = "LoginForm" }))
         {

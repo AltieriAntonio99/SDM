@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using ClosedXML.Excel;
 using SDM.Models;
 using SDM.Models.Database;
 
@@ -1677,7 +1679,6 @@ namespace SDM.Helper
         }
 
         #endregion
-
 
         #region Finanza
         public List<Pratica> PraticaFinanza(int idSede, string ruolo, string metodo, Pratica criteri)
@@ -3834,6 +3835,83 @@ namespace SDM.Helper
         }
         #endregion
 
+        #endregion
+
+        #region DownloadExcel
+        public byte[] DownloadExcel(List<Pratica> pratiche, List<string> headers)
+        {
+            var fontSize = 12;
+            var fontColor = XLColor.White;
+            var backgroundColor = XLColor.LightBlue;
+            var bold = true;
+            try
+            {
+
+                using (var workbook = new XLWorkbook())
+                {
+                    IXLWorksheet worksheet = workbook.Worksheets.Add("Pratiche");
+                    for (int i = 0; i < headers.Count; i++)
+                    {
+                        worksheet.Cell(1, i + 1).Value = headers[i];
+                        worksheet.Cell(1, i + 1).Style.Fill.BackgroundColor = backgroundColor;
+                        worksheet.Cell(1, i + 1).Style.Font.FontColor = fontColor;
+                        worksheet.Cell(1, i + 1).Style.Font.Bold = bold;
+                        worksheet.Cell(1, i + 1).Style.Font.FontSize = fontSize;
+                    }
+
+                    if (headers.Contains("Sottocategoria") && headers.Contains("Tipologia Pratica"))
+                    {
+                        for (int index = 1; index <= pratiche.Count; index++)
+                        {
+                            worksheet.Cell(index + 1, 1).Value = pratiche[index - 1].NumPratica;
+                            worksheet.Cell(index + 1, 2).Value = pratiche[index - 1].Nome;
+                            worksheet.Cell(index + 1, 3).Value = pratiche[index - 1].Cognome;
+                            worksheet.Cell(index + 1, 4).Value = pratiche[index - 1].Anno;
+                            worksheet.Cell(index + 1, 5).Value = pratiche[index - 1].Sottocategoria;
+                            worksheet.Cell(index + 1, 6).Value = pratiche[index - 1].TipologiaPratica;
+                            worksheet.Cell(index + 1, 7).Value = pratiche[index - 1].Note;
+                        }
+                    }
+                    else if(!headers.Contains("Sottocategoria") && headers.Contains("Tipologia Pratica"))
+                    {
+                        for (int index = 1; index <= pratiche.Count; index++)
+                        {
+                            worksheet.Cell(index + 1, 1).Value = pratiche[index - 1].NumPratica;
+                            worksheet.Cell(index + 1, 2).Value = pratiche[index - 1].Nome;
+                            worksheet.Cell(index + 1, 3).Value = pratiche[index - 1].Cognome;
+                            worksheet.Cell(index + 1, 4).Value = pratiche[index - 1].Anno;
+                            worksheet.Cell(index + 1, 5).Value = pratiche[index - 1].TipologiaPratica;
+                            worksheet.Cell(index + 1, 6).Value = pratiche[index - 1].Note;
+                        }
+                    }
+                    else if (headers.Contains("Sottocategoria") && !headers.Contains("Tipologia Pratica"))
+                    {
+                        for (int index = 1; index <= pratiche.Count; index++)
+                        {
+                            worksheet.Cell(index + 1, 1).Value = pratiche[index - 1].NumPratica;
+                            worksheet.Cell(index + 1, 2).Value = pratiche[index - 1].Nome;
+                            worksheet.Cell(index + 1, 3).Value = pratiche[index - 1].Cognome;
+                            worksheet.Cell(index + 1, 4).Value = pratiche[index - 1].Anno;
+                            worksheet.Cell(index + 1, 5).Value = pratiche[index - 1].Sottocategoria;
+                            worksheet.Cell(index + 1, 6).Value = pratiche[index - 1].Note;
+                        }
+                    }
+
+                    worksheet.Columns().AdjustToContents();
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return content;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DownloadExcel", null, ex);
+                throw;
+            }
+        }
         #endregion
     }
 }

@@ -318,5 +318,34 @@ namespace SDM.Controllers
             }
         }
         #endregion
+
+        [HttpGet]
+        public ActionResult DownloadExcel()
+        {
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = $"Pratiche_Sindacato_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+            List<string> headers = new List<string>
+                {
+                    "Numero Pratica",
+                    "Nome",
+                    "Cognome",
+                    "Anno",
+                    "Sottocategoria",
+                    "Tipologia Pratica",
+                    "Note"
+                };
+
+            try
+            {
+                List<Pratica> pratiche = _help.PraticaSindacato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                var content = _help.DownloadExcel(pratiche, headers);
+                return File(content, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("SindacatoController", null, ex);
+                return RedirectToAction("Error", "Home");
+            }
+        }
     }
 }

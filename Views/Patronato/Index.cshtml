@@ -8,6 +8,9 @@
     addPratica = () => {
         window.location.href = "/Patronato/AggiungiPratica";
     }
+    downloadPratiche = () => {
+        window.location.href = "/Patronato/DownloadExcel";
+    }
     function AjaxBegin() {
         $('#loading-div').show();
     }
@@ -19,6 +22,7 @@
 <div class="patronatoStyle">
     <ul class="patronatoMenu">
         <li class="menuBack">@Html.ActionLink("Torna indietro", "Index", "Home")</li>
+        <li><a onclick="downloadPratiche()" style="margin-right: 1rem">Download Excel</a></li>
         <li><a onclick="addPratica()">Nuova pratica</a></li>
     </ul>
     @TempData["message"]
