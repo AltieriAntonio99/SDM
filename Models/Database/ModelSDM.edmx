@@ -58,6 +58,18 @@
           <Property Name="IdUserUpdate" Type="int" Nullable="false" />
           <Property Name="LastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="AttachmentsNoleggio">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="255" />
+          <Property Name="Type" Type="varchar" MaxLength="255" />
+          <Property Name="Blob" Type="varbinary(max)" />
+          <Property Name="IdPratica" Type="int" Nullable="false" />
+          <Property Name="IdUserUpdate" Type="int" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="AttachmentsPatronato">
           <Key>
             <PropertyRef Name="Id" />
@@ -181,6 +193,23 @@
           <Property Name="Message" Type="varchar(max)" />
           <Property Name="Request" Type="varchar(max)" />
           <Property Name="LastUpdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Noleggio">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Anno" Type="varchar" MaxLength="50" />
+          <Property Name="Nome" Type="varchar" MaxLength="50" />
+          <Property Name="Cognome" Type="varchar" MaxLength="50" />
+          <Property Name="Sottocategoria" Type="varchar" MaxLength="50" />
+          <Property Name="NumPratica" Type="varchar" MaxLength="255" />
+          <Property Name="LastUpdate" Type="datetime" />
+          <Property Name="IdUserUpdate" Type="int" />
+          <Property Name="IdSede" Type="int" />
+          <Property Name="IdStato" Type="int" />
+          <Property Name="TipologiaPratica" Type="varchar" MaxLength="255" />
+          <Property Name="Note" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="NumeroPratiche">
           <Key>
@@ -446,6 +475,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Noleggio_AttachmentsNoleggio">
+          <End Role="Noleggio" Type="Self.Noleggio" Multiplicity="1" />
+          <End Role="AttachmentsNoleggio" Type="Self.AttachmentsNoleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Noleggio">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsNoleggio">
+              <PropertyRef Name="IdPratica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Noleggio_Sede">
+          <End Role="Sedi" Type="Self.Sedi" Multiplicity="0..1" />
+          <End Role="Noleggio" Type="Self.Noleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sedi">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Noleggio">
+              <PropertyRef Name="IdSede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Noleggio_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Noleggio" Type="Self.Noleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Noleggio">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Patronato_AttachmentsPatronato">
           <End Role="Patronato" Type="Self.Patronato" Multiplicity="1" />
           <End Role="AttachmentsPatronato" Type="Self.AttachmentsPatronato" Multiplicity="*" />
@@ -662,6 +727,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_AttachmentsNoleggio">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AttachmentsNoleggio" Type="Self.AttachmentsNoleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsNoleggio">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_AttachmentsPatronato">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="AttachmentsPatronato" Type="Self.AttachmentsPatronato" Multiplicity="*" />
@@ -799,6 +876,7 @@
           <EntitySet Name="AttachmentsAgenzia" EntityType="Self.AttachmentsAgenzia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsEventi" EntityType="Self.AttachmentsEventi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsFinanza" EntityType="Self.AttachmentsFinanza" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachmentsNoleggio" EntityType="Self.AttachmentsNoleggio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsPatronato" EntityType="Self.AttachmentsPatronato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsPraticheAuto" EntityType="Self.AttachmentsPraticheAuto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentsSindacato" EntityType="Self.AttachmentsSindacato" Schema="dbo" store:Type="Tables" />
@@ -809,6 +887,7 @@
           <EntitySet Name="Eventi" EntityType="Self.Eventi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Finanza" EntityType="Self.Finanza" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Noleggio" EntityType="Self.Noleggio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NumeroPratiche" EntityType="Self.NumeroPratiche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patronato" EntityType="Self.Patronato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PraticheAuto" EntityType="Self.PraticheAuto" Schema="dbo" store:Type="Tables" />
@@ -862,6 +941,18 @@
           <AssociationSet Name="FK_Finanza_User" Association="Self.FK_Finanza_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Finanza" EntitySet="Finanza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Noleggio_AttachmentsNoleggio" Association="Self.FK_Noleggio_AttachmentsNoleggio">
+            <End Role="Noleggio" EntitySet="Noleggio" />
+            <End Role="AttachmentsNoleggio" EntitySet="AttachmentsNoleggio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Noleggio_Sede" Association="Self.FK_Noleggio_Sede">
+            <End Role="Sedi" EntitySet="Sedi" />
+            <End Role="Noleggio" EntitySet="Noleggio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Noleggio_User" Association="Self.FK_Noleggio_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Noleggio" EntitySet="Noleggio" />
           </AssociationSet>
           <AssociationSet Name="FK_Patronato_AttachmentsPatronato" Association="Self.FK_Patronato_AttachmentsPatronato">
             <End Role="Patronato" EntitySet="Patronato" />
@@ -934,6 +1025,10 @@
           <AssociationSet Name="FK_User_AttachmentsFinanza" Association="Self.FK_User_AttachmentsFinanza">
             <End Role="Users" EntitySet="Users" />
             <End Role="AttachmentsFinanza" EntitySet="AttachmentsFinanza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_AttachmentsNoleggio" Association="Self.FK_User_AttachmentsNoleggio">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AttachmentsNoleggio" EntitySet="AttachmentsNoleggio" />
           </AssociationSet>
           <AssociationSet Name="FK_User_AttachmentsPatronato" Association="Self.FK_User_AttachmentsPatronato">
             <End Role="Users" EntitySet="Users" />
@@ -1168,6 +1263,24 @@
           <AssociationSet Name="FK_Visure_User" Association="MSSql204389Model.FK_Visure_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Visure" EntitySet="Visure" />
+          </AssociationSet>
+          <EntitySet Name="AttachmentsNoleggio" EntityType="MSSql204389Model.AttachmentsNoleggio" />
+          <EntitySet Name="Noleggio" EntityType="MSSql204389Model.Noleggio" />
+          <AssociationSet Name="FK_Noleggio_AttachmentsNoleggio" Association="MSSql204389Model.FK_Noleggio_AttachmentsNoleggio">
+            <End Role="Noleggio" EntitySet="Noleggio" />
+            <End Role="AttachmentsNoleggio" EntitySet="AttachmentsNoleggio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_AttachmentsNoleggio" Association="MSSql204389Model.FK_User_AttachmentsNoleggio">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AttachmentsNoleggio" EntitySet="AttachmentsNoleggio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Noleggio_Sede" Association="MSSql204389Model.FK_Noleggio_Sede">
+            <End Role="Sedi" EntitySet="Sedi" />
+            <End Role="Noleggio" EntitySet="Noleggio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Noleggio_User" Association="MSSql204389Model.FK_Noleggio_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Noleggio" EntitySet="Noleggio" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Agenzia">
@@ -1451,6 +1564,7 @@
           <NavigationProperty Name="StudioProfessionale" Relationship="MSSql204389Model.FK_StudioProfessionale_Sede" FromRole="Sedi" ToRole="StudioProfessionale" />
           <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_Sede" FromRole="Sedi" ToRole="Users" />
           <NavigationProperty Name="Visure" Relationship="MSSql204389Model.FK_Visure_Sede" FromRole="Sedi" ToRole="Visure" />
+          <NavigationProperty Name="Noleggio" Relationship="MSSql204389Model.FK_Noleggio_Sede" FromRole="Sedi" ToRole="Noleggio" />
         </EntityType>
         <EntityType Name="Sindacato">
           <Key>
@@ -1538,6 +1652,8 @@
           <NavigationProperty Name="Sindacato" Relationship="MSSql204389Model.FK_Sindacato_User" FromRole="Users" ToRole="Sindacato" />
           <NavigationProperty Name="StudioProfessionale" Relationship="MSSql204389Model.FK_StudioProfessionale_User" FromRole="Users" ToRole="StudioProfessionale" />
           <NavigationProperty Name="Visure" Relationship="MSSql204389Model.FK_Visure_User" FromRole="Users" ToRole="Visure" />
+          <NavigationProperty Name="AttachmentsNoleggio" Relationship="MSSql204389Model.FK_User_AttachmentsNoleggio" FromRole="Users" ToRole="AttachmentsNoleggio" />
+          <NavigationProperty Name="Noleggio" Relationship="MSSql204389Model.FK_Noleggio_User" FromRole="Users" ToRole="Noleggio" />
         </EntityType>
         <EntityType Name="Visure">
           <Key>
@@ -2039,6 +2155,88 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AttachmentsNoleggio">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Blob" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IdPratica" Type="Int32" Nullable="false" />
+          <Property Name="IdUserUpdate" Type="Int32" Nullable="false" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Noleggio" Relationship="MSSql204389Model.FK_Noleggio_AttachmentsNoleggio" FromRole="AttachmentsNoleggio" ToRole="Noleggio" />
+          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_User_AttachmentsNoleggio" FromRole="AttachmentsNoleggio" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Noleggio">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cognome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sottocategoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NumPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+          <Property Name="IdUserUpdate" Type="Int32" />
+          <Property Name="IdSede" Type="Int32" />
+          <Property Name="IdStato" Type="Int32" />
+          <Property Name="TipologiaPratica" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AttachmentsNoleggio" Relationship="MSSql204389Model.FK_Noleggio_AttachmentsNoleggio" FromRole="Noleggio" ToRole="AttachmentsNoleggio" />
+          <NavigationProperty Name="Sedi" Relationship="MSSql204389Model.FK_Noleggio_Sede" FromRole="Noleggio" ToRole="Sedi" />
+          <NavigationProperty Name="Users" Relationship="MSSql204389Model.FK_Noleggio_User" FromRole="Noleggio" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Noleggio_AttachmentsNoleggio">
+          <End Type="MSSql204389Model.Noleggio" Role="Noleggio" Multiplicity="1" />
+          <End Type="MSSql204389Model.AttachmentsNoleggio" Role="AttachmentsNoleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Noleggio">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsNoleggio">
+              <PropertyRef Name="IdPratica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_AttachmentsNoleggio">
+          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="1" />
+          <End Type="MSSql204389Model.AttachmentsNoleggio" Role="AttachmentsNoleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentsNoleggio">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Noleggio_Sede">
+          <End Type="MSSql204389Model.Sedi" Role="Sedi" Multiplicity="0..1" />
+          <End Type="MSSql204389Model.Noleggio" Role="Noleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sedi">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Noleggio">
+              <PropertyRef Name="IdSede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Noleggio_User">
+          <End Type="MSSql204389Model.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="MSSql204389Model.Noleggio" Role="Noleggio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Noleggio">
+              <PropertyRef Name="IdUserUpdate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2363,6 +2561,37 @@
           <EntitySetMapping Name="Visure">
             <EntityTypeMapping TypeName="MSSql204389Model.Visure">
               <MappingFragment StoreEntitySet="Visure">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
+                <ScalarProperty Name="IdStato" ColumnName="IdStato" />
+                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
+                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="NumPratica" ColumnName="NumPratica" />
+                <ScalarProperty Name="Sottocategoria" ColumnName="Sottocategoria" />
+                <ScalarProperty Name="Cognome" ColumnName="Cognome" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Anno" ColumnName="Anno" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttachmentsNoleggio">
+            <EntityTypeMapping TypeName="MSSql204389Model.AttachmentsNoleggio">
+              <MappingFragment StoreEntitySet="AttachmentsNoleggio">
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="IdUserUpdate" ColumnName="IdUserUpdate" />
+                <ScalarProperty Name="IdPratica" ColumnName="IdPratica" />
+                <ScalarProperty Name="Blob" ColumnName="Blob" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Noleggio">
+            <EntityTypeMapping TypeName="MSSql204389Model.Noleggio">
+              <MappingFragment StoreEntitySet="Noleggio">
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="TipologiaPratica" ColumnName="TipologiaPratica" />
                 <ScalarProperty Name="IdStato" ColumnName="IdStato" />

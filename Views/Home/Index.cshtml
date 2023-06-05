@@ -26,8 +26,8 @@
                 <a class="cardImage" style="cursor: not-allowed;" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                <a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
@@ -46,6 +46,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSegreteria")
@@ -71,8 +74,8 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
@@ -91,6 +94,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
@@ -116,8 +122,8 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
@@ -136,6 +142,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminCasoria")
@@ -161,8 +170,8 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                <a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
@@ -181,6 +190,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
 
             }
@@ -207,8 +219,8 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
@@ -227,6 +239,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminStudioProfessionale")
@@ -252,8 +267,8 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
                 </a>
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
@@ -272,6 +287,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" style="cursor: not-allowed;">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio (inattivo).svg" />
                 </a>
             }
             else
@@ -297,8 +315,8 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto e noleggio a breve termine" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="Pratiche auto e noleggio a breve termine" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                <a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
                 </a>
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
@@ -317,6 +335,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Scuola ed ente di formazione" href="https://smartschool.scuolasemplice.it/login">
                     <img alt="Scuola ed ente di formazione" src="~/Content/Icone/pulsanti/scuola ed ente di formazione.svg" />
+                </a>
+                <a class="cardImage" title="Noleggio" onclick="@("window.location.href='" + @Url.Action("Index", "Noleggio") + "'")">
+                    <img alt="Noleggio" src="~/Content/Icone/pulsanti/noleggio.svg" />
                 </a>
             }
         </div>

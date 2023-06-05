@@ -1888,6 +1888,217 @@ namespace SDM.Helper
         }
         #endregion
 
+
+        #region Noleggio
+        public List<Pratica> PraticaNoleggio(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<Noleggio> items = new List<Noleggio>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPraticheNoleggio";
+                    items = GetPratiche<Noleggio>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                            || ruolo == "adminCasoria"
+                            || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                            || ruolo == "adminSupportoNoSmartJob"
+                            || ruolo == "adminStudioProfessionale")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaNoleggio";
+                    items = GetPratiche<Noleggio>(logMessage);
+                    break;
+            }
+
+            return MapListNoleggioToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaNoleggio(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaNoleggio";
+                    var item = GetPratica<Noleggio>(idPratica, logMessage);
+                    result = MapNoleggioToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaNoleggio(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "Noleggio";
+            string logMessage;
+            Noleggio item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "documenti@sdmservices.it";
+            string mailSubject = "Pratica Noleggio";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaNoleggio";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewNoleggio(pratica);
+                    mailPratica = MapNoleggioToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaNoleggio";
+                    var prevPratica = GetById<Noleggio>(pratica.Id);
+                    item = MapPraticaToNoleggio(prevPratica, pratica);
+                    mailPratica = MapNoleggioToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsNoleggio(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage = "GetFileNoleggio";
+            List<AttachmentsNoleggio> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsNoleggio.Where(x => x.IdPratica == idPratica).ToList();
+                    result = MapListAttachmentsNoleggioToAttachments(items);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool AttachmentsNoleggio(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileNoleggio";
+                    var temp = MapListAttachmentsToAttachmentsNoleggio(items);
+                    result = LoadFile<AttachmentsNoleggio>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsNoleggio(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileNoleggio";
+                    var item = DownloadFile<AttachmentsNoleggio>(idFile, logMessage);
+                    result = MapAttachmentsNoleggioToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteNoleggio(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.Noleggio.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsNoleggio.ToList();
+
+                    if (itemToRemove != null)
+                    {
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsNoleggio.Remove(item);
+                            }
+                        }
+
+                        context.Noleggio.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteNoleggio", null, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteFileNoleggio(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.AttachmentsNoleggio.SingleOrDefault(x => x.Id == id);
+
+                    if (itemToRemove != null)
+                    {
+                        context.AttachmentsNoleggio.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFileNoleggio", null, ex);
+                throw;
+            }
+        }
+
+        #endregion
+
+
         #region DownloadFileArea
         public List<Download> GetFileDownload(int idSezione)
         {
@@ -3821,6 +4032,200 @@ namespace SDM.Helper
             foreach (var file in temp)
             {
                 result.Add(new AttachmentsFinanza
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Noleggio
+        private Noleggio MapPraticaToNewNoleggio(Pratica item)
+        {
+            return new Noleggio
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Noleggio MapPraticaToNoleggio(Noleggio prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapNoleggioToPraticaMail(Noleggio item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListNoleggioToPratica(List<Noleggio> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListNoleggioToPraticaFiltered(List<Noleggio> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapNoleggioToPratica(Noleggio item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsNoleggioToAttachments(AttachmentsNoleggio item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsNoleggioToAttachments(List<AttachmentsNoleggio> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsNoleggio> MapListAttachmentsToAttachmentsNoleggio(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsNoleggio> result = new List<AttachmentsNoleggio>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsNoleggio
                 {
                     Nome = file.Nome,
                     Blob = file.Blob,

@@ -70,6 +70,12 @@
         <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_User" />
         <AssociationConnector Association="MSSql204389Model.FK_Visure_User" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsNoleggio" Width="1.5" PointX="7.5" PointY="14.75" />
+        <EntityTypeShape EntityType="MSSql204389Model.Noleggio" Width="1.5" PointX="5.25" PointY="13.5" />
+        <AssociationConnector Association="MSSql204389Model.FK_Noleggio_AttachmentsNoleggio" />
+        <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsNoleggio" />
+        <AssociationConnector Association="MSSql204389Model.FK_Noleggio_Sede" />
+        <AssociationConnector Association="MSSql204389Model.FK_Noleggio_User" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -149,6 +149,7 @@
     <Compile Include="Controllers\DownloadFileController.cs" />
     <Compile Include="Controllers\AgenziaController.cs" />
     <Compile Include="Controllers\FinanzaController.cs" />
+    <Compile Include="Controllers\NoleggioController.cs" />
     <Compile Include="Controllers\VisureController.cs" />
     <Compile Include="Controllers\StudioProfessionaleController.cs" />
     <Compile Include="Controllers\EventiController.cs" />
@@ -167,6 +168,9 @@
     <Compile Include="Models\Database\AttachmentsFinanza.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Database\AttachmentsNoleggio.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\AttachmentsPraticheAuto.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
@@ -180,6 +184,9 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\Finanza.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\Noleggio.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\PraticheAuto.cs">
@@ -422,6 +429,12 @@
     <Content Include="Views\Finanza\ModificaPratica.cshtml" />
     <Content Include="Views\Finanza\TableAllegati.cshtml" />
     <Content Include="Views\Finanza\TableIndex.cshtml" />
+    <Content Include="Views\Noleggio\AggiungiPratica.cshtml" />
+    <Content Include="Views\Noleggio\CaricaAllegati.cshtml" />
+    <Content Include="Views\Noleggio\Index.cshtml" />
+    <Content Include="Views\Noleggio\ModificaPratica.cshtml" />
+    <Content Include="Views\Noleggio\TableAllegati.cshtml" />
+    <Content Include="Views\Noleggio\TableIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
