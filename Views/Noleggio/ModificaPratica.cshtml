@@ -46,7 +46,14 @@
                         <option value="">...</option>
                         @foreach (var item in Model.SottocategoriaList)
                         {
-                            <option value="@item.Nome">@item.Nome</option>
+                            if (item.Nome == "Noleggio moto breve termine" || item.Nome == "Noleggio auto breve termine")
+                            {
+                                <option disabled style="background-color: #e4e4e4;" value="@item.Nome">@item.Nome</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Nome">@item.Nome</option>
+                            }
                         }
                     </select>
                 </div>
