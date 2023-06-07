@@ -323,7 +323,7 @@ namespace SDM.Controllers
         public ActionResult DownloadExcel()
         {
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            string fileName = $"Pratiche_Auto_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+            string fileName = $"Noleggio_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
             List<string> headers = new List<string>
                 {
                     "Numero Pratica",
