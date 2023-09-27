@@ -26,9 +26,9 @@
                 <a class="cardImage" style="cursor: not-allowed;" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
@@ -52,6 +52,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
+                </a>
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSegreteria")
@@ -77,9 +80,9 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
@@ -103,6 +106,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
+                </a>
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminSupporto" || Session["role"].ToString() == "adminSupportoNoSmartJob")
@@ -128,9 +134,9 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
@@ -154,6 +160,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
+                </a>
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminCasoria")
@@ -179,9 +188,9 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
@@ -206,7 +215,9 @@
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
                 </a>
-
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
+                </a>
             }
             else if (Session["role"].ToString() == "adminArchivioNoSmartJob")
             {
@@ -231,9 +242,9 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
@@ -257,6 +268,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
+                </a>
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
             }
             else if (Session["role"].ToString() == "adminStudioProfessionale")
@@ -282,9 +296,9 @@
                 <a class="cardImage" title="Patronato" style="cursor: not-allowed;">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato (inattivo).svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" style="cursor: not-allowed;">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto (inattivo).svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" style="cursor: not-allowed;">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi (inattivo).svg" />
                 </a>
@@ -308,6 +322,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
+                </a>
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
             }
             else
@@ -333,9 +350,9 @@
                 <a class="cardImage" onclick="@("window.location.href='" + @Url.Action("Index", "Patronato") + "'")" title="Patronato">
                     <img alt="Patronato" src="~/Content/Icone/pulsanti/patronato.svg" />
                 </a>
-                <a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
-                    <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
-                </a>
+                @*<a class="cardImage" title="Pratiche auto" onclick="@("window.location.href='" + @Url.Action("Index", "PraticheAuto") + "'")">
+                        <img alt="Pratiche auto" src="~/Content/Icone/pulsanti/pratiche auto.svg" />
+                    </a>*@
                 <a class="cardImage" title="Eventi" onclick="@("window.location.href='" + @Url.Action("Index", "Eventi") + "'")">
                     <img alt="Eventi" src="~/Content/Icone/pulsanti/eventi.svg" />
                 </a>
@@ -359,6 +376,9 @@
                 </a>
                 <a class="cardImage" target="_blank" title="Prenotazione Sanitaria" href="http://gestionale.trovalab.it/">
                     <img alt="Prenotazione Sanitaria" src="~/Content/Icone/pulsanti/prenotazione sanitaria.svg" />
+                </a>
+                <a class="cardImage" title="Assicurazioni">
+                    <img alt="Assicurazioni" src="~/Content/Icone/pulsanti/sdm pay (inattivo).svg" />
                 </a>
             }
         </div>
@@ -400,18 +420,18 @@
                         <td>assistenza@sdmservices.it</td>
                         <td></td>
                     </tr>
-                    <tr>
-                        <td>Responsabile Studio Legale</td>
-                        <td>De Micco Sabino</td>
-                        <td>documenti@sdmservices.it</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Responsabile Agenda</td>
-                        <td>Vitacca Martina</td>
-                        <td>info@sdmservices.it</td>
-                        <td></td>
-                    </tr>
+                    @*<tr>
+                            <td>Responsabile Studio Legale</td>
+                            <td>De Micco Sabino</td>
+                            <td>documenti@sdmservices.it</td>
+                            <td></td>
+                        </tr>*@
+                    @*<tr>
+                            <td>Responsabile Agenda</td>
+                            <td>Vitacca Martina</td>
+                            <td>info@sdmservices.it</td>
+                            <td></td>
+                        </tr>*@
                     <tr>
                         <td>Responsabile Grafica e Comunicazione</td>
                         <td>Franco Marco</td>
