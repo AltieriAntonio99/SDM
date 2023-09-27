@@ -40,11 +40,17 @@
         </div>
         <div class="rowForm">
             <div class="colForm">
-                @Html.LabelFor(model => model.TipologiaPratica, htmlAttributes: new { @class = "labelForm" })
+                @Html.LabelFor(model => model.Sottocategoria, htmlAttributes: new { @class = "labelForm" })
                 <div>
-                    @Html.EditorFor(model => model.TipologiaPratica, new { htmlAttributes = new { @class = "inputForm" } })
+                    <select name="Sottocategoria" id="sottocategoria-value" class="inputForm">
+                        <option value="">...</option>
+                        @foreach (var item in Model.SottocategoriaList)
+                        {
+                            <option value="@item.Nome">@item.Nome</option>
+                        }
+                    </select>
                 </div>
-                <span id="TipologiaValidation" class="validationField">Il campo è obbligatorio</span>
+                <span id="SottocategoriaValidation" class="validationField">Il campo è obbligatorio</span>
             </div>
             <div class="colForm">
                 @Html.LabelFor(model => model.Anno, htmlAttributes: new { @class = "labelForm" })
@@ -52,6 +58,15 @@
                     @Html.EditorFor(model => model.Anno, new { htmlAttributes = new { @class = "inputForm", value = Model.Anno } })
                 </div>
                 <span id="AnnoValidation" class="validationField">Il campo è obbligatorio</span>
+            </div>
+        </div>
+        <div class="rowForm">
+            <div class="colForm">
+                @Html.LabelFor(model => model.TipologiaPratica, htmlAttributes: new { @class = "labelForm" })
+                <div>
+                    @Html.EditorFor(model => model.TipologiaPratica, new { htmlAttributes = new { @class = "inputForm" } })
+                </div>
+                <span id="TipologiaValidation" class="validationField">Il campo è obbligatorio</span>
             </div>
         </div>
         <div class="rowForm">

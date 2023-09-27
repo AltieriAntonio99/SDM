@@ -1094,32 +1094,32 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "studioassociato@grupposdm.it";
-            List<string> mailCCs = new List<string>();
+            string mailTos = "STUDIOPROFESSIONALEASSOCIATO@GRUPPOSDM.IT";
+            //List<string> mailCCs = new List<string>();
             string mailSubject = "Pratica Studio Professionale";
             #endregion
 
-            if(pratica != null && pratica.Sottocategoria == "Consulenza Legale Civile")
-            {
-                mailCCs.Add("avvpasqualefuschino@virgilio.it");
-                mailCCs.Add("studiolegalebifulco@gmail.it");
-            }
-            //else if(pratica != null && pratica.Sottocategoria == "Consulenza Catastale")
+            //if(pratica != null && pratica.Sottocategoria == "Consulenza Legale Civile")
             //{
-            //    mailCCs.Add("");
+            //    mailCCs.Add("avvpasqualefuschino@virgilio.it");
+            //    mailCCs.Add("studiolegalebifulco@gmail.it");
             //}
-            else if (pratica != null && pratica.Sottocategoria == "Consulenza del lavoro")
-            {
-                mailCCs.Add("marcotorrecuso@yahoo.it");
-            }
-            else if (pratica != null && pratica.Sottocategoria == "Consulenza Contabile")
-            {
-                mailCCs.Add("redconsulenz.italia@gmail.com");
-            }
-            else if (pratica != null && pratica.Sottocategoria == "Consulenza Legale Penale")
-            {
-                mailCCs.Add("galdierocinzia@gmail.com");
-            }
+            ////else if(pratica != null && pratica.Sottocategoria == "Consulenza Catastale")
+            ////{
+            ////    mailCCs.Add("");
+            ////}
+            //else if (pratica != null && pratica.Sottocategoria == "Consulenza del lavoro")
+            //{
+            //    mailCCs.Add("marcotorrecuso@yahoo.it");
+            //}
+            //else if (pratica != null && pratica.Sottocategoria == "Consulenza Contabile")
+            //{
+            //    mailCCs.Add("redconsulenz.italia@gmail.com");
+            //}
+            //else if (pratica != null && pratica.Sottocategoria == "Consulenza Legale Penale")
+            //{
+            //    mailCCs.Add("galdierocinzia@gmail.com");
+            //}
 
             switch (metodo)
             {
@@ -1128,14 +1128,14 @@ namespace SDM.Helper
                     pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
                     item = MapPraticaToNewStudioProfessionale(pratica);
                     mailPratica = MapStudioProfessionaleToPraticaMail(item);
-                    result = SalvaPraticaWithCC(item, tipoPratica, mailTos, mailCCs, mailSubject, mailPratica, logMessage);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
                     break;
                 case "update":
                     logMessage = "ModificaPraticaStudioProfessionale";
                     var prevPratica = GetById<StudioProfessionale>(pratica.Id);
                     item = MapPraticaToStudioProfessionale(prevPratica, pratica);
                     mailPratica = MapStudioProfessionaleToPraticaMail(item);
-                    result = ModificaPraticaWithCC(item, tipoPratica, mailTos, mailCCs, mailSubject, mailPratica, logMessage);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
                     break;
             }
 

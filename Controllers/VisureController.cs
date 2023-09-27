@@ -29,7 +29,7 @@ namespace SDM.Controllers
                         PraticaIndex model = new PraticaIndex
                         {
                             Pratiche = _help.PraticaVisure(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
-                            Categorie = null
+                            Categorie = _help.GetCategorie("visure")
                         };
 
                         return View(model);
@@ -56,7 +56,7 @@ namespace SDM.Controllers
                     {
                         Pratica model = new Pratica
                         {
-                            SottocategoriaList = null
+                            SottocategoriaList = _help.GetCategorie("visure")
                         };
 
                         return View(model);
@@ -83,7 +83,7 @@ namespace SDM.Controllers
                     {
 
                         Pratica model = _help.PraticaVisure(idPratica, "get");
-                        model.SottocategoriaList = null;
+                        model.SottocategoriaList = _help.GetCategorie("visure");
                         model.StatoList = _help.GetStati();
 
                         return View(model);
@@ -330,6 +330,7 @@ namespace SDM.Controllers
                     "Nome",
                     "Cognome",
                     "Anno",
+                    "Sottocategoria",
                     "Tipologia Pratica",
                     "Note"
                 };
