@@ -75,7 +75,7 @@ namespace SDM.Helper
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("portalesdm@gmail.com", "bswweyzrtmdyauqz");
+                smtp.Credentials = new NetworkCredential("portalesdm@gmail.com", "ydtrqblxlkrydqot");
                 smtp.Send(message);
             }            
         }
