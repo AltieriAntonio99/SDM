@@ -164,9 +164,9 @@ namespace SDM.Helper
                             riepilogoPratica.attachment = AttachmentsPatronato(id, "getall");
                             riepilogoPratica.type = "Patronato";
                             break;
-                        case "PraticheAuto":
-                            riepilogoPratica.pratica = PraticaEventi(id, "get");
-                            riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
+                        case "Noleggio":
+                            riepilogoPratica.pratica = PraticaNoleggio(id, "get");
+                            riepilogoPratica.attachment = AttachmentsNoleggio(id, "getall");
                             riepilogoPratica.type = "PraticheAuto";
                             break;
                         case "Eventi":
@@ -183,6 +183,16 @@ namespace SDM.Helper
                             riepilogoPratica.pratica = PraticaEventi(id, "get");
                             riepilogoPratica.attachment = AttachmentsEventi(id, "getall");
                             riepilogoPratica.type = "Agenzia";
+                            break;
+                        case "Visure":
+                            riepilogoPratica.pratica = PraticaVisure(id, "get");
+                            riepilogoPratica.attachment = AttachmentsVisure(id, "getall");
+                            riepilogoPratica.type = "Visure";
+                            break;
+                        case "Finanza":
+                            riepilogoPratica.pratica = PraticaFinanza(id, "get");
+                            riepilogoPratica.attachment = AttachmentsFinanza(id, "getall");
+                            riepilogoPratica.type = "Visure";
                             break;
                     }
 
@@ -2274,7 +2284,12 @@ namespace SDM.Helper
             try
             {
                 var result = Add<T>(item, tipoPratica);
-                if (result) _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                if (result)
+                {
+                    var id = item.GetType().GetProperty("Id").GetValue(item);
+                    mailPratica.Id = Convert.ToInt32(id);
+                    _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                }
                 return result;
             }
             catch (Exception ex)
