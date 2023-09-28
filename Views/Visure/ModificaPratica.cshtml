@@ -117,6 +117,11 @@
         $("#stato-value option[value='@Model.IdStato']").prop('selected', true);
     });
 
+     $(document).ready(function () {
+        $("#sottocategoria-value option[value='@Model.Sottocategoria']").prop('selected', true);
+        $("#stato-value option[value='@Model.IdStato']").prop('selected', true);
+    });
+
     $("#formPratica").on("submit", function () {
         var nome = $("#Nome").val();
         var cognome = $("#Cognome").val();
