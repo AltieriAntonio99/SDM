@@ -281,6 +281,8 @@
     <Content Include="Content\Icone\pulsanti\agenzia.svg" />
     <Content Include="Content\Icone\pulsanti\archivio %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\archivio.svg" />
+    <Content Include="Content\Icone\pulsanti\assicurazioni %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\assicurazioni.svg" />
     <Content Include="Content\Icone\pulsanti\assistenza contabile %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\assistenza contabile.svg" />
     <Content Include="Content\Icone\pulsanti\caf %28inattivo%29.svg" />
