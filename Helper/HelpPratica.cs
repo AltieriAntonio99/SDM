@@ -1898,7 +1898,6 @@ namespace SDM.Helper
         }
         #endregion
 
-
         #region Noleggio
         public List<Pratica> PraticaNoleggio(int idSede, string ruolo, string metodo, Pratica criteri)
         {
@@ -2108,6 +2107,423 @@ namespace SDM.Helper
 
         #endregion
 
+        #region Assicurazione
+        public List<Pratica> PraticaAssicurazione(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<Assicurazione> items = new List<Assicurazione>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPraticheAssicurazione";
+                    items = GetPratiche<Assicurazione>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                                    || ruolo == "adminCasoria"
+                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaAssicurazione";
+                    items = GetPratiche<Assicurazione>(logMessage);
+                    break;
+            }
+
+            return MapListAssicurazioneToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaAssicurazione(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaAssicurazione";
+                    var item = GetPratica<Assicurazione>(idPratica, logMessage);
+                    result = MapAssicurazioneToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaAssicurazione(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "Assicurazione";
+            string logMessage;
+            Assicurazione item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "documenti@sdmservices.it";
+            string mailSubject = "Pratica Assicurazione";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaAssicurazione";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewAssicurazione(pratica);
+                    mailPratica = MapAssicurazioneToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaAssicurazione";
+                    var prevPratica = GetById<Assicurazione>(pratica.Id);
+                    item = MapPraticaToAssicurazione(prevPratica, pratica);
+                    mailPratica = MapAssicurazioneToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsAssicurazione(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage = "GetFileAssicurazione";
+            List<AttachmentsAssicurazione> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsAssicurazione.Where(x => x.IdPratica == idPratica).ToList();
+                    result = MapListAttachmentsAssicurazioneToAttachments(items);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool AttachmentsAssicurazione(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileAssicurazione";
+                    var temp = MapListAttachmentsToAttachmentsAssicurazione(items);
+                    result = LoadFile<AttachmentsAssicurazione>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsAssicurazione(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileAssicurazione";
+                    var item = DownloadFile<AttachmentsAssicurazione>(idFile, logMessage);
+                    result = MapAttachmentsAssicurazioneToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteAssicurazione(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.Assicurazione.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsAssicurazione.ToList();
+
+                    if (itemToRemove != null)
+                    {
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsAssicurazione.Remove(item);
+                            }
+                        }
+
+                        context.Assicurazione.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteAssicurazione", null, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteFileAssicurazione(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.AttachmentsAssicurazione.SingleOrDefault(x => x.Id == id);
+
+                    if (itemToRemove != null)
+                    {
+                        context.AttachmentsAssicurazione.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFileAssicurazione", null, ex);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region PresidiSanitari
+        public List<Pratica> PraticaPresidiSanitari(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<PresidiSanitari> items = new List<PresidiSanitari>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPratichePresidiSanitari";
+                    items = GetPratiche<PresidiSanitari>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                                    || ruolo == "adminCasoria"
+                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaPresidiSanitari";
+                    items = GetPratiche<PresidiSanitari>(logMessage);
+                    break;
+            }
+
+            return MapListPresidiSanitariToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaPresidiSanitari(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaPresidiSanitari";
+                    var item = GetPratica<PresidiSanitari>(idPratica, logMessage);
+                    result = MapPresidiSanitariToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaPresidiSanitari(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "PresidiSanitari";
+            string logMessage;
+            PresidiSanitari item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "assistenza@sdmservices.it";
+            string mailSubject = "Pratica PresidiSanitari";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaPresidiSanitari";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewPresidiSanitari(pratica);
+                    mailPratica = MapPresidiSanitariToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaPresidiSanitari";
+                    var prevPratica = GetById<PresidiSanitari>(pratica.Id);
+                    item = MapPraticaToPresidiSanitari(prevPratica, pratica);
+                    mailPratica = MapPresidiSanitariToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsPresidiSanitari(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage = "GetFilePresidiSanitari";
+            List<AttachmentsPresidiSanitari> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsPresidiSanitari.Where(x => x.IdPratica == idPratica).ToList();
+                    result = MapListAttachmentsPresidiSanitariToAttachments(items);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool AttachmentsPresidiSanitari(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFilePresidiSanitari";
+                    var temp = MapListAttachmentsToAttachmentsPresidiSanitari(items);
+                    result = LoadFile<AttachmentsPresidiSanitari>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsPresidiSanitari(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFilePresidiSanitari";
+                    var item = DownloadFile<AttachmentsPresidiSanitari>(idFile, logMessage);
+                    result = MapAttachmentsPresidiSanitariToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeletePresidiSanitari(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.PresidiSanitari.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsPresidiSanitari.ToList();
+
+                    if (itemToRemove != null)
+                    {
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsPresidiSanitari.Remove(item);
+                            }
+                        }
+
+                        context.PresidiSanitari.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeletePresidiSanitari", null, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteFilePresidiSanitari(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.AttachmentsPresidiSanitari.SingleOrDefault(x => x.Id == id);
+
+                    if (itemToRemove != null)
+                    {
+                        context.AttachmentsPresidiSanitari.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFilePresidiSanitari", null, ex);
+                throw;
+            }
+        }
+
+        #endregion
 
         #region DownloadFileArea
         public List<Download> GetFileDownload(int idSezione)
@@ -4241,6 +4657,394 @@ namespace SDM.Helper
             foreach (var file in temp)
             {
                 result.Add(new AttachmentsNoleggio
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Assicurazione
+        private Assicurazione MapPraticaToNewAssicurazione(Pratica item)
+        {
+            return new Assicurazione
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Assicurazione MapPraticaToAssicurazione(Assicurazione prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapAssicurazioneToPraticaMail(Assicurazione item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListAssicurazioneToPratica(List<Assicurazione> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListAssicurazioneToPraticaFiltered(List<Assicurazione> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapAssicurazioneToPratica(Assicurazione item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsAssicurazioneToAttachments(AttachmentsAssicurazione item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsAssicurazioneToAttachments(List<AttachmentsAssicurazione> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsAssicurazione> MapListAttachmentsToAttachmentsAssicurazione(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsAssicurazione> result = new List<AttachmentsAssicurazione>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsAssicurazione
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region PresidiSanitari
+        private PresidiSanitari MapPraticaToNewPresidiSanitari(Pratica item)
+        {
+            return new PresidiSanitari
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private PresidiSanitari MapPraticaToPresidiSanitari(PresidiSanitari prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapPresidiSanitariToPraticaMail(PresidiSanitari item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListPresidiSanitariToPratica(List<PresidiSanitari> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListPresidiSanitariToPraticaFiltered(List<PresidiSanitari> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapPresidiSanitariToPratica(PresidiSanitari item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsPresidiSanitariToAttachments(AttachmentsPresidiSanitari item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsPresidiSanitariToAttachments(List<AttachmentsPresidiSanitari> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsPresidiSanitari> MapListAttachmentsToAttachmentsPresidiSanitari(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsPresidiSanitari> result = new List<AttachmentsPresidiSanitari>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsPresidiSanitari
                 {
                     Nome = file.Nome,
                     Blob = file.Blob,

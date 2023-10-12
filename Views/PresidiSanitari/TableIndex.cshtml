@@ -1,0 +1,137 @@
+﻿@model List<SDM.Models.Pratica>
+
+<table id="patronatoTable" class="table table-striped table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th class="th-sm">
+            </th>
+            <th class="th-sm">
+            </th>
+            <th class="th-sm">
+            </th>
+            <th class="th-sm">
+                Stato
+            </th>
+            <th class="th-sm">
+                Pratica N°
+            </th>
+            <th class="th-sm">
+                Anno
+            </th>
+            <th class="th-sm">
+                Nome
+            </th>
+            <th class="th-sm">
+                Cognome
+            </th>
+            <th class="th-sm">
+                Sottocategoria
+            </th>
+            <th class="th-sm">
+                Tipologia Pratica
+            </th>
+            <th class="th-sm">
+                Data Caricamento
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ foreach (var item in Model)
+            {
+                <tr>
+                    <td class="iconTd">
+                        <a title="Allegati" href='@Url.Action("CaricaAllegati", "PresidiSanitari", new { idPratica = item.Id })'>
+                            <img src="~/Content/Icone/allegati.svg" alt="Allegati" class="allegatiIcon" />
+                        </a>
+                    </td>
+                    <td class="iconTd">
+                        @using (Ajax.BeginForm("DeletePratica", "PresidiSanitari", new { idPratica = item.Id }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-index", AllowCache = false, InsertionMode = InsertionMode.Replace, OnBegin = "AjaxBeginDelete", OnComplete = "AjaxComplete" }, new { id = "cestino" + item.Id }))
+                        {
+                            <a title="Cancella" id="@item.Id" onclick="submitForm(this)" style="cursor: pointer">
+                                <img src="~/Content/Icone/cestino.svg" alt="Cancella" class="allegatiIcon" />
+                            </a>
+                        }
+                    </td>
+                    <td class="iconTd">
+                        <a title="Modifica" href='@Url.Action("ModificaPratica", "PresidiSanitari", new { idPratica = item.Id })'>
+                            <img src="~/Content/Icone/edit.svg" alt="Modifica" class="allegatiIcon" />
+                        </a>
+                    </td>
+                    @{
+                        if (item.IdStato == 1)
+                        {
+                            <td>
+                                <a title="Chiusa">
+                                    <img src="~/Content/Icone/verde.svg" alt="Chiusa" class="semaforoIcon" />
+                                </a>
+                            </td>
+                        }
+                        else if (item.IdStato == 2)
+                        {
+                            <td>
+                                <a title="Incompleta">
+                                    <img src="~/Content/Icone/rosso.svg" alt="Incompleta" class="semaforoIcon" />
+                                </a>
+                            </td>
+                        }
+                        else if (item.IdStato == 3)
+                        {
+                            <td>
+                                <a title="In Lavorazione">
+                                    <img src="~/Content/Icone/giallo.svg" alt="In Lavorazione" class="semaforoIcon" />
+                                </a>
+                            </td>
+                        }
+                    }
+                    <td>@item.NumPratica</td>
+                    <td>@item.Anno</td>
+                    <td>@item.Nome</td>
+                    <td>@item.Cognome</td>
+                    <td>@item.Sottocategoria</td>
+                    <td>@item.TipologiaPratica</td>
+                    <td>@item.LastUpdate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<p class="totalRow">Pratiche totali: @Model.Count()</p>
+<script>
+    $(document).ready(function () {
+        $('#patronatoTable').DataTable({
+            "dom": '<"top"f>rt<"bottom"ipl>',
+            "scrollX": true,
+            "pagingType": "simple_numbers",
+            "language": {
+                "paginate": {
+                    "previous": "<",
+                    "next": ">"
+                },
+                "lengthMenu": "Mostra _MENU_ elementi per pagina",
+                "zeroRecords": "Non ci sono elementi da mostrare",
+                "info": "Mostra pagina _PAGE_ di _PAGES_",
+                "infoEmpty": "Nessun elemento disponibile"
+            },
+            "drawCallback": function () {
+                $('.dataTables_paginate > .pagination').addClass('customPagination');
+            },
+            "searching": false
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+    submitForm = (item) => {
+        $("#cestino" + item.id).submit();
+    }
+</script>
+
+<script>
+    function AjaxBeginDelete(event) {
+        if (!confirm("Vuoi davvero eliminare la pratica?")) {
+            return false;
+        }
+        else {
+            $('#loading-div').show();
+        }
+    }
+</script>

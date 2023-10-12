@@ -26,11 +26,15 @@ namespace SDM.Models.Database
         }
     
         public virtual DbSet<Agenzia> Agenzia { get; set; }
+        public virtual DbSet<Assicurazione> Assicurazione { get; set; }
         public virtual DbSet<AttachmentsAgenzia> AttachmentsAgenzia { get; set; }
+        public virtual DbSet<AttachmentsAssicurazione> AttachmentsAssicurazione { get; set; }
         public virtual DbSet<AttachmentsEventi> AttachmentsEventi { get; set; }
         public virtual DbSet<AttachmentsFinanza> AttachmentsFinanza { get; set; }
+        public virtual DbSet<AttachmentsNoleggio> AttachmentsNoleggio { get; set; }
         public virtual DbSet<AttachmentsPatronato> AttachmentsPatronato { get; set; }
         public virtual DbSet<AttachmentsPraticheAuto> AttachmentsPraticheAuto { get; set; }
+        public virtual DbSet<AttachmentsPresidiSanitari> AttachmentsPresidiSanitari { get; set; }
         public virtual DbSet<AttachmentsSindacato> AttachmentsSindacato { get; set; }
         public virtual DbSet<AttachmentsStudioProfessionale> AttachmentsStudioProfessionale { get; set; }
         public virtual DbSet<AttachmentsVisure> AttachmentsVisure { get; set; }
@@ -39,9 +43,11 @@ namespace SDM.Models.Database
         public virtual DbSet<Eventi> Eventi { get; set; }
         public virtual DbSet<Finanza> Finanza { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
+        public virtual DbSet<Noleggio> Noleggio { get; set; }
         public virtual DbSet<NumeroPratiche> NumeroPratiche { get; set; }
         public virtual DbSet<Patronato> Patronato { get; set; }
         public virtual DbSet<PraticheAuto> PraticheAuto { get; set; }
+        public virtual DbSet<PresidiSanitari> PresidiSanitari { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Sedi> Sedi { get; set; }
         public virtual DbSet<Sindacato> Sindacato { get; set; }
@@ -49,7 +55,5 @@ namespace SDM.Models.Database
         public virtual DbSet<StudioProfessionale> StudioProfessionale { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Visure> Visure { get; set; }
-        public virtual DbSet<AttachmentsNoleggio> AttachmentsNoleggio { get; set; }
-        public virtual DbSet<Noleggio> Noleggio { get; set; }
     }
 }

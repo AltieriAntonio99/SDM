@@ -146,10 +146,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\PresidiSantiariController.cs" />
     <Compile Include="Controllers\DownloadFileController.cs" />
     <Compile Include="Controllers\AgenziaController.cs" />
     <Compile Include="Controllers\FinanzaController.cs" />
     <Compile Include="Controllers\NoleggioController.cs" />
+    <Compile Include="Controllers\AssicurazioneController.cs" />
     <Compile Include="Controllers\VisureController.cs" />
     <Compile Include="Controllers\StudioProfessionaleController.cs" />
     <Compile Include="Controllers\EventiController.cs" />
@@ -165,6 +167,12 @@
     <Compile Include="Helper\Login.cs" />
     <Compile Include="Helper\Mail.cs" />
     <Compile Include="Helper\Token.cs" />
+    <Compile Include="Models\Database\Assicurazione.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\AttachmentsAssicurazione.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\AttachmentsFinanza.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
@@ -172,6 +180,9 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsPraticheAuto.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\AttachmentsPresidiSanitari.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsStudioProfessionale.cs">
@@ -190,6 +201,9 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\PraticheAuto.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\PresidiSanitari.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\StudioProfessionale.cs">
@@ -439,6 +453,18 @@
     <Content Include="Views\Noleggio\ModificaPratica.cshtml" />
     <Content Include="Views\Noleggio\TableAllegati.cshtml" />
     <Content Include="Views\Noleggio\TableIndex.cshtml" />
+    <Content Include="Views\Assicurazione\AggiungiPratica.cshtml" />
+    <Content Include="Views\Assicurazione\CaricaAllegati.cshtml" />
+    <Content Include="Views\Assicurazione\Index.cshtml" />
+    <Content Include="Views\Assicurazione\ModificaPratica.cshtml" />
+    <Content Include="Views\Assicurazione\TableAllegati.cshtml" />
+    <Content Include="Views\Assicurazione\TableIndex.cshtml" />
+    <Content Include="Views\PresidiSanitari\AggiungiPratica.cshtml" />
+    <Content Include="Views\PresidiSanitari\CaricaAllegati.cshtml" />
+    <Content Include="Views\PresidiSanitari\Index.cshtml" />
+    <Content Include="Views\PresidiSanitari\ModificaPratica.cshtml" />
+    <Content Include="Views\PresidiSanitari\TableAllegati.cshtml" />
+    <Content Include="Views\PresidiSanitari\TableIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

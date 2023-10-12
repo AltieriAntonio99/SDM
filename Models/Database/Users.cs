@@ -18,24 +18,28 @@ namespace SDM.Models.Database
         public Users()
         {
             this.Agenzia = new HashSet<Agenzia>();
+            this.Assicurazione = new HashSet<Assicurazione>();
             this.AttachmentsAgenzia = new HashSet<AttachmentsAgenzia>();
+            this.AttachmentsAssicurazione = new HashSet<AttachmentsAssicurazione>();
             this.AttachmentsEventi = new HashSet<AttachmentsEventi>();
             this.AttachmentsFinanza = new HashSet<AttachmentsFinanza>();
+            this.AttachmentsNoleggio = new HashSet<AttachmentsNoleggio>();
             this.AttachmentsPatronato = new HashSet<AttachmentsPatronato>();
             this.AttachmentsPraticheAuto = new HashSet<AttachmentsPraticheAuto>();
+            this.AttachmentsPresidiSanitari = new HashSet<AttachmentsPresidiSanitari>();
             this.AttachmentsSindacato = new HashSet<AttachmentsSindacato>();
             this.AttachmentsStudioProfessionale = new HashSet<AttachmentsStudioProfessionale>();
             this.AttachmentsVisure = new HashSet<AttachmentsVisure>();
             this.DownloadFile = new HashSet<DownloadFile>();
             this.Eventi = new HashSet<Eventi>();
             this.Finanza = new HashSet<Finanza>();
+            this.Noleggio = new HashSet<Noleggio>();
             this.Patronato = new HashSet<Patronato>();
             this.PraticheAuto = new HashSet<PraticheAuto>();
+            this.PresidiSanitari = new HashSet<PresidiSanitari>();
             this.Sindacato = new HashSet<Sindacato>();
             this.StudioProfessionale = new HashSet<StudioProfessionale>();
             this.Visure = new HashSet<Visure>();
-            this.AttachmentsNoleggio = new HashSet<AttachmentsNoleggio>();
-            this.Noleggio = new HashSet<Noleggio>();
         }
     
         public int Id { get; set; }
@@ -51,15 +55,23 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Agenzia> Agenzia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Assicurazione> Assicurazione { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsAgenzia> AttachmentsAgenzia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AttachmentsAssicurazione> AttachmentsAssicurazione { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsEventi> AttachmentsEventi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsFinanza> AttachmentsFinanza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AttachmentsNoleggio> AttachmentsNoleggio { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsPatronato> AttachmentsPatronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsPraticheAuto> AttachmentsPraticheAuto { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AttachmentsPresidiSanitari> AttachmentsPresidiSanitari { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentsSindacato> AttachmentsSindacato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -73,9 +85,13 @@ namespace SDM.Models.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Finanza> Finanza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Noleggio> Noleggio { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patronato> Patronato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PraticheAuto> PraticheAuto { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PresidiSanitari> PresidiSanitari { get; set; }
         public virtual Roles Roles { get; set; }
         public virtual Sedi Sedi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -84,9 +100,5 @@ namespace SDM.Models.Database
         public virtual ICollection<StudioProfessionale> StudioProfessionale { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Visure> Visure { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AttachmentsNoleggio> AttachmentsNoleggio { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Noleggio> Noleggio { get; set; }
     }
 }
