@@ -309,6 +309,8 @@
     <Content Include="Content\Icone\pulsanti\finanza agevolata.svg" />
     <Content Include="Content\Icone\pulsanti\infocert %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\infocert.svg" />
+    <Content Include="Content\Icone\pulsanti\namiral %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\namiral.svg" />
     <Content Include="Content\Icone\pulsanti\noleggio %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\noleggio.svg" />
     <Content Include="Content\Icone\pulsanti\patronato %28inattivo%29.svg" />
@@ -317,6 +319,8 @@
     <Content Include="Content\Icone\pulsanti\pratiche auto.svg" />
     <Content Include="Content\Icone\pulsanti\prenotazione sanitaria %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\prenotazione sanitaria.svg" />
+    <Content Include="Content\Icone\pulsanti\presidi sanitari %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\presidi sanitari.svg" />
     <Content Include="Content\Icone\pulsanti\scuola ed ente di formazione %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\scuola ed ente di formazione.svg" />
     <Content Include="Content\Icone\pulsanti\sdm pay %28inattivo%29.svg" />
