@@ -88,6 +88,12 @@
         <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_Status" />
         <AssociationConnector Association="MSSql204389Model.FK_StudioProfessionale_User" />
         <AssociationConnector Association="MSSql204389Model.FK_Visure_User" />
+        <EntityTypeShape EntityType="MSSql204389Model.AttachmentsCredito" Width="1.5" PointX="21.5" PointY="25.625" />
+        <EntityTypeShape EntityType="MSSql204389Model.Credito" Width="1.5" PointX="14.25" PointY="21" />
+        <AssociationConnector Association="MSSql204389Model.FK_Credito_AttachmentsCredito" />
+        <AssociationConnector Association="MSSql204389Model.FK_User_AttachmentsCredito" />
+        <AssociationConnector Association="MSSql204389Model.FK_Credito_Sede" />
+        <AssociationConnector Association="MSSql204389Model.FK_Credito_User" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

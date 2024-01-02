@@ -29,6 +29,7 @@ namespace SDM.Models.Database
             this.StudioProfessionale = new HashSet<StudioProfessionale>();
             this.Users = new HashSet<Users>();
             this.Visure = new HashSet<Visure>();
+            this.Credito = new HashSet<Credito>();
         }
     
         public int Id { get; set; }
@@ -61,5 +62,7 @@ namespace SDM.Models.Database
         public virtual ICollection<Users> Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Visure> Visure { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Credito> Credito { get; set; }
     }
 }

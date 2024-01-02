@@ -2525,6 +2525,217 @@ namespace SDM.Helper
 
         #endregion
 
+
+        #region Credito
+        public List<Pratica> PraticaCredito(int idSede, string ruolo, string metodo, Pratica criteri)
+        {
+            #region variabili gestionali
+            string logMessage;
+            List<Credito> items = new List<Credito>();
+            #endregion
+
+            switch (metodo)
+            {
+                case "getall":
+                    logMessage = "GetPraticheCredito";
+                    items = GetPratiche<Credito>(logMessage);
+                    if (ruolo == "admin" || ruolo == "adminArchivioNoSmartJob"
+                                    || ruolo == "adminCasoria"
+                                    || ruolo == "adminSegreteria" || ruolo == "adminSupporto"
+                                    || ruolo == "adminSupportoNoSmartJob"
+                                    || ruolo == "adminStudioProfessionale")
+                    {
+                        criteri = new Pratica();
+                    }
+                    else criteri = new Pratica() { IdSede = idSede };
+                    break;
+                case "search":
+                    logMessage = "RicercaCredito";
+                    items = GetPratiche<Credito>(logMessage);
+                    break;
+            }
+
+            return MapListCreditoToPraticaFiltered(items, criteri);
+        }
+
+        public Pratica PraticaCredito(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Pratica result = new Pratica();
+            #endregion
+
+            switch (metodo)
+            {
+                case "get":
+                    logMessage = "GetPraticaCredito";
+                    var item = GetPratica<Credito>(idPratica, logMessage);
+                    result = MapCreditoToPratica(item);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public bool PraticaCredito(Pratica pratica, string metodo)
+        {
+            #region variabili gestionali
+            string tipoPratica = "Credito";
+            string logMessage;
+            Credito item;
+            Pratica mailPratica;
+            bool result = false;
+            #endregion
+
+            #region variabili mail
+            string mailTos = "documenti@sdmservices.it";
+            string mailSubject = "Pratica Credito";
+            #endregion
+
+            switch (metodo)
+            {
+                case "save":
+                    logMessage = "SalvaPraticaCredito";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewCredito(pratica);
+                    mailPratica = MapCreditoToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "update":
+                    logMessage = "ModificaPraticaCredito";
+                    var prevPratica = GetById<Credito>(pratica.Id);
+                    item = MapPraticaToCredito(prevPratica, pratica);
+                    mailPratica = MapCreditoToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public List<Attachment> AttachmentsCredito(int idPratica, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage = "GetFileCredito";
+            List<AttachmentsCredito> items;
+            List<Attachment> result = new List<Attachment>();
+            #endregion
+
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    items = context.AttachmentsCredito.Where(x => x.IdPratica == idPratica).ToList();
+                    result = MapListAttachmentsCreditoToAttachments(items);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool AttachmentsCredito(List<Attachment> items, string metodo)
+        {
+            #region variabili gestionali
+            string logMessage;
+            bool result = false;
+            #endregion
+
+            switch (metodo)
+            {
+                case "upload":
+                    logMessage = "LoadFileCredito";
+                    var temp = MapListAttachmentsToAttachmentsCredito(items);
+                    result = LoadFile<AttachmentsCredito>(temp, logMessage);
+                    break;
+            }
+
+            return result;
+        }
+
+        public Attachment AttachmentsCredito(string metodo, int idFile)
+        {
+            #region variabili gestionali
+            string logMessage;
+            Attachment result = new Attachment();
+            #endregion
+
+            switch (metodo)
+            {
+                case "download":
+                    logMessage = "DownloadFileCredito";
+                    var item = DownloadFile<AttachmentsCredito>(idFile, logMessage);
+                    result = MapAttachmentsCreditoToAttachments(item);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteCredito(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.Credito.SingleOrDefault(x => x.Id == id);
+                    var itemToRemoveAttachment = itemToRemove.AttachmentsCredito.ToList();
+
+                    if (itemToRemove != null)
+                    {
+                        if (itemToRemoveAttachment != null)
+                        {
+                            foreach (var item in itemToRemoveAttachment)
+                            {
+                                context.AttachmentsCredito.Remove(item);
+                            }
+                        }
+
+                        context.Credito.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteCredito", null, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteFileCredito(int id)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var itemToRemove = context.AttachmentsCredito.SingleOrDefault(x => x.Id == id);
+
+                    if (itemToRemove != null)
+                    {
+                        context.AttachmentsCredito.Remove(itemToRemove);
+                        return context.SaveChanges() > 0;
+                    }
+
+                    return false; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("DeleteFileCredito", null, ex);
+                throw;
+            }
+        }
+
+        #endregion
+
+
         #region DownloadFileArea
         public List<Download> GetFileDownload(int idSezione)
         {
@@ -5045,6 +5256,201 @@ namespace SDM.Helper
             foreach (var file in temp)
             {
                 result.Add(new AttachmentsPresidiSanitari
+                {
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    Type = file.Type,
+                    IdUserUpdate = file.IdUserUpdate,
+                    IdPratica = file.IdPratica,
+                    LastUpdate = file.LastUpdate
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
+
+        #region Credito
+        private Credito MapPraticaToNewCredito(Pratica item)
+        {
+            return new Credito
+            {
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Credito MapPraticaToCredito(Credito prev, Pratica item)
+        {
+            prev.Nome = item.Nome;
+            prev.Cognome = item.Cognome;
+            prev.Sottocategoria = item.Sottocategoria;
+            prev.Anno = item.Anno;
+            prev.LastUpdate = item.LastUpdate;
+            prev.IdUserUpdate = item.IdUserUpdate;
+            //newPratica.IdSede = pratica.IdSede;
+            prev.IdStato = item.IdStato;
+            prev.Note = item.Note;
+            prev.TipologiaPratica = item.TipologiaPratica;
+
+            return prev;
+        }
+
+        private Pratica MapCreditoToPraticaMail(Credito item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Sottocategoria = item.Sottocategoria,
+                Anno = item.Anno,
+                LastUpdate = item.LastUpdate,
+                IdUserUpdate = item.IdUserUpdate,
+                NumPratica = item.NumPratica,
+                IdSede = item.IdSede,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private List<Pratica> MapListCreditoToPratica(List<Credito> items)
+        {
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in items)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private List<Pratica> MapListCreditoToPraticaFiltered(List<Credito> items, Pratica criteri)
+        {
+            var temp = items.Where(i =>
+                        (criteri.NumPratica == null || i.NumPratica.Contains(criteri.NumPratica))
+                        && (criteri.Anno == null || i.Anno == criteri.Anno)
+                        && (criteri.Nome == null || i.Nome.Contains(criteri.Nome))
+                        && (criteri.Cognome == null || i.Cognome.Contains(criteri.Cognome))
+                        && (criteri.Sottocategoria == null || i.Sottocategoria == criteri.Sottocategoria)
+                        && (criteri.IdSede == null || i.IdSede == criteri.IdSede)
+                        )
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Pratica> result = new List<Pratica>();
+            foreach (var pratica in temp)
+            {
+                result.Add(new Pratica
+                {
+                    Id = pratica.Id,
+                    Nome = pratica.Nome,
+                    Cognome = pratica.Cognome,
+                    Anno = pratica.Anno,
+                    Sottocategoria = pratica.Sottocategoria,
+                    IdUserUpdate = pratica.Id,
+                    IdSede = pratica.IdSede,
+                    NumPratica = pratica.NumPratica,
+                    LastUpdate = pratica.LastUpdate,
+                    IdStato = pratica.IdStato,
+                    Note = pratica.Note,
+                    TipologiaPratica = pratica.TipologiaPratica
+                });
+            }
+            return result;
+        }
+
+        private Pratica MapCreditoToPratica(Credito item)
+        {
+            return new Pratica
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Cognome = item.Cognome,
+                Anno = item.Anno,
+                Sottocategoria = item.Sottocategoria,
+                IdUserUpdate = item.Id,
+                IdSede = item.IdSede,
+                NumPratica = item.NumPratica,
+                LastUpdate = item.LastUpdate,
+                IdStato = item.IdStato,
+                Note = item.Note,
+                TipologiaPratica = item.TipologiaPratica
+            };
+        }
+
+        private Attachment MapAttachmentsCreditoToAttachments(AttachmentsCredito item)
+        {
+            return new Attachment
+            {
+                Id = item.Id,
+                Nome = item.Nome,
+                Blob = item.Blob,
+                LastUpdate = item.LastUpdate,
+                Type = item.Type,
+                IdPratica = item.IdPratica,
+                IdUserUpdate = item.IdUserUpdate
+            };
+        }
+
+        private List<Attachment> MapListAttachmentsCreditoToAttachments(List<AttachmentsCredito> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<Attachment> result = new List<Attachment>();
+            foreach (var file in temp)
+            {
+                result.Add(new Attachment
+                {
+                    Id = file.Id,
+                    Nome = file.Nome,
+                    Blob = file.Blob,
+                    LastUpdate = file.LastUpdate,
+                    Type = file.Type,
+                    IdPratica = file.IdPratica,
+                    IdUserUpdate = file.IdUserUpdate
+                });
+            }
+
+            return result;
+        }
+
+        private List<AttachmentsCredito> MapListAttachmentsToAttachmentsCredito(List<Attachment> items)
+        {
+            var temp = items
+                        .OrderByDescending(i => i.LastUpdate)
+                        .ToList();
+
+            List<AttachmentsCredito> result = new List<AttachmentsCredito>();
+            foreach (var file in temp)
+            {
+                result.Add(new AttachmentsCredito
                 {
                     Nome = file.Nome,
                     Blob = file.Blob,

@@ -55,5 +55,7 @@ namespace SDM.Models.Database
         public virtual DbSet<StudioProfessionale> StudioProfessionale { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Visure> Visure { get; set; }
+        public virtual DbSet<AttachmentsCredito> AttachmentsCredito { get; set; }
+        public virtual DbSet<Credito> Credito { get; set; }
     }
 }

@@ -146,6 +146,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CreditoController.cs" />
     <Compile Include="Controllers\PresidiSantiariController.cs" />
     <Compile Include="Controllers\DownloadFileController.cs" />
     <Compile Include="Controllers\AgenziaController.cs" />
@@ -173,6 +174,9 @@
     <Compile Include="Models\Database\AttachmentsAssicurazione.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Database\AttachmentsCredito.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\AttachmentsFinanza.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
@@ -189,6 +193,9 @@
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\AttachmentsVisure.cs">
+      <DependentUpon>ModelSDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\Credito.cs">
       <DependentUpon>ModelSDM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\DownloadFile.cs">
@@ -469,6 +476,12 @@
     <Content Include="Views\PresidiSanitari\ModificaPratica.cshtml" />
     <Content Include="Views\PresidiSanitari\TableAllegati.cshtml" />
     <Content Include="Views\PresidiSanitari\TableIndex.cshtml" />
+    <Content Include="Views\Credito\AggiungiPratica.cshtml" />
+    <Content Include="Views\Credito\CaricaAllegati.cshtml" />
+    <Content Include="Views\Credito\Index.cshtml" />
+    <Content Include="Views\Credito\ModificaPratica.cshtml" />
+    <Content Include="Views\Credito\TableAllegati.cshtml" />
+    <Content Include="Views\Credito\TableIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
