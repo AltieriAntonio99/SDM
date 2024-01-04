@@ -1104,7 +1104,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "STUDIOPROFESSIONALEASSOCIATO@GRUPPOSDM.IT";
+            string mailTos = "STUDIOASSOCIATO@GRUPPOSDM.IT";
             //List<string> mailCCs = new List<string>();
             string mailSubject = "Pratica Studio Professionale";
             #endregion
