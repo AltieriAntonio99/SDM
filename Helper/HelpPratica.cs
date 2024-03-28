@@ -205,6 +205,24 @@ namespace SDM.Helper
                 throw;
             }
         }
+        
+        public Sedi GetSedeByName(string name)
+        {
+            try
+            {
+                using (var context = new SDMEntities())
+                {
+                    var result = context.Sedi.FirstOrDefault(x => x.Acronimo == name);
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite("GetSede", null, ex);
+                throw;
+            }
+        }
         #endregion
 
         #region Patronato
@@ -267,11 +285,15 @@ namespace SDM.Helper
             Patronato item;
             Pratica mailPratica;
             bool result = false;
+            Patronato prevPratica;
+            List<string> tos = new List<string>();
             #endregion
 
             #region variabili mail
             string mailTos = "assistenza@sdmservices.it";
             string mailSubject = "Pratica Patronato";
+
+            string villariccaMail = "villaricca@sdmservices.it";
             #endregion
 
             switch (metodo)
@@ -285,10 +307,28 @@ namespace SDM.Helper
                     break;
                 case "update":
                     logMessage = "ModificaPraticaPatronato";
-                    var prevPratica = GetById<Patronato>(pratica.Id);
+                    prevPratica = GetById<Patronato>(pratica.Id);
                     item = MapPraticaToPatronato(prevPratica, pratica);
                     mailPratica = MapPatronatoToPraticaMail(item);
                     result = ModificaPratica(item, tipoPratica, mailTos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "saveGiugliano": //Salva la pratica per giugliano e invia mail a villaricca                    
+                    tos.Add(mailTos);
+                    tos.Add(villariccaMail);
+                    logMessage = "SalvaPraticaPatronato";
+                    pratica.NumPratica = GetNextNumeroPratica(pratica.NumPratica, tipoPratica);
+                    item = MapPraticaToNewPatronato(pratica);
+                    mailPratica = MapPatronatoToPraticaMail(item);
+                    result = SalvaPratica(item, tipoPratica, tos, mailSubject, mailPratica, logMessage);
+                    break;
+                case "updateGiugliano":
+                    tos.Add(mailTos);
+                    tos.Add(villariccaMail);
+                    logMessage = "ModificaPraticaPatronato";
+                    prevPratica = GetById<Patronato>(pratica.Id);
+                    item = MapPraticaToPatronato(prevPratica, pratica);
+                    mailPratica = MapPatronatoToPraticaMail(item);
+                    result = ModificaPratica(item, tipoPratica, tos, mailSubject, mailPratica, logMessage);
                     break;
             }
 
@@ -2926,6 +2966,26 @@ namespace SDM.Helper
             }
         }
 
+        public bool SalvaPratica<T>(T item, string tipoPratica, List<string> mailTos, string mailSubject, Pratica mailPratica, string logMessage) where T : class
+        {
+            try
+            {
+                var result = Add<T>(item, tipoPratica);
+                if (result)
+                {
+                    var id = item.GetType().GetProperty("Id").GetValue(item);
+                    mailPratica.Id = Convert.ToInt32(id);
+                    _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
         public bool SalvaPraticaWithCC<T>(T item, string tipoPratica, string mailTos, List<string> mailCCs, string mailSubject, Pratica mailPratica, string logMessage) where T : class
         {
             try
@@ -2942,6 +3002,51 @@ namespace SDM.Helper
         }
 
         public bool ModificaPratica<T>(T item, string tipoPratica, string mailTos, string mailSubject, Pratica mailPratica, string logMessage) where T : class
+        {
+            try
+            {
+                var result = Update(item);
+                if (result)
+                {
+                    using (var context = new SDMEntities())
+                    {
+                        Users userFrom = context.Users.FirstOrDefault(x => x.Id == mailPratica.IdUserUpdate.Value);
+
+                        if (userFrom != null)
+                        {
+                            List<Users> userFromList = context.Users.Where(x => x.IdSede == mailPratica.IdSede && x.Roles.Ruolo != "admin" && x.Roles.Ruolo != "adminArchivioNoSmartJob"
+                                    && x.Roles.Ruolo != "adminCasoria"
+                                    && x.Roles.Ruolo != "adminSegreteria" && x.Roles.Ruolo != "adminSupporto"
+                                    && x.Roles.Ruolo != "adminSupportoNoSmartJob"
+                                    && x.Roles.Ruolo == "adminStudioProfessionale").ToList();
+
+                            string ruolo = userFrom.Roles?.Ruolo;
+                            if (!string.IsNullOrWhiteSpace(ruolo))
+                            {
+                                if (ruolo == "admin" || ruolo == "adminCasoria")
+                                {
+                                    if (userFromList.Count > 0)
+                                    {
+                                        string email = userFromList.FirstOrDefault().Email;
+                                        if (!string.IsNullOrWhiteSpace(email)) _mail.SendMail(mailPratica, tipoPratica, email, mailSubject);
+                                    }
+                                }
+                                else _mail.SendMail(mailPratica, tipoPratica, mailTos, mailSubject);
+                            }
+
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWrite(logMessage, null, ex);
+                throw;
+            }
+        }
+
+        public bool ModificaPratica<T>(T item, string tipoPratica, List<string> mailTos, string mailSubject, Pratica mailPratica, string logMessage) where T : class
         {
             try
             {

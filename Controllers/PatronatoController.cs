@@ -26,11 +26,32 @@ namespace SDM.Controllers
                 {
                     if (authentication.Login(Session["username"].ToString(), Session["password"].ToString(), Session["role"].ToString(), true))
                     {
-                        PraticaIndex model = new PraticaIndex
+                        PraticaIndex model;
+
+                        if (Session["sede"].ToString() == "NA-VILLARICCA")
                         {
-                            Pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
-                            Categorie = _help.GetCategorie("patronato")
-                        };
+                            List<Pratica> pratiche = new List<Pratica>();
+                            var sedeGiugliano = _help.GetSedeByName("NA-GIUGLIANO");
+                            var praticheGiugliano = _help.PraticaPatronato(sedeGiugliano.Id, Session["role"].ToString(), "getall", null);
+                            var allPratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                            
+                            pratiche.AddRange(praticheGiugliano);
+                            pratiche.AddRange(allPratiche);
+
+                            model = new PraticaIndex
+                            {
+                                Pratiche = pratiche.OrderByDescending(x => x.LastUpdate).ToList(),
+                                Categorie = _help.GetCategorie("patronato")
+                            };
+                        }
+                        else
+                        {
+                            model = new PraticaIndex
+                            {
+                                Pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null),
+                                Categorie = _help.GetCategorie("patronato")
+                            };
+                        }                        
 
                         return View(model);
                     }
@@ -112,11 +133,22 @@ namespace SDM.Controllers
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
                     pratica.NumPratica = Session["sede"].ToString() + "-" + pratica.Anno + "-";
 
-                    if (_help.PraticaPatronato(pratica, "save"))
+                    if (Session["sede"].ToString() == "NA-GIUGLIANO")
                     {
-                        TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
-                        return RedirectToAction("Index", "Patronato");
+                        if (_help.PraticaPatronato(pratica, "saveGiugliano"))
+                        {
+                            TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
+                            return RedirectToAction("Index", "Patronato");
+                        }
                     }
+                    else
+                    {
+                        if (_help.PraticaPatronato(pratica, "save"))
+                        {
+                            TempData["erroreInserimentoPatronatoHome"] = "Pratica salvata correttamente";
+                            return RedirectToAction("Index", "Patronato");
+                        }
+                    }                    
                 }
 
                 TempData["erroreInserimentoPatronato"] = "true";
@@ -141,11 +173,22 @@ namespace SDM.Controllers
                     pratica.IdUserUpdate = Convert.ToInt32(Session["Id"].ToString());
                     pratica.IdSede = Convert.ToInt32(Session["idsede"].ToString());
 
-                    if (_help.PraticaPatronato(pratica, "update"))
+                    if (Session["sede"].ToString() == "NA-GIUGLIANO")
                     {
-                        TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
-                        return RedirectToAction("Index", "Patronato");
+                        if (_help.PraticaPatronato(pratica, "updateGiugliano"))
+                        {
+                            TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
+                            return RedirectToAction("Index", "Patronato");
+                        }
                     }
+                    else
+                    {
+                        if (_help.PraticaPatronato(pratica, "update"))
+                        {
+                            TempData["erroreInserimentoPatronatoHome"] = "Pratica modificata correttamente";
+                            return RedirectToAction("Index", "Patronato");
+                        }
+                    }                    
                 }
 
                 TempData["erroreInserimentoPatronato"] = "true";
@@ -168,12 +211,45 @@ namespace SDM.Controllers
                 PraticaIndex model = new PraticaIndex();
                 if (_help.DeletePatronato(idPratica))
                 {
-                    model.Pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                    if (Session["sede"].ToString() == "NA-VILLARICCA")
+                    {
+                        List<Pratica> pratiche = new List<Pratica>();
+                        var sedeGiugliano = _help.GetSedeByName("NA-GIUGLIANO");
+                        var praticheGiugliano = _help.PraticaPatronato(sedeGiugliano.Id, Session["role"].ToString(), "getall", null);
+                        var allPratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+
+                        pratiche.AddRange(praticheGiugliano);
+                        pratiche.AddRange(allPratiche);
+
+                        model.Pratiche = pratiche.OrderByDescending(x => x.LastUpdate).ToList();
+                    }
+                    else
+                    {
+                        model.Pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                    }
+                    
                     return PartialView("TableIndex", model.Pratiche);
                 }
 
                 TempData["message"] = "Errore nell'eliminazione della pratica";
-                model.Pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+
+                if (Session["sede"].ToString() == "NA-VILLARICCA")
+                {
+                    List<Pratica> pratiche = new List<Pratica>();
+                    var sedeGiugliano = _help.GetSedeByName("NA-GIUGLIANO");
+                    var praticheGiugliano = _help.PraticaPatronato(sedeGiugliano.Id, Session["role"].ToString(), "getall", null);
+                    var allPratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+
+                    pratiche.AddRange(praticheGiugliano);
+                    pratiche.AddRange(allPratiche);
+
+                    model.Pratiche = pratiche.OrderByDescending(x => x.LastUpdate).ToList();
+                }
+                else
+                {
+                    model.Pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                }
+
                 return PartialView("TableIndex", model.Pratiche);
             }
             catch (Exception ex)
@@ -310,7 +386,23 @@ namespace SDM.Controllers
 
             try
             {
-                List<Pratica> pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                List<Pratica> pratiche = new List<Pratica>();
+                if (Session["sede"].ToString() == "NA-VILLARICCA")
+                {
+                    var sedeGiugliano = _help.GetSedeByName("NA-GIUGLIANO");
+                    var praticheGiugliano = _help.PraticaPatronato(sedeGiugliano.Id, Session["role"].ToString(), "getall", null);
+                    var allPratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+
+                    pratiche.AddRange(praticheGiugliano);
+                    pratiche.AddRange(allPratiche);
+
+                    pratiche = pratiche.OrderByDescending(x => x.LastUpdate).ToList();
+                }
+                else
+                {
+                    pratiche = _help.PraticaPatronato(Convert.ToInt32(Session["idsede"].ToString()), Session["role"].ToString(), "getall", null);
+                }
+                
                 var content = _help.DownloadExcel(pratiche, headers);
                 return File(content, contentType, fileName);
             }
