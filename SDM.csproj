@@ -332,6 +332,8 @@
     <Content Include="Content\Icone\pulsanti\scuola ed ente di formazione.svg" />
     <Content Include="Content\Icone\pulsanti\sdm pay %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\sdm pay.svg" />
+    <Content Include="Content\Icone\pulsanti\servizi di pagamento %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\servizi di pagamento.svg" />
     <Content Include="Content\Icone\pulsanti\servizi postali %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\servizi postali.svg" />
     <Content Include="Content\Icone\pulsanti\sindacato %28inattivo%29.svg" />
