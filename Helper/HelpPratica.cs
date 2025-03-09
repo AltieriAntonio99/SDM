@@ -1961,7 +1961,7 @@ namespace SDM.Helper
             #endregion
 
             #region variabili mail
-            string mailTos = "documenti@sdmservices.it";
+            string mailTos = "noleggio@grupposdm.it";
             string mailSubject = "Pratica Noleggio";
             #endregion
 
