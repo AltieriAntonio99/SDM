@@ -363,6 +363,7 @@
       <DependentUpon>ModelSDM.edmx</DependentUpon>
       <LastGenOutput>ModelSDM.cs</LastGenOutput>
     </Content>
+    <Content Include="offline.html" />
     <Content Include="Scripts\api.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
