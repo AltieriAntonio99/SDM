@@ -340,8 +340,10 @@
     <Content Include="Content\Icone\pulsanti\sos utenze e servizi.svg" />
     <Content Include="Content\Icone\pulsanti\studio professionale associato %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\studio professionale associato.svg" />
-    <Content Include="Content\Icone\pulsanti\utenze %28inattivo%29.svg" />
-    <Content Include="Content\Icone\pulsanti\utenze.svg" />
+    <Content Include="Content\Icone\pulsanti\utenze luce gas %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\utenze luce gas.svg" />
+    <Content Include="Content\Icone\pulsanti\utenze telefonia %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\utenze telefonia.svg" />
     <Content Include="Content\Icone\pulsanti\visure e certificati %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\visure e certificati.svg" />
     <Content Include="Content\Icone\rosso.svg" />
