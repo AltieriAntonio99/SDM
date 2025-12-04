@@ -343,6 +343,8 @@
     <Content Include="Content\Icone\pulsanti\utenze luce gas %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\utenze luce gas.svg" />
     <Content Include="Content\Icone\pulsanti\utenze telefonia %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\utenze telefonia mobile %28inattivo%29.svg" />
+    <Content Include="Content\Icone\pulsanti\utenze telefonia mobile.svg" />
     <Content Include="Content\Icone\pulsanti\utenze telefonia.svg" />
     <Content Include="Content\Icone\pulsanti\visure e certificati %28inattivo%29.svg" />
     <Content Include="Content\Icone\pulsanti\visure e certificati.svg" />
